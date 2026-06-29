@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { loaderBridge } from "@/lib/loaderBridge";
+import CartIndicator from "@/components/store/CartIndicator";
 
 const links = [
   { href: "/shop", label: "Shop" },
@@ -20,6 +21,8 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHomepage = pathname === "/";
+  // Staff areas use their own chrome — hide the marketing nav there.
+  const isStaffArea = /^\/(login|pos|admin)(\/|$)/.test(pathname);
 
   // On the homepage the nav starts off-screen and slides in after the
   // PostcardLoader signals completion. On every other page it's visible immediately.
@@ -34,6 +37,8 @@ export default function Nav() {
     setNavVisible(false);
     return loaderBridge.addListener(() => setNavVisible(true));
   }, [isHomepage]);
+
+  if (isStaffArea) return null;
 
   return (
     <motion.header
@@ -84,16 +89,19 @@ export default function Nav() {
               </Link>
             ))}
             <Link
-              href="/shop"
+              href="/store"
               className="text-base tracking-widest font-display px-5 py-2 border border-orchard text-orchard hover:bg-orchard hover:text-cream transition-all duration-300"
             >
               Order Now
             </Link>
+            <CartIndicator className="text-orchard hover:text-maroon transition-colors" />
           </nav>
 
-          {/* Mobile hamburger */}
+          {/* Mobile cart + hamburger */}
+          <div className="md:hidden flex items-center gap-5">
+          <CartIndicator className="text-orchard" />
           <button
-            className="md:hidden flex flex-col gap-[5px] text-orchard p-1"
+            className="flex flex-col gap-[5px] text-orchard p-1"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -113,6 +121,7 @@ export default function Nav() {
               }`}
             />
           </button>
+          </div>
         </div>
 
         {/* Mobile menu — inside the paper, above the torn edge */}

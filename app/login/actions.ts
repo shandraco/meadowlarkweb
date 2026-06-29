@@ -1,0 +1,31 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+
+export interface LoginResult {
+  error?: string;
+}
+
+export async function login(
+  _prev: LoginResult,
+  formData: FormData,
+): Promise<LoginResult> {
+  const email = String(formData.get("email") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+  const next = String(formData.get("next") ?? "/admin") || "/admin";
+
+  if (!email || !password) return { error: "Email and password are required." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { error: error.message };
+
+  redirect(next.startsWith("/") ? next : "/admin");
+}
+
+export async function logout() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/login");
+}

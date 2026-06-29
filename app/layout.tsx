@@ -3,6 +3,7 @@ import { Cormorant_SC, Cormorant, Playfair_Display, Inter } from "next/font/goog
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/components/store/CartProvider";
 
 const cormorantSC = Cormorant_SC({
   subsets: ["latin"],
@@ -52,9 +53,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorantSC.variable} ${cormorantDisplay.variable} ${playfair.variable} ${inter.variable}`}>
       <body>
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+        <CartProvider>
+          <Nav />
+          <main>{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

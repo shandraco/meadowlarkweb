@@ -1,7 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LeafMark, WaxSeal } from "./Ornament";
 
 export default function Footer() {
+  const pathname = usePathname();
+  // Staff areas (/login, /pos, /admin) use their own chrome.
+  if (/^\/(login|pos|admin)(\/|$)/.test(pathname)) return null;
+
   return (
     <footer className="bg-orchard text-cream/80">
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-8">
