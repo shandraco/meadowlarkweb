@@ -4,6 +4,7 @@ export type ProductCategory = "cider" | "farm-good";
 export type OrderChannel = "online" | "pos";
 export type OrderStatus = "pending" | "paid" | "fulfilled" | "cancelled" | "refunded";
 export type UserRole = "admin" | "cashier";
+export type StockReason = "initial" | "restock" | "sale" | "spoilage" | "correction" | "return";
 
 export type Product = {
   id: string;
@@ -55,6 +56,24 @@ export type Profile = {
   full_name: string | null;
   role: UserRole;
   created_at: string;
+}
+
+export type StockMovement = {
+  id: string;
+  product_id: string;
+  delta: number;
+  reason: StockReason;
+  note: string | null;
+  order_id: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export type SiteContent = {
+  key: string;
+  value: Record<string, unknown>;
+  updated_at: string;
+  updated_by: string | null;
 }
 
 // A cart line shared by the online cart and the POS ticket.

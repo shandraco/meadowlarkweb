@@ -1,7 +1,7 @@
 // Hand-written Supabase schema types (mirrors supabase/schema.sql).
 // Wired into the Supabase clients so table reads/writes and rpc() are typed.
 // Can later be regenerated with `supabase gen types typescript`.
-import type { Product, Order, OrderItem, Profile } from "./types";
+import type { Product, Order, OrderItem, Profile, StockMovement, SiteContent } from "./types";
 
 export interface Database {
   public: {
@@ -88,12 +88,56 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
         Relationships: [];
       };
+      stock_movements: {
+        Row: StockMovement;
+        Insert: {
+          product_id: string;
+          delta: number;
+          reason: "initial" | "restock" | "sale" | "spoilage" | "correction" | "return";
+          id?: string;
+          note?: string | null;
+          order_id?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["stock_movements"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      site_content: {
+        Row: SiteContent;
+        Insert: {
+          key: string;
+          value?: Record<string, unknown>;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["site_content"]["Insert"]>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
       mark_order_paid: {
         Args: { p_payment_intent: string };
         Returns: undefined;
+      };
+      adjust_stock: {
+        Args: {
+          p_product: string;
+          p_delta: number;
+          p_reason: "initial" | "restock" | "sale" | "spoilage" | "correction" | "return";
+          p_note?: string | null;
+          p_user?: string | null;
+        };
+        Returns: number;
       };
       is_staff: { Args: Record<string, never>; Returns: boolean };
       is_admin: { Args: Record<string, never>; Returns: boolean };

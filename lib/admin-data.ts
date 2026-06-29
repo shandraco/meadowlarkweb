@@ -66,3 +66,24 @@ export async function getProductsAdmin(): Promise<Product[]> {
   if (error) throw new Error(error.message);
   return (data ?? []) as Product[];
 }
+
+export async function getProductById(id: string): Promise<Product | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
+  if (error) throw new Error(error.message);
+  return data ?? null;
+}
+
+import type { StockMovement } from "./types";
+
+export async function getStockMovements(productId: string, limit = 20): Promise<StockMovement[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("stock_movements")
+    .select("*")
+    .eq("product_id", productId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw new Error(error.message);
+  return (data ?? []) as StockMovement[];
+}

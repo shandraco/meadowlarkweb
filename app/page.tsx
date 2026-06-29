@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { BranchDivider, LeafMark, CircleText } from "@/components/Ornament";
 import RemindMe from "@/components/RemindMe";
 import PostcardLoader from "@/components/PostcardLoader";
+import { createClient } from "@/lib/supabase/client";
+import { DEFAULT_HERO, DEFAULT_BANNER } from "@/lib/content-types";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -67,6 +69,23 @@ export default function Home() {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
+  // CMS-driven copy (hero + seasonal banner). Defaults render immediately;
+  // the postcard loader covers the hero until the DB values arrive.
+  const [hero, setHero] = useState(DEFAULT_HERO);
+  const [banner, setBanner] = useState(DEFAULT_BANNER);
+  useEffect(() => {
+    createClient()
+      .from("site_content")
+      .select("key, value")
+      .in("key", ["hero", "seasonal_banner"])
+      .then(({ data }) => {
+        for (const row of data ?? []) {
+          if (row.key === "hero") setHero((h) => ({ ...h, ...(row.value as object) }));
+          if (row.key === "seasonal_banner") setBanner((b) => ({ ...b, ...(row.value as object) }));
+        }
+      });
+  }, []);
+
   return (
     <>
       <PostcardLoader />
@@ -100,32 +119,30 @@ export default function Home() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-32 w-full">
           <motion.div variants={stagger} initial="hidden" animate="show" className="max-w-3xl">
             <motion.p variants={fadeUp} className="section-label mb-5">
-              Rose Hill, Kansas — Est. 2010
+              {hero.label}
             </motion.p>
             <motion.h1
               variants={fadeUp}
               className="font-serif text-7xl md:text-9xl text-cream leading-[1.0] mb-8 tracking-tight"
             >
-              Where the
+              {hero.line1}
               <br />
-              orchard
+              {hero.line2}
               <br />
-              <em className="text-amber/90">meets the glass.</em>
+              <em className="text-amber/90">{hero.emphasis}</em>
             </motion.h1>
             <motion.p
               variants={fadeUp}
               className="text-cream/75 font-light text-lg md:text-xl leading-relaxed mb-12 max-w-xl"
             >
-              Tom & Gina Brown planted 5,000 trees on Kansas prairie and pressed
-              their first cider in 2010. Every bottle is still made from fruit
-              grown right here.
+              {hero.body}
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
-              <Link href="/shop" className="btn-primary">
-                Shop Cider
+              <Link href={hero.primaryHref} className="btn-primary">
+                {hero.primaryLabel}
               </Link>
-              <Link href="/the-farm" className="btn-outline border-cream/50 text-cream hover:bg-cream/10 hover:border-cream">
-                Our Story
+              <Link href={hero.secondaryHref} className="btn-outline border-cream/50 text-cream hover:bg-cream/10 hover:border-cream">
+                {hero.secondaryLabel}
               </Link>
             </motion.div>
           </motion.div>
@@ -149,14 +166,14 @@ export default function Home() {
       <div className="bg-maroon text-cream">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-5">
-            <span className="text-xs tracking-widest uppercase font-light opacity-70">Now Pouring</span>
+            <span className="text-xs tracking-widest uppercase font-light opacity-70">{banner.eyebrow}</span>
             <span className="h-px w-6 bg-cream/40" />
-            <span className="font-serif text-lg md:text-xl">Meadowlark Red · Meadowlark Gold · Meadow Hopper — on tap at the farm</span>
+            <span className="font-serif text-lg md:text-xl">{banner.line1}</span>
             <span className="hidden md:inline h-4 w-px bg-cream/30" />
-            <span className="font-serif text-lg md:text-xl opacity-80">Also at Wichita Farmers Market every Saturday</span>
+            <span className="font-serif text-lg md:text-xl opacity-80">{banner.line2}</span>
           </div>
-          <Link href="/visit" className="text-xs tracking-widest uppercase font-light border border-cream/40 px-5 py-2 hover:bg-cream/10 transition-colors whitespace-nowrap shrink-0">
-            Visit Us →
+          <Link href={banner.ctaHref} className="text-xs tracking-widest uppercase font-light border border-cream/40 px-5 py-2 hover:bg-cream/10 transition-colors whitespace-nowrap shrink-0">
+            {banner.ctaLabel}
           </Link>
         </div>
       </div>
