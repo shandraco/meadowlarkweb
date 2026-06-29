@@ -26,7 +26,7 @@ export default async function AdminProducts() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-cream-dark/40 text-left">
-              {["", "Product", "Tier", "Price", "Stock", "Status"].map((h, i) => (
+              {["", "Product", "Tier", "Price", "Stock", "Status", ""].map((h, i) => (
                 <th key={i} className="px-4 py-3 text-xs tracking-widest uppercase font-light text-stone whitespace-nowrap">
                   {h}
                 </th>
@@ -61,6 +61,14 @@ export default async function AdminProducts() {
                   <span className={`text-[10px] tracking-widest uppercase px-2 py-0.5 ${p.active ? "bg-orchard/15 text-orchard" : "bg-stone/20 text-stone"}`}>
                     {p.active ? "Live" : "Hidden"}
                   </span>
+                </td>
+                <td className="px-4 py-3 text-right whitespace-nowrap">
+                  <Link
+                    href={`/admin/products/${p.id}`}
+                    className="text-xs tracking-widest uppercase font-light text-maroon hover:text-orchard transition-colors"
+                  >
+                    Edit →
+                  </Link>
                 </td>
               </tr>
             ))}
