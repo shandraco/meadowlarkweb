@@ -19,8 +19,17 @@ export type Product = {
   stock_quantity: number;
   active: boolean;
   sort_order: number;
+  pos_category_id: string | null;
+  pos_order: number;
   created_at: string;
   updated_at: string;
+}
+
+export type PosCategory = {
+  id: string;
+  name: string;
+  sort_order: number;
+  created_at: string;
 }
 
 export type Order = {

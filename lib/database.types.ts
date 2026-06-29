@@ -1,7 +1,7 @@
 // Hand-written Supabase schema types (mirrors supabase/schema.sql).
 // Wired into the Supabase clients so table reads/writes and rpc() are typed.
 // Can later be regenerated with `supabase gen types typescript`.
-import type { Product, Order, OrderItem, Profile, StockMovement, SiteContent } from "./types";
+import type { Product, Order, OrderItem, Profile, StockMovement, SiteContent, PosCategory } from "./types";
 
 export interface Database {
   public: {
@@ -21,10 +21,23 @@ export interface Database {
           stock_quantity?: number;
           active?: boolean;
           sort_order?: number;
+          pos_category_id?: string | null;
+          pos_order?: number;
           created_at?: string;
           updated_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["products"]["Insert"]>;
+        Relationships: [];
+      };
+      pos_categories: {
+        Row: PosCategory;
+        Insert: {
+          name: string;
+          id?: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["pos_categories"]["Insert"]>;
         Relationships: [];
       };
       orders: {

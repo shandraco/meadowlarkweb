@@ -1,5 +1,15 @@
 import { createClient } from "./supabase/server";
-import type { Product } from "./types";
+import type { Product, PosCategory } from "./types";
+
+export async function getPosCategories(): Promise<PosCategory[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("pos_categories")
+    .select("*")
+    .order("sort_order", { ascending: true });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as PosCategory[];
+}
 
 // Catalog reads use the request-scoped server client (anon key + RLS:
 // "public read active products"). No secret key needed for browsing.

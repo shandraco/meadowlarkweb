@@ -2,16 +2,25 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import type { Product } from "@/lib/types";
+import type { Product, PosCategory } from "@/lib/types";
 import { formatUSD } from "@/lib/money";
 import { createPosOrder } from "@/app/pos/actions";
+import PosCatalog from "./PosCatalog";
 
 interface TicketLine {
   product: Product;
   qty: number;
 }
 
-export default function PosRegister({ products }: { products: Product[] }) {
+export default function PosRegister({
+  products,
+  categories,
+  canEdit,
+}: {
+  products: Product[];
+  categories: PosCategory[];
+  canEdit: boolean;
+}) {
   const router = useRouter();
   const [ticket, setTicket] = useState<Map<string, TicketLine>>(new Map());
   const [pending, start] = useTransition();
@@ -81,32 +90,7 @@ export default function PosRegister({ products }: { products: Product[] }) {
 
   return (
     <div className="flex-1 flex flex-col lg:flex-row min-h-0">
-      {/* Product grid */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
-          {products.map((p) => {
-            const out = p.stock_quantity <= 0;
-            return (
-              <button
-                key={p.id}
-                onClick={() => addToTicket(p)}
-                disabled={out}
-                className={`text-left p-4 border transition-colors min-h-[96px] flex flex-col justify-between ${
-                  out
-                    ? "border-orchard/10 opacity-40 cursor-not-allowed"
-                    : "border-orchard/15 bg-cream hover:border-orchard hover:bg-cream-dark/40 active:bg-orchard active:text-cream"
-                }`}
-              >
-                <span className="font-serif text-lg leading-tight">{p.name}</span>
-                <span className="flex items-center justify-between mt-2">
-                  <span className="font-serif text-base">{formatUSD(p.price_cents)}</span>
-                  <span className="text-[10px] tracking-widest uppercase text-stone">{p.stock_quantity} in stock</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <PosCatalog products={products} categories={categories} canEdit={canEdit} onAdd={addToTicket} />
 
       {/* Ticket */}
       <aside className="lg:w-96 bg-cream-dark/40 border-t lg:border-t-0 lg:border-l border-orchard/15 flex flex-col">
