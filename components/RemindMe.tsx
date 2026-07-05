@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LeafMark } from "./Ornament";
 import { submitReminders } from "@/app/actions/remind-me";
-import { SEASON_TOPICS } from "@/lib/season-subs";
+import { SEASON_TOPICS } from "@/lib/season-topics";
 
 export default function RemindMe({ variant = "section" }: { variant?: "section" | "inline" }) {
   const [selected, setSelected] = useState<string[]>([]);

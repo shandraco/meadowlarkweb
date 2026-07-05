@@ -2,17 +2,8 @@ import { createClient } from "./supabase/server";
 import { getSupabaseAdmin } from "./supabase/admin";
 import type { SeasonSubscriber } from "./types";
 
-export const SEASON_TOPICS = [
-  { id: "strawberries", label: "Strawberry U-Pick", when: "May" },
-  { id: "peaches", label: "Peach Season", when: "July–Aug" },
-  { id: "apples", label: "Apple Harvest", when: "Aug–Oct" },
-  { id: "pumpkins", label: "Pumpkin Patch", when: "October" },
-  { id: "cider-release", label: "Cider Club Releases", when: "4× per year" },
-  { id: "live-music", label: "Live Music & Events", when: "Seasonal" },
-  { id: "farmers-market", label: "Farmers Market Updates", when: "Every Saturday" },
-] as const;
-
-export type SeasonTopicId = (typeof SEASON_TOPICS)[number]["id"];
+// Re-exported for backward compatibility with earlier imports.
+export { SEASON_TOPICS, type SeasonTopicId } from "./season-topics";
 
 export async function subscribeToSeasons(input: {
   email: string;
@@ -32,7 +23,6 @@ export async function subscribeToSeasons(input: {
     .maybeSingle();
 
   if (existing) {
-    // Merge new topics into the existing set.
     const merged = Array.from(new Set([...(existing.topics as string[]), ...input.topics]));
     const { error } = await admin
       .from("season_subscribers")
@@ -64,7 +54,6 @@ export async function getSeasonSubscribers(): Promise<SeasonSubscriber[]> {
   return (data ?? []) as SeasonSubscriber[];
 }
 
-// Handy count-per-topic for the admin blast page.
 export async function getSubscriberCountsByTopic(): Promise<Record<string, number>> {
   const subs = await getSeasonSubscribers();
   const counts: Record<string, number> = {};
