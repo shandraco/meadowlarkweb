@@ -12,8 +12,6 @@ const cormorantSC = Cormorant_SC({
   variable: "--font-cormorant",
 });
 
-// Flowing italic display face used for the emphasized <em> lines inside
-// headings — the swashy italic plays against the engraved small caps.
 const cormorantDisplay = Cormorant({
   subsets: ["latin"],
   weight: ["400", "500"],
@@ -45,13 +43,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cormorantSC.variable} ${cormorantDisplay.variable} ${playfair.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${cormorantSC.variable} ${cormorantDisplay.variable} ${playfair.variable} ${inter.variable}`}
+    >
       <body>
         <CartProvider>
           <Nav />

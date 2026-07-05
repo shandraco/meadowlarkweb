@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createPaidOrder } from "@/lib/orders";
+import { createPaidPosOrder } from "@/lib/orders";
 import { getSessionProfile, requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { getPosLocationId, setPosLocation, clearPosLocation } from "@/lib/pos-session";
 
 export interface PosSaleResult {
   ok: boolean;
@@ -13,7 +14,7 @@ export interface PosSaleResult {
 }
 
 // Rings up an in-person sale. Same order pipeline as online checkout, tagged
-// channel:'pos' and attributed to the signed-in cashier.
+// channel:'pos', attributed to the signed-in cashier and their current location.
 export async function createPosOrder(input: {
   items: { productId: string; quantity: number }[];
   customerName?: string;
@@ -22,18 +23,36 @@ export async function createPosOrder(input: {
   if (!session) return { ok: false, error: "Not signed in." };
   if (!input.items.length) return { ok: false, error: "Ticket is empty." };
 
+  const locationId = await getPosLocationId();
+  if (!locationId) return { ok: false, error: "Pick a register location before ringing up sales." };
+
   try {
-    const order = await createPaidOrder({
+    const order = await createPaidPosOrder({
       channel: "pos",
       items: input.items,
       customer: input.customerName?.trim() ? { name: input.customerName.trim() } : undefined,
       createdBy: session.userId,
+      locationId,
       notes: "In-person sale",
     });
     return { ok: true, orderNumber: order.orderNumber, totalCents: order.totalCents };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Sale failed." };
   }
+}
+
+export async function chooseLocation(locationId: string): Promise<{ ok: boolean; error?: string }> {
+  const session = await getSessionProfile();
+  if (!session) return { ok: false, error: "Not signed in." };
+  await setPosLocation(locationId);
+  revalidatePath("/pos");
+  return { ok: true };
+}
+
+// Bound to a <form action={...}> so it must accept FormData and return void.
+export async function switchLocation(_formData: FormData): Promise<void> {
+  await clearPosLocation();
+  revalidatePath("/pos");
 }
 
 /* ── POS layout editing (admin only) ─────────────────────────────────────── */
@@ -44,7 +63,6 @@ export interface LayoutResult {
   error?: string;
 }
 
-// Persist the order of products within a category (drag-and-drop result).
 export async function reorderPosProducts(
   categoryId: string | null,
   orderedIds: string[],
@@ -69,7 +87,6 @@ export async function moveProductToCategory(
   await requireAdmin();
   const supabase = await createClient();
 
-  // Append to the end of the target category.
   let q = supabase.from("products").select("pos_order").order("pos_order", { ascending: false }).limit(1);
   q = categoryId === null ? q.is("pos_category_id", null) : q.eq("pos_category_id", categoryId);
   const { data } = await q;
@@ -134,4 +151,3 @@ export async function deletePosCategory(id: string): Promise<LayoutResult> {
   revalidatePath("/pos");
   return { ok: true };
 }
-

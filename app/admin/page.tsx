@@ -33,7 +33,7 @@ export default async function AdminOverview() {
       <div className="flex items-end justify-between mb-10">
         <div>
           <p className="section-label mb-2">Dashboard</p>
-          <h1 className="font-serif text-4xl md:text-5xl text-orchard leading-none">Overview</h1>
+          <h1 className="font-serif text-4xl md:text-5xl text-meadow leading-none">Overview</h1>
         </div>
         <span className="text-xs text-stone font-light hidden md:block">Live · updates automatically</span>
       </div>
@@ -41,30 +41,74 @@ export default async function AdminOverview() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
         {cards.map((c) => (
-          <div key={c.label} className="bg-cream-dark/50 border border-orchard/10 p-6">
+          <div key={c.label} className="bg-paper-dark/50 border border-meadow/10 p-6">
             <p className="text-xs tracking-widest uppercase font-light text-stone mb-2">{c.label}</p>
-            <p className="font-serif text-2xl md:text-3xl text-orchard leading-none">{c.value}</p>
+            <p className="font-serif text-2xl md:text-3xl text-meadow leading-none">{c.value}</p>
           </div>
         ))}
       </div>
 
+      {/* Sales by location + cashier */}
+      <div className="grid md:grid-cols-2 gap-10 mb-14">
+        <section>
+          <h2 className="font-serif text-2xl text-meadow mb-4">Sales by location</h2>
+          {summary.byLocation.length === 0 ? (
+            <p className="text-ink-soft font-light text-sm">No paid orders yet.</p>
+          ) : (
+            <div className="border border-meadow/10 divide-y divide-meadow/10">
+              {summary.byLocation.map((row) => (
+                <div key={row.locationId ?? "online"} className="flex items-center justify-between px-4 py-3">
+                  <div>
+                    <p className="text-ink">{row.locationName}</p>
+                    <p className="text-xs text-stone font-light">{row.orders} orders</p>
+                  </div>
+                  <p className="font-serif text-lg text-meadow">{formatUSD(row.revenueCents)}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section>
+          <h2 className="font-serif text-2xl text-meadow mb-4">POS by cashier</h2>
+          {summary.byCashier.length === 0 ? (
+            <p className="text-ink-soft font-light text-sm">No POS sales yet.</p>
+          ) : (
+            <div className="border border-meadow/10 divide-y divide-meadow/10">
+              {summary.byCashier.map((row) => (
+                <div key={row.cashierId} className="flex items-center justify-between px-4 py-3">
+                  <div>
+                    <p className="text-ink">{row.cashierName}</p>
+                    <p className="text-xs text-stone font-light">{row.orders} orders</p>
+                  </div>
+                  <p className="font-serif text-lg text-meadow">{formatUSD(row.revenueCents)}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+
       {/* Recent orders */}
       <div className="flex items-center justify-between mb-5">
-        <h2 className="font-serif text-2xl text-orchard">Recent orders</h2>
-        <Link href="/admin/orders" className="text-xs tracking-widest uppercase font-light text-stone hover:text-orchard transition-colors">
+        <h2 className="font-serif text-2xl text-meadow">Recent orders</h2>
+        <Link
+          href="/admin/orders"
+          className="text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors"
+        >
           View all →
         </Link>
       </div>
 
       {orders.length === 0 ? (
-        <p className="text-stone font-light border-t border-orchard/10 pt-6">
+        <p className="text-ink-soft font-light border-t border-meadow/10 pt-6">
           No orders yet. Place one from the store or the POS.
         </p>
       ) : (
-        <div className="border border-orchard/10 overflow-x-auto">
+        <div className="border border-meadow/10 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-cream-dark/40 text-left">
+              <tr className="bg-paper-dark/40 text-left">
                 {["Order", "Channel", "Customer", "Items", "Total", "Status", "When"].map((h) => (
                   <th key={h} className="px-4 py-3 text-xs tracking-widest uppercase font-light text-stone whitespace-nowrap">
                     {h}
@@ -72,19 +116,23 @@ export default async function AdminOverview() {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-orchard/10">
+            <tbody className="divide-y divide-meadow/10">
               {orders.map((o) => {
                 const itemCount = o.order_items.reduce((n, i) => n + i.quantity, 0);
                 return (
-                  <tr key={o.id} className="hover:bg-cream-dark/20">
-                    <td className="px-4 py-3 font-serif text-orchard whitespace-nowrap">#{o.order_number}</td>
-                    <td className="px-4 py-3"><ChannelBadge channel={o.channel} /></td>
-                    <td className="px-4 py-3 text-stone font-light whitespace-nowrap">
+                  <tr key={o.id} className="hover:bg-paper-dark/20">
+                    <td className="px-4 py-3 font-serif text-meadow whitespace-nowrap">#{o.order_number}</td>
+                    <td className="px-4 py-3">
+                      <ChannelBadge channel={o.channel} />
+                    </td>
+                    <td className="px-4 py-3 text-ink-soft font-light whitespace-nowrap">
                       {o.customer_name || <span className="text-stone/50">—</span>}
                     </td>
-                    <td className="px-4 py-3 text-stone font-light">{itemCount}</td>
-                    <td className="px-4 py-3 text-orchard whitespace-nowrap">{formatUSD(o.total_cents)}</td>
-                    <td className="px-4 py-3"><StatusBadge status={o.status} /></td>
+                    <td className="px-4 py-3 text-ink-soft font-light">{itemCount}</td>
+                    <td className="px-4 py-3 text-meadow whitespace-nowrap">{formatUSD(o.total_cents)}</td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={o.status} />
+                    </td>
                     <td className="px-4 py-3 text-stone/70 font-light whitespace-nowrap">{timeAgo(o.created_at)}</td>
                   </tr>
                 );

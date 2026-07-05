@@ -9,16 +9,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        orchard: "#2C3E1F",
-        "orchard-light": "#3D5429",
-        maroon: "#6D1A28",
-        "maroon-light": "#8B2236",
-        amber: "#C9A84B",
-        "amber-light": "#D9C06E",
-        cream: "#DECCB0",
-        "cream-dark": "#C8AE8A",
+        // Meadowlark palette — Kansas prairie sky
+        // "meadow" = the vibrant sky blue Tom asked for
+        meadow: "#1E5FA8",
+        "meadow-deep": "#0A2E5C",
+        "meadow-light": "#4A96D6",
+        "meadow-sky": "#B7D6EF",
+
+        // Warm accents — harvest gold and sunset
+        wheat: "#D4A745",
+        "wheat-light": "#E5C275",
+        sunset: "#C2523A",
+
+        // Neutrals — paper, ink, softened shadows
+        paper: "#F6EEDA",
+        "paper-dark": "#EBDEBE",
+        ink: "#12294A",
+        "ink-soft": "#3A4A67",
+        stone: "#6C6960",
+
+        // Kept for backward compatibility during rollout — will be removed
+        // once every consumer moves onto the meadow palette. Mapped to the
+        // closest new token so old classes don't break the page.
+        orchard: "#1E5FA8",
+        "orchard-light": "#4A96D6",
+        maroon: "#C2523A",
+        "maroon-light": "#D66B54",
+        amber: "#D4A745",
+        "amber-light": "#E5C275",
+        cream: "#F6EEDA",
+        "cream-dark": "#EBDEBE",
         bark: "#8B6914",
-        stone: "#474137",
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "var(--font-playfair)", "Georgia", "serif"],

@@ -39,12 +39,12 @@ export default function ContentEditor({
   }
 
   const input =
-    "w-full border border-orchard/20 bg-cream text-orchard placeholder:text-stone/40 px-3 py-2.5 text-sm font-light outline-none focus:border-orchard transition-colors";
+    "w-full border border-meadow/20 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2.5 text-sm font-light outline-none focus:border-meadow transition-colors";
 
   return (
-    <div className="border border-orchard/10 p-6 md:p-8 mb-8">
-      <h2 className="font-serif text-2xl text-orchard">{title}</h2>
-      <p className="text-stone font-light text-sm mb-6">{description}</p>
+    <div className="border border-meadow/10 p-6 md:p-8 mb-8 bg-paper">
+      <h2 className="font-serif text-2xl text-meadow">{title}</h2>
+      <p className="text-ink-soft font-light text-sm mb-6">{description}</p>
 
       <div className="grid sm:grid-cols-2 gap-5">
         {fields.map((f) => (
@@ -53,7 +53,7 @@ export default function ContentEditor({
             {f.multiline ? (
               <textarea
                 className={input}
-                rows={3}
+                rows={4}
                 value={v[f.key] ?? ""}
                 onChange={(e) => setV((p) => ({ ...p, [f.key]: e.target.value }))}
               />
@@ -64,11 +64,12 @@ export default function ContentEditor({
                 onChange={(e) => setV((p) => ({ ...p, [f.key]: e.target.value }))}
               />
             )}
+            {f.hint && <p className="text-xs text-ink-soft/60 font-light mt-1">{f.hint}</p>}
           </div>
         ))}
       </div>
 
-      {error && <p className="text-sm text-maroon font-light mt-4">{error}</p>}
+      {error && <p className="text-sm text-sunset font-light mt-4">{error}</p>}
 
       <div className="mt-6">
         <button onClick={save} disabled={pending} className="btn-primary disabled:opacity-50">

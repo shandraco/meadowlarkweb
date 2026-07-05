@@ -3,13 +3,7 @@
 import { useRef, useState } from "react";
 import { uploadProductImage } from "@/app/admin/products/actions";
 
-export default function ImageUpload({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (url: string) => void;
-}) {
+export default function ImageUpload({ value, onChange }: { value: string; onChange: (url: string) => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +25,7 @@ export default function ImageUpload({
   return (
     <div>
       <div className="flex items-start gap-4">
-        <div className="w-28 h-32 bg-cream-dark/50 border border-orchard/15 overflow-hidden shrink-0 flex items-center justify-center">
+        <div className="w-28 h-32 bg-paper-dark/50 border border-meadow/15 overflow-hidden shrink-0 flex items-center justify-center">
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={value} alt="" className="w-full h-full object-cover" />
@@ -53,7 +47,7 @@ export default function ImageUpload({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="text-xs tracking-widest uppercase px-4 py-2 border border-orchard text-orchard hover:bg-orchard hover:text-cream transition-colors disabled:opacity-50"
+            className="text-xs tracking-widest uppercase px-4 py-2 border border-meadow text-meadow hover:bg-meadow hover:text-paper transition-colors disabled:opacity-50"
           >
             {uploading ? "Uploading…" : value ? "Replace image" : "Upload image"}
           </button>
@@ -61,21 +55,20 @@ export default function ImageUpload({
             <button
               type="button"
               onClick={() => onChange("")}
-              className="ml-3 text-xs tracking-widest uppercase text-stone hover:text-maroon transition-colors"
+              className="ml-3 text-xs tracking-widest uppercase text-stone hover:text-sunset transition-colors"
             >
               Remove
             </button>
           )}
-          <p className="text-xs text-stone/60 font-light mt-2">JPG, PNG, WebP · up to 5 MB</p>
-          {error && <p className="text-xs text-maroon mt-1">{error}</p>}
+          <p className="text-xs text-ink-soft/60 font-light mt-2">JPG, PNG, WebP · up to 5 MB</p>
+          {error && <p className="text-xs text-sunset mt-1">{error}</p>}
 
-          {/* Manual URL fallback */}
           <input
             type="url"
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="…or paste an image URL"
-            className="w-full mt-3 border border-orchard/15 bg-cream text-orchard placeholder:text-stone/40 px-3 py-2 text-xs font-light outline-none focus:border-orchard"
+            className="w-full mt-3 border border-meadow/15 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2 text-xs font-light outline-none focus:border-meadow"
           />
         </div>
       </div>

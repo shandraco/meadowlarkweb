@@ -22,11 +22,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  // Load once on mount (avoids SSR/client mismatch).
+  // Load once on mount (avoids SSR/client mismatch). Backfill any legacy lines
+  // that predate the requiresAgeCheck field so the checkout gate never gets
+  // silently skipped for cider left in an old cart.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setLines(JSON.parse(raw));
+      if (raw) {
+        const parsed = JSON.parse(raw) as Partial<CartLine>[];
+        const normalized: CartLine[] = parsed
+          .filter((l): l is CartLine & { requiresAgeCheck?: boolean } =>
+            typeof l.productId === "string" && typeof l.quantity === "number",
+          )
+          .map((l) => ({
+            productId: l.productId,
+            slug: l.slug ?? "",
+            name: l.name ?? "",
+            unitPriceCents: l.unitPriceCents ?? 0,
+            quantity: l.quantity,
+            imageUrl: l.imageUrl ?? null,
+            requiresAgeCheck: l.requiresAgeCheck ?? true,
+          }));
+        setLines(normalized);
+      }
     } catch {
       /* ignore corrupt storage */
     }

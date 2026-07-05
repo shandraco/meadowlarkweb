@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCart } from "./CartProvider";
 
-// Small cart link with a live item count. Safe before hydration (renders 0).
 export default function CartIndicator({ className = "" }: { className?: string }) {
   const { count, hydrated } = useCart();
 
@@ -25,7 +24,7 @@ export default function CartIndicator({ className = "" }: { className?: string }
         <circle cx="18" cy="20" r="1.3" fill="currentColor" />
       </svg>
       {hydrated && count > 0 && (
-        <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-maroon text-cream text-[10px] font-sans font-medium leading-none">
+        <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-sunset text-paper text-[10px] font-sans font-medium leading-none">
           {count}
         </span>
       )}

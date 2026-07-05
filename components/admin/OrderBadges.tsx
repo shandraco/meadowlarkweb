@@ -5,7 +5,7 @@ export function ChannelBadge({ channel }: { channel: OrderChannel }) {
   return (
     <span
       className={`text-[10px] tracking-widest uppercase px-2 py-0.5 ${
-        online ? "bg-orchard/10 text-orchard" : "bg-maroon/10 text-maroon"
+        online ? "bg-meadow/10 text-meadow" : "bg-wheat/25 text-ink"
       }`}
     >
       {online ? "Online" : "POS"}
@@ -14,17 +14,13 @@ export function ChannelBadge({ channel }: { channel: OrderChannel }) {
 }
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
-  pending: "bg-amber/20 text-bark",
-  paid: "bg-orchard/15 text-orchard",
-  fulfilled: "bg-orchard text-cream",
+  pending: "bg-wheat/25 text-ink",
+  paid: "bg-meadow/15 text-meadow",
+  fulfilled: "bg-meadow text-paper",
   cancelled: "bg-stone/20 text-stone",
-  refunded: "bg-maroon/15 text-maroon",
+  refunded: "bg-sunset/15 text-sunset",
 };
 
 export function StatusBadge({ status }: { status: OrderStatus }) {
-  return (
-    <span className={`text-[10px] tracking-widest uppercase px-2 py-0.5 ${STATUS_STYLES[status]}`}>
-      {status}
-    </span>
-  );
+  return <span className={`text-[10px] tracking-widest uppercase px-2 py-0.5 ${STATUS_STYLES[status]}`}>{status}</span>;
 }
