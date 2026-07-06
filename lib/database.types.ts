@@ -46,6 +46,7 @@ export interface Database {
           pos_order: number;
           vendor_id: string | null;
           requires_age_check: boolean;
+          barcode: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -69,6 +70,7 @@ export interface Database {
           pos_order?: number;
           vendor_id?: string | null;
           requires_age_check?: boolean;
+          barcode?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -92,6 +94,7 @@ export interface Database {
           pos_order?: number;
           vendor_id?: string | null;
           requires_age_check?: boolean;
+          barcode?: string | null;
           created_at?: string;
           updated_at?: string;
         };
