@@ -451,6 +451,22 @@ export const SubscribeSeasonsInput = z
   })
   .strict();
 
+// ---- Season pass purchase -------------------------------------------------
+
+export const PurchaseSeasonPassInput = z
+  .object({
+    customer: z
+      .object({
+        name: nonEmptyTrimmed("Name", 120),
+        email: email,
+        phone: phone,
+      })
+      .strict(),
+    notes: z.string().max(500).optional(),
+    ageConfirmed: z.boolean(),
+  })
+  .strict();
+
 // ---- Farm videos (CMS block) ----------------------------------------------
 
 export const VideoSlotSchema = z

@@ -238,6 +238,56 @@ export function renderClubWelcome(d: ClubWelcomeData): { subject: string; html: 
   return { subject, html: baseWrapper(inner, `Welcome to the Cider Club — Member #${d.memberNumber}`), text };
 }
 
+// ── Season pass confirmation ────────────────────────────────────────────
+export interface SeasonPassConfirmationData {
+  passNumber: number;
+  customerName: string;
+  expiresAt: string;
+  priceCents: number;
+  redeemUrl: string;
+}
+
+export function renderSeasonPassConfirmation(d: SeasonPassConfirmationData): { subject: string; html: string; text: string } {
+  const subject = `Season Pass #${d.passNumber} — welcome, ${d.customerName.split(" ")[0]}`;
+  const expiresLabel = new Date(d.expiresAt).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const inner = `
+    <h1 style="margin:0 0 4px;color:${BRAND.meadow};font-size:26px">Season Pass #${d.passNumber}</h1>
+    <p style="margin:0 0 24px;color:${BRAND.cider};font-size:12px;letter-spacing:0.2em;text-transform:uppercase">Active</p>
+
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:${BRAND.ink}">
+      Thanks, ${escapeHtml(d.customerName)}. Your pass is good for unlimited farm entry through <strong>${escapeHtml(expiresLabel)}</strong>.
+    </p>
+
+    <div style="background:${BRAND.wheat};padding:20px;margin:0 0 24px;text-align:center">
+      <p style="margin:0 0 8px;color:${BRAND.stone};font-size:11px;letter-spacing:0.2em;text-transform:uppercase">Show at the gate</p>
+      <p style="margin:0;color:${BRAND.meadow};font-size:32px;letter-spacing:0.1em">#${d.passNumber}</p>
+    </div>
+
+    <p style="margin:0 0 8px;font-size:13px;color:${BRAND.stone}">Bookmark your pass to show it on your phone:</p>
+    <p style="margin:0 0 24px">
+      <a href="${d.redeemUrl}" style="color:${BRAND.cider};font-size:14px">${d.redeemUrl}</a>
+    </p>
+
+    <p style="margin:0;font-size:13px;color:${BRAND.stone};line-height:1.6">
+      We&apos;ll invoice you for ${formatUSD(d.priceCents)} within a business day. Questions? Reply to this email.
+    </p>
+  `;
+  const text = [
+    `Season Pass #${d.passNumber} — active through ${expiresLabel}`,
+    ``,
+    `Thanks, ${d.customerName}.`,
+    ``,
+    `Save this URL to show at the gate: ${d.redeemUrl}`,
+    ``,
+    `Meadowlark Farm · Rose Hill, KS`,
+  ].join("\n");
+  return { subject, html: baseWrapper(inner, `Season Pass #${d.passNumber} active`), text };
+}
+
 // ── Admin notification (new booking) ────────────────────────────────────
 export interface AdminNewBookingData {
   bookingNumber: number;

@@ -32,14 +32,60 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://themeadowlarkfarm.com";
+
 export const metadata: Metadata = {
-  title: "Meadowlark Farm | Orchard & Cidery — Wichita, Kansas",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Meadowlark Farm | Orchard & Cidery — Wichita, Kansas",
+    template: "%s | Meadowlark Farm",
+  },
   description:
     "Hard cider, peaches, apples, and pumpkins grown east of Wichita, Kansas. Visit the orchard, join the Cider Club, and shop our seasonal releases.",
+  keywords: [
+    "cider",
+    "hard cider",
+    "orchard",
+    "Kansas",
+    "Rose Hill",
+    "Wichita",
+    "u-pick",
+    "peaches",
+    "apples",
+    "farm",
+    "cidery",
+  ],
   openGraph: {
     title: "Meadowlark Farm | Orchard & Cidery",
     description: "Hard cider and orchard fruit grown east of Wichita, Kansas.",
     type: "website",
+    locale: "en_US",
+    siteName: "Meadowlark Farm",
+    url: siteUrl,
+    images: [
+      {
+        url: "/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Meadowlark Farm orchard at golden hour, Rose Hill, Kansas",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Meadowlark Farm | Orchard & Cidery",
+    description: "Hard cider and orchard fruit grown east of Wichita, Kansas.",
+    images: ["/og-default.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

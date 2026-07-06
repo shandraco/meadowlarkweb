@@ -1,10 +1,11 @@
 "use server";
 
 import { headers } from "next/headers";
-import { createPaidOrder } from "@/lib/orders";
+import { z } from "zod";
+import { createPaidOrder, quoteCartTotals, type CartQuote } from "@/lib/orders";
 import { writeAudit } from "@/lib/audit";
 import { consumeRateLimit, callerIp } from "@/lib/rate-limit";
-import { PlaceOrderInput, firstIssue } from "@/lib/validation";
+import { CartItemInput, PlaceOrderInput, firstIssue } from "@/lib/validation";
 import { sendOrderConfirmation } from "@/lib/email/send";
 
 export interface PlaceOrderResult {
@@ -16,6 +17,39 @@ export interface PlaceOrderResult {
 
 function siteUrl(): string {
   return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "";
+}
+
+// Live quote — called from the checkout page as the customer types their
+// address. Never touches the orders table. Cheap and safe to spam.
+const QuoteInput = z
+  .object({
+    lines: z.array(CartItemInput).min(1).max(50),
+    fulfillment: z.enum(["pickup", "ship"]),
+    shipState: z
+      .string()
+      .transform((s) => s.trim().toUpperCase())
+      .pipe(z.string().max(2))
+      .optional(),
+    shipAddress: z.string().max(500).optional(),
+  })
+  .strict();
+
+export async function quoteCheckout(input: unknown): Promise<
+  { ok: true; quote: CartQuote } | { ok: false; error: string }
+> {
+  const parsed = QuoteInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  try {
+    const quote = await quoteCartTotals({
+      items: parsed.data.lines,
+      fulfillment: parsed.data.fulfillment,
+      shipState: parsed.data.shipState ?? null,
+      shipAddress: parsed.data.shipAddress ?? null,
+    });
+    return { ok: true, quote };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Could not quote your cart." };
+  }
 }
 
 export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult> {
@@ -44,6 +78,17 @@ export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult
     return { ok: false, error: "Too many attempts. Please try again shortly." };
   }
 
+  // Re-quote server-side — we never trust totals sent by the client.
+  const quote = await quoteCartTotals({
+    items: p.lines,
+    fulfillment: p.fulfillment,
+    shipAddress: p.fulfillment === "ship" ? p.address : null,
+  });
+
+  if (p.fulfillment === "ship" && quote.shipQuote && !quote.shipQuote.supported) {
+    return { ok: false, error: quote.shipQuote.warning ?? "Cider can't ship to that state yet." };
+  }
+
   const notes =
     p.fulfillment === "ship"
       ? `Fulfillment: Ship to — ${(p.address ?? "").trim()}`
@@ -61,12 +106,12 @@ export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult
       notes,
       ageConfirmed: p.ageConfirmed,
       ageConfirmIp: ip,
+      taxCents: quote.taxCents,
+      shippingCents: quote.shippingCents,
     });
 
     const lookupUrl = `${siteUrl()}/orders/lookup?order=${order.orderNumber}&token=${order.lookupToken}`;
 
-    // Fire-and-forget — email failure must not roll back the order. The
-    // send helper already logs to email_log for ops visibility.
     void sendOrderConfirmation(p.customer.email, {
       orderNumber: order.orderNumber,
       customerName: p.customer.name,
@@ -86,7 +131,15 @@ export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult
       entityType: "order",
       entityId: order.id,
       summary: `Online order #${order.orderNumber} — ${p.customer.name} — $${(order.totalCents / 100).toFixed(2)}`,
-      after: { orderNumber: order.orderNumber, channel: "online", customer: p.customer, itemCount: p.lines.length },
+      after: {
+        orderNumber: order.orderNumber,
+        channel: "online",
+        customer: p.customer,
+        itemCount: p.lines.length,
+        subtotalCents: quote.subtotalCents,
+        taxCents: quote.taxCents,
+        shippingCents: quote.shippingCents,
+      },
     });
     return { ok: true, orderNumber: order.orderNumber, lookupUrl };
   } catch (e) {

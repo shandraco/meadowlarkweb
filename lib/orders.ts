@@ -1,6 +1,8 @@
 import { getSupabaseAdmin } from "./supabase/admin";
 import type { OrderChannel, Product } from "./types";
 import { effectivePriceCents } from "./types";
+import { quoteTax, homeStateTax } from "./tax";
+import { quoteShipping } from "./shipping-rates";
 
 export interface NewOrderItem {
   productId: string;
@@ -16,6 +18,8 @@ export interface CreateOrderInput {
   locationId?: string | null;
   ageConfirmed?: boolean;
   ageConfirmIp?: string | null;
+  taxCents?: number;
+  shippingCents?: number;
 }
 
 export interface CreatedOrder {
@@ -75,6 +79,10 @@ export async function createPaidOrder(input: CreateOrderInput): Promise<CreatedO
     throw new Error("You must confirm you are 21 or older to purchase cider.");
   }
 
+  const tax = Math.max(0, Math.round(input.taxCents ?? 0));
+  const shipping = Math.max(0, Math.round(input.shippingCents ?? 0));
+  const total = subtotal + tax + shipping;
+
   const ref =
     input.channel === "pos"
       ? `pos_${crypto.randomUUID()}`
@@ -86,8 +94,8 @@ export async function createPaidOrder(input: CreateOrderInput): Promise<CreatedO
       channel: input.channel,
       status: "pending",
       subtotal_cents: subtotal,
-      tax_cents: 0,
-      total_cents: subtotal,
+      tax_cents: tax,
+      total_cents: total,
       customer_name: input.customer?.name ?? null,
       customer_email: input.customer?.email ?? null,
       customer_phone: input.customer?.phone ?? null,
@@ -110,17 +118,14 @@ export async function createPaidOrder(input: CreateOrderInput): Promise<CreatedO
     .insert(lines.map((l) => ({ ...l, order_id: orderId })));
   if (iErr) throw new Error(iErr.message);
 
-  // Atomic: status → paid + decrement stock (idempotent). For POS the sale is
-  // final. For online we mark paid immediately for now — the day payments go
-  // live, this branch calls createIntent + returns a client_secret instead,
-  // and this row stays 'pending' until the webhook fires.
+  // Atomic: status → paid + decrement stock (idempotent).
   const { error: mErr } = await admin.rpc("mark_order_paid", { p_payment_intent: ref });
   if (mErr) throw new Error(mErr.message);
 
   return {
     id: orderId,
     orderNumber: order.order_number,
-    totalCents: subtotal,
+    totalCents: total,
     lookupToken: order.customer_lookup_token,
     items: lines.map((l) => ({
       name_snapshot: l.name_snapshot,
@@ -132,3 +137,69 @@ export async function createPaidOrder(input: CreateOrderInput): Promise<CreatedO
 
 // Kept for callers that were already using the more specific POS-only name.
 export const createPaidPosOrder = createPaidOrder;
+
+// ── Live quote for the checkout page ──────────────────────────────────────
+// No order is created. Given the cart and (optionally) a ship-to state,
+// returns subtotal + tax + shipping + total so the customer can see the
+// full price before submitting.
+export interface CartQuote {
+  subtotalCents: number;
+  taxCents: number;
+  shippingCents: number;
+  totalCents: number;
+  bottleCount: number;
+  taxLabel: string | null;
+  taxWarning?: string;
+  shipQuote?: {
+    supported: boolean;
+    stateCode: string | null;
+    daysMin: number;
+    daysMax: number;
+    notes: string | null;
+    warning?: string;
+  };
+}
+
+export async function quoteCartTotals(input: {
+  items: NewOrderItem[];
+  fulfillment: "pickup" | "ship";
+  shipState?: string | null;
+  shipAddress?: string | null;
+}): Promise<CartQuote> {
+  const { lines, subtotal } = await validateAndPrice(input.items);
+  const bottleCount = lines.reduce((n, l) => n + l.quantity, 0);
+
+  if (input.fulfillment === "pickup") {
+    const t = await homeStateTax(subtotal);
+    return {
+      subtotalCents: subtotal,
+      taxCents: t.taxCents,
+      shippingCents: 0,
+      totalCents: subtotal + t.taxCents,
+      bottleCount,
+      taxLabel: t.label,
+      taxWarning: t.warning,
+    };
+  }
+
+  const stateHint = input.shipState ?? input.shipAddress ?? null;
+  const shipping = await quoteShipping(subtotal, bottleCount, stateHint);
+  const tax = await quoteTax(subtotal, shipping.stateCode);
+  return {
+    subtotalCents: subtotal,
+    taxCents: tax.taxCents,
+    shippingCents: shipping.costCents,
+    totalCents: subtotal + tax.taxCents + shipping.costCents,
+    bottleCount,
+    taxLabel: tax.label,
+    taxWarning: tax.warning,
+    shipQuote: {
+      supported: shipping.supported,
+      stateCode: shipping.stateCode,
+      daysMin: shipping.daysMin,
+      daysMax: shipping.daysMax,
+      notes: shipping.notes,
+      warning: shipping.warning,
+    },
+  };
+}

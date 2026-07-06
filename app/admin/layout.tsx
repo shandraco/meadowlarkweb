@@ -35,6 +35,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       ],
     },
     {
+      label: "Season passes",
+      items: [{ href: "/admin/season-passes", label: "All passes" }],
+    },
+    {
       label: "Marketing",
       items: [
         { href: "/admin/campaigns", label: "Discount campaigns" },

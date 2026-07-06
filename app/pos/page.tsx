@@ -28,6 +28,7 @@ export default async function PosPage() {
       categories={categories}
       canEdit={session?.profile?.role === "admin"}
       locationName={location?.name ?? "Unknown location"}
+      cashierName={session?.profile?.full_name ?? session?.email ?? "Cashier"}
     />
   );
 }

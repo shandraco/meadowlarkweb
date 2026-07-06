@@ -9,10 +9,12 @@ import {
   renderBookingConfirmation,
   renderClubWelcome,
   renderOrderConfirmation,
+  renderSeasonPassConfirmation,
   type AdminNewBookingData,
   type BookingConfirmationData,
   type ClubWelcomeData,
   type OrderConfirmationData,
+  type SeasonPassConfirmationData,
 } from "./templates";
 
 type EmailKind =
@@ -24,6 +26,7 @@ type EmailKind =
   | "season_blast"
   | "admin_new_booking"
   | "admin_new_order"
+  | "season_pass_confirmation"
   | "other";
 
 async function logEmail(input: {
@@ -123,6 +126,18 @@ export async function sendClubWelcome(
     "club_welcome",
     { to, subject, html, text, tags: { kind: "club_welcome" } },
     { type: "subscription", id: String(data.memberNumber) },
+  );
+}
+
+export async function sendSeasonPassConfirmation(
+  to: string,
+  data: SeasonPassConfirmationData,
+): Promise<boolean> {
+  const { subject, html, text } = renderSeasonPassConfirmation(data);
+  return dispatch(
+    "season_pass_confirmation",
+    { to, subject, html, text, tags: { kind: "season_pass_confirmation" } },
+    { type: "season_pass", id: String(data.passNumber) },
   );
 }
 

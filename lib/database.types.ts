@@ -1129,6 +1129,132 @@ export interface Database {
         Relationships: [];
       };
 
+      // -----------------------------------------------------------------
+      // Sales tax rates (Migration 007)
+      // -----------------------------------------------------------------
+      tax_rates: {
+        Row: {
+          id: string;
+          state_code: string;
+          rate_bp: number;
+          label: string | null;
+          effective_from: string;
+          created_at: string;
+        };
+        Insert: {
+          state_code: string;
+          rate_bp: number;
+          id?: string;
+          label?: string | null;
+          effective_from?: string;
+          created_at?: string;
+        };
+        Update: {
+          state_code?: string;
+          rate_bp?: number;
+          id?: string;
+          label?: string | null;
+          effective_from?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
+      // -----------------------------------------------------------------
+      // Shipping rates (Migration 007)
+      // -----------------------------------------------------------------
+      shipping_rates: {
+        Row: {
+          id: string;
+          state_code: string;
+          base_cents: number;
+          per_bottle_cents: number;
+          days_min: number;
+          days_max: number;
+          notes: string | null;
+          active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          state_code: string;
+          id?: string;
+          base_cents?: number;
+          per_bottle_cents?: number;
+          days_min?: number;
+          days_max?: number;
+          notes?: string | null;
+          active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          state_code?: string;
+          id?: string;
+          base_cents?: number;
+          per_bottle_cents?: number;
+          days_min?: number;
+          days_max?: number;
+          notes?: string | null;
+          active?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
+      // -----------------------------------------------------------------
+      // Season passes (Migration 007)
+      // -----------------------------------------------------------------
+      season_passes: {
+        Row: {
+          id: string;
+          pass_number: number;
+          order_id: string | null;
+          customer_name: string;
+          customer_email: string;
+          customer_phone: string | null;
+          status: Database["public"]["Enums"]["season_pass_status"];
+          price_cents: number;
+          purchased_at: string;
+          expires_at: string;
+          redeem_token: string;
+          notes: string | null;
+        };
+        Insert: {
+          customer_name: string;
+          customer_email: string;
+          expires_at: string;
+          id?: string;
+          order_id?: string | null;
+          customer_phone?: string | null;
+          status?: Database["public"]["Enums"]["season_pass_status"];
+          price_cents?: number;
+          purchased_at?: string;
+          redeem_token?: string;
+          notes?: string | null;
+        };
+        Update: {
+          customer_name?: string;
+          customer_email?: string;
+          expires_at?: string;
+          id?: string;
+          order_id?: string | null;
+          customer_phone?: string | null;
+          status?: Database["public"]["Enums"]["season_pass_status"];
+          price_cents?: number;
+          purchased_at?: string;
+          redeem_token?: string;
+          notes?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "season_passes_order_id_fkey";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "orders";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+
       shipping_providers: {
         Row: {
           id: string;
@@ -1247,6 +1373,7 @@ export interface Database {
         | "admin_new_order"
         | "other";
       email_status: "sent" | "failed" | "skipped";
+      season_pass_status: "active" | "expired" | "revoked";
     };
 
     CompositeTypes: Record<string, never>;
