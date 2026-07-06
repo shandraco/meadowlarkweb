@@ -13,8 +13,8 @@ html {
 }
 
 body {
-  background-color: #F6EEDA;
-  color: #12294A;
+  background-color: #F4EAD1;
+  color: #1B2A3D;
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "liga" 1, "calt" 1, "kern" 1;
@@ -22,8 +22,8 @@ body {
 }
 
 ::selection {
-  background-color: #1E5FA8;
-  color: #F6EEDA;
+  background-color: #D9A621;
+  color: #1B2A3D;
 }
 
 .font-serif,
@@ -48,51 +48,69 @@ h1 em, h2 em, h3 em {
   font-size: 3.4em;
   line-height: 0.78;
   padding: 0.06em 0.12em 0 0;
-  color: #1E5FA8;
+  color: #8B1E20;
 }
 
 @layer components {
+  /* Primary CTA — cider burgundy on wheat. High contrast, warm. */
   .btn-primary {
-    @apply inline-block px-8 py-3 bg-meadow text-paper text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-meadow-deep;
+    @apply inline-block px-8 py-3 bg-cider text-wheat text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-cider-deep;
   }
 
+  /* Outline — prairie navy on wheat. Secondary action. */
   .btn-outline {
-    @apply inline-block px-8 py-3 border border-meadow text-meadow text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-meadow hover:text-paper;
+    @apply inline-block px-8 py-3 border border-meadow text-meadow text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-meadow hover:text-wheat;
   }
 
+  /* Accent — sunflower gold on ink. Used sparingly for hero CTAs / Kansas
+     flag flourish. */
   .btn-accent {
-    @apply inline-block px-8 py-3 bg-wheat text-ink text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-wheat-light;
+    @apply inline-block px-8 py-3 bg-sunflower text-ink text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-sunflower-light;
   }
 
   .section-label {
-    @apply text-xs tracking-widest uppercase font-sans font-light text-meadow;
+    @apply text-xs tracking-widest uppercase font-sans font-light text-cider;
   }
 
   .section-heading {
-    @apply font-display text-5xl md:text-6xl text-ink leading-tight;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 3px rgba(18, 41, 74, 0.08);
+    @apply font-display text-5xl md:text-6xl text-meadow leading-tight;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 3px rgba(27, 42, 61, 0.08);
   }
 
   .card {
-    @apply bg-paper border border-meadow/10;
+    @apply bg-wheat border border-meadow/10;
+  }
+
+  /* Info pill — dense fact display. Used in the quick-facts strip. */
+  .info-pill {
+    @apply flex flex-col text-center;
+  }
+  .info-pill-label {
+    @apply text-[10px] tracking-widest uppercase font-light text-cider mb-1;
+  }
+  .info-pill-value {
+    @apply font-serif text-xl text-meadow leading-none;
+  }
+  .info-pill-sub {
+    @apply text-xs text-ink-soft font-light mt-1;
   }
 }
 
-/* Subtle letterpress emboss for headings on paper backgrounds */
+/* Subtle letterpress emboss for headings on cream backgrounds */
 .embossed {
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 3px rgba(18, 41, 74, 0.08);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 3px rgba(27, 42, 61, 0.08);
 }
 
-/* Gold-foil accent for the rare hero highlight */
+/* Gold-foil accent — Kansas sunflower / meadowlark chest */
 .foil {
-  background: linear-gradient(100deg, #a97e28 0%, #e5c275 28%, #fff4ce 48%, #d4a745 64%, #a97e28 100%);
+  background: linear-gradient(100deg, #A97F0F 0%, #EBC65C 28%, #FFEBB2 48%, #D9A621 64%, #A97F0F 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Unified "prairie film" grade so photography reads as one shoot rather
-   than assorted stock — cooler now to sit next to the blue palette. */
+/* Warm-print "prairie film" grade — pushes photos toward the palette so
+   stock and estate shots read as one shoot. */
 .estate-photo {
-  filter: saturate(0.92) contrast(1.05) brightness(0.98) hue-rotate(-5deg);
+  filter: saturate(0.9) contrast(1.06) brightness(0.98) sepia(0.08);
 }

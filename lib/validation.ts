@@ -161,10 +161,18 @@ export const UpdateProductInput = productBase
 
 export const AdjustStockInput = z
   .object({
+    // .refine() must come after .min()/.max() — the numeric validators live
+    // on ZodNumber but .refine() returns ZodEffects, which doesn't expose
+    // them. Chain in the wrong order and TS silently falls back to unknown.
     productId: uuid,
-    delta: z.number().int().refine((n) => n !== 0, "Non-zero delta required.").min(-100_000).max(100_000),
+    delta: z
+      .number()
+      .int()
+      .min(-100_000)
+      .max(100_000)
+      .refine((n) => n !== 0, "Non-zero delta required."),
     reason: StockReason,
-    note: z.string().transform((s) => s.trim()).pipe(z.string().max(500)).optional(),
+    note: z.string().max(500).optional(),
     vendorId: uuid.nullable().optional(),
   })
   .strict();

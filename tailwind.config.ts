@@ -1,5 +1,13 @@
 import type { Config } from "tailwindcss";
 
+// Meadowlark Prairie — Kansas flag (navy + gold) + the farm's rustic warmth
+// (cider burgundy, prairie green, wheat cream). Ties every surface back to
+// the Kansas state palette and the meadowlark bird's own colors: gold breast,
+// dark head/back, prairie tones.
+//
+// Token strategy: semantic first (meadow / sunflower / cider / orchard),
+// legacy aliases (maroon, amber, cream, orchard) still resolve so components
+// mid-migration keep rendering.
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,37 +17,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Meadowlark palette — Kansas prairie sky
-        // "meadow" = the vibrant sky blue Tom asked for
-        meadow: "#1E5FA8",
-        "meadow-deep": "#0A2E5C",
-        "meadow-light": "#4A96D6",
-        "meadow-sky": "#B7D6EF",
+        // ── Primary structural ───────────────────────────────────────
+        // Prairie navy — Kansas flag, meadowlark's back, night sky over
+        // wheat. Used for nav, footers, headings on cream.
+        meadow: "#1F3A5C",
+        "meadow-deep": "#122540",
+        "meadow-light": "#3E5E85",
+        "meadow-sky": "#B7CCE3",
 
-        // Warm accents — harvest gold and sunset
-        wheat: "#D4A745",
-        "wheat-light": "#E5C275",
-        sunset: "#C2523A",
+        // Sunflower gold — Kansas state flower, meadowlark's chest,
+        // late-season wheat. CTAs, price highlights, accents.
+        sunflower: "#D9A621",
+        "sunflower-light": "#EBC65C",
+        "sunflower-deep": "#A97F0F",
 
-        // Neutrals — paper, ink, softened shadows
-        paper: "#F6EEDA",
-        "paper-dark": "#EBDEBE",
-        ink: "#12294A",
-        "ink-soft": "#3A4A67",
-        stone: "#6C6960",
+        // Cider burgundy — sunset over the prairie, wine, aged cider.
+        // The warm red the client asked for.
+        cider: "#8B1E20",
+        "cider-light": "#B03A3C",
+        "cider-deep": "#611013",
 
-        // Kept for backward compatibility during rollout — will be removed
-        // once every consumer moves onto the meadow palette. Mapped to the
-        // closest new token so old classes don't break the page.
-        orchard: "#1E5FA8",
-        "orchard-light": "#4A96D6",
-        maroon: "#C2523A",
-        "maroon-light": "#D66B54",
-        amber: "#D4A745",
-        "amber-light": "#E5C275",
-        cream: "#F6EEDA",
-        "cream-dark": "#EBDEBE",
-        bark: "#8B6914",
+        // Prairie / orchard green — leaves, sunflower stems, tallgrass.
+        orchard: "#5D7A3E",
+        "orchard-light": "#7C9C58",
+        "orchard-deep": "#3E5626",
+
+        // ── Neutrals ────────────────────────────────────────────────
+        // Wheat cream — page background, cards, straw bales.
+        wheat: "#F4EAD1",
+        "wheat-light": "#FBF5E4",
+        "wheat-dark": "#E5D5B4",
+
+        // Ink — darkest text, deep prairie shadow.
+        ink: "#1B2A3D",
+        "ink-soft": "#3E5470",
+        stone: "#7C6E5B",
+
+        // Legacy aliases so pages still mid-migration keep rendering
+        // (they now resolve to the Prairie palette).
+        paper: "#F4EAD1",
+        "paper-dark": "#E5D5B4",
+        sunset: "#8B1E20",
+        maroon: "#8B1E20",
+        "maroon-light": "#B03A3C",
+        amber: "#D9A621",
+        "amber-light": "#EBC65C",
+        cream: "#F4EAD1",
+        "cream-dark": "#E5D5B4",
+        bark: "#7C6E5B",
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "var(--font-playfair)", "Georgia", "serif"],

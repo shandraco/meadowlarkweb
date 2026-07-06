@@ -5,6 +5,7 @@ import { formatUSD } from "@/lib/money";
 import { effectivePriceCents, isOnSale } from "@/lib/types";
 import AddToCartButton from "@/components/store/AddToCartButton";
 import { BranchDivider } from "@/components/Ornament";
+import OpenNowBadge from "@/components/home/OpenNowBadge";
 
 export const dynamic = "force-dynamic";
 
@@ -19,27 +20,35 @@ export default async function StorePage() {
 
   return (
     <>
-      {/* Header */}
+      {/* Header — the practical info sits with the hero so a customer knows
+          they can also come pick up in person, right below the shop title. */}
       <section className="pt-36 pb-0 bg-meadow-deep relative overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none">
-          <p className="font-serif text-[24vw] text-paper whitespace-nowrap leading-none">The Cellar</p>
+          <p className="font-serif text-[24vw] text-wheat whitespace-nowrap leading-none">The Cellar</p>
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-24">
-          <p className="text-xs tracking-widest uppercase font-light text-wheat mb-5">The Cellar</p>
-          <h1 className="font-serif text-7xl md:text-9xl text-paper leading-tight">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-20">
+          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-5">The Cellar</p>
+          <h1 className="font-serif text-7xl md:text-9xl text-wheat leading-tight">
             Order
             <br />
-            <em>online.</em>
+            <em className="text-sunflower">online.</em>
           </h1>
-          <p className="text-paper/70 font-light text-lg mt-6 max-w-lg">
+          <p className="text-wheat/70 font-light text-lg mt-6 max-w-lg">
             Estate cider and farm-store goods, shipped or held for farm pickup. Every cider made from fruit grown right
             here in Rose Hill, Kansas.
           </p>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-8 text-wheat/80 font-light text-sm">
+            <OpenNowBadge variant="light" />
+            <span>Pick up at 11249 SW 160th St, Rose Hill KS</span>
+            <span className="hidden md:inline w-1 h-1 rounded-full bg-wheat/40" />
+            <span className="hidden md:inline">Ship to KS, MO, CO, NE, OK</span>
+          </div>
         </div>
       </section>
 
       {/* Age notice */}
-      <div className="bg-wheat text-ink text-center py-3 px-6">
+      <div className="bg-sunflower text-ink text-center py-3 px-6">
         <p className="text-xs tracking-wide font-light">
           You must be 21 or older to purchase alcoholic cider. Age confirmation is required at checkout.
         </p>
