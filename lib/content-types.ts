@@ -277,7 +277,10 @@ export const CONTENT_BLOCKS: {
 ];
 
 // Merge stored CMS value with defaults so missing fields fall back gracefully.
-export function mergeContent<T extends Record<string, unknown>>(defaults: T, stored: Record<string, unknown> | undefined): T {
+// T is intentionally unconstrained: HeroContent / BannerContent / etc. are
+// interfaces, and TypeScript's structural subtype check between an interface
+// and `Record<string, unknown>` fails without an explicit index signature.
+export function mergeContent<T extends object>(defaults: T, stored: Record<string, unknown> | undefined): T {
   if (!stored) return defaults;
   return { ...defaults, ...stored } as T;
 }
