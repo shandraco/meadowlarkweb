@@ -64,6 +64,7 @@ export const CampaignStatus = z.enum(["draft", "scheduled", "live", "ended"]);
 export const FulfillmentMode = z.enum(["ship", "pickup"]);
 export const PlanTier = z.enum(["basic", "reserve", "fine"]);
 export const PlanCadence = z.enum(["monthly", "quarterly", "seasonal", "biannual"]);
+export const EventKindEnum = z.enum(["live_music", "cider_dinner", "harvest_day", "other"]);
 
 // ---- Auth / session -------------------------------------------------------
 
@@ -417,6 +418,28 @@ export const ProviderInput = z
     active: z.boolean(),
   })
   .strict();
+
+// ---- Events (live music, cider dinners, harvest days) --------------------
+
+export const EventInput = z
+  .object({
+    name: nonEmptyTrimmed("Event name", 160),
+    kind: EventKindEnum,
+    startsAt: z.string().datetime({ offset: true }).or(z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/)),
+    endsAt: z.string().datetime({ offset: true }).or(z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/)),
+    description: z.string().max(4000).optional(),
+    heroImageUrl: z.string().max(500).optional(),
+    ticketUrl: z.string().max(500).optional(),
+    priceCents: z.number().int().min(0).max(1_000_000),
+    capacity: z.number().int().positive().max(50_000).nullable(),
+    cancelled: z.boolean(),
+    featured: z.boolean(),
+  })
+  .strict()
+  .refine((v) => new Date(v.endsAt) > new Date(v.startsAt), {
+    message: "End must be after start.",
+    path: ["endsAt"],
+  });
 
 // ---- Season reminders -----------------------------------------------------
 

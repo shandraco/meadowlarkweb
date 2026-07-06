@@ -1,17 +1,10 @@
 import { createClient } from "./supabase/server";
-import type { Database } from "./database.types";
+import type { Event } from "./events-shared";
 
-export type Event = Database["public"]["Tables"]["events"]["Row"];
-export type EventKind = Database["public"]["Enums"]["event_kind"];
+// Re-export for backward compat — existing importers of lib/events for types
+// keep working, but new client-side callers should import from lib/events-shared.
+export { EVENT_KIND_LABEL, type Event, type EventKind } from "./events-shared";
 
-export const EVENT_KIND_LABEL: Record<EventKind, string> = {
-  live_music: "Live music",
-  cider_dinner: "Cider dinner",
-  harvest_day: "Harvest day",
-  other: "Event",
-};
-
-// Public read — anyone can list upcoming, non-cancelled events.
 export async function getUpcomingEvents(limit = 20): Promise<Event[]> {
   const supabase = await createClient();
   const now = new Date().toISOString();

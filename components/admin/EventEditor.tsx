@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { EVENT_KIND_LABEL, type Event, type EventKind } from "@/lib/events";
+import { EVENT_KIND_LABEL, type Event, type EventKind } from "@/lib/events-shared";
 import { createEvent, updateEvent, deleteEvent } from "@/app/admin/events/actions";
 
 function toDateInput(iso: string | null): string {
