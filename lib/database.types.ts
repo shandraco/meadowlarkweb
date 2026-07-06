@@ -1,34 +1,54 @@
-// Hand-written Supabase schema types (mirrors supabase/schema.sql + migrations).
-import type {
-  Product,
-  Order,
-  OrderItem,
-  Profile,
-  StockMovement,
-  SiteContent,
-  PosCategory,
-  Location,
-  Vendor,
-  BookableResource,
-  FieldTripProgram,
-  Booking,
-  BlockedDate,
-  SubscriptionPlan,
-  Subscription,
-  SubscriptionShipment,
-  SeasonSubscriber,
-  DiscountCampaign,
-  ShippingProvider,
-} from "./types";
+// Hand-written Supabase schema types — mirrors supabase/schema.sql +
+// migration_001..004. Structured to match the canonical shape produced by
+// `supabase gen types typescript` so PostgREST's overload resolution for
+// .from().update() / .insert() / .upsert() infers correctly.
+//
+// Conventions:
+//   • Generated columns (`generated always as identity`, `default now()`,
+//     `default gen_random_uuid()`) are optional in Insert/Update.
+//   • Columns that are `not null` without a default are required in Insert.
+//   • Update mirrors Insert's shape but every field is optional.
+//   • Enum columns reference Database["public"]["Enums"][…] so a single
+//     rename in the Enums block flows through everywhere.
 
-// A convenient shape for "any JSON blob" columns.
-type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
 
 export interface Database {
   public: {
     Tables: {
+      // -----------------------------------------------------------------
+      // Products (schema.sql + migration_003)
+      // -----------------------------------------------------------------
       products: {
-        Row: Product;
+        Row: {
+          id: string;
+          slug: string;
+          name: string;
+          tier: string | null;
+          category: string;
+          description: string | null;
+          price_cents: number;
+          sale_price_cents: number | null;
+          sale_starts_at: string | null;
+          sale_ends_at: string | null;
+          image_url: string | null;
+          abv: string | null;
+          stock_quantity: number;
+          active: boolean;
+          sort_order: number;
+          pos_category_id: string | null;
+          pos_order: number;
+          vendor_id: string | null;
+          requires_age_check: boolean;
+          created_at: string;
+          updated_at: string;
+        };
         Insert: {
           slug: string;
           name: string;
@@ -37,6 +57,9 @@ export interface Database {
           tier?: string | null;
           category?: string;
           description?: string | null;
+          sale_price_cents?: number | null;
+          sale_starts_at?: string | null;
+          sale_ends_at?: string | null;
           image_url?: string | null;
           abv?: string | null;
           stock_quantity?: number;
@@ -44,38 +67,108 @@ export interface Database {
           sort_order?: number;
           pos_category_id?: string | null;
           pos_order?: number;
-          sale_price_cents?: number | null;
-          sale_starts_at?: string | null;
-          sale_ends_at?: string | null;
           vendor_id?: string | null;
           requires_age_check?: boolean;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["products"]["Insert"]>;
+        Update: {
+          slug?: string;
+          name?: string;
+          price_cents?: number;
+          id?: string;
+          tier?: string | null;
+          category?: string;
+          description?: string | null;
+          sale_price_cents?: number | null;
+          sale_starts_at?: string | null;
+          sale_ends_at?: string | null;
+          image_url?: string | null;
+          abv?: string | null;
+          stock_quantity?: number;
+          active?: boolean;
+          sort_order?: number;
+          pos_category_id?: string | null;
+          pos_order?: number;
+          vendor_id?: string | null;
+          requires_age_check?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // POS categories
+      // -----------------------------------------------------------------
       pos_categories: {
-        Row: PosCategory;
-        Insert: { name: string; id?: string; sort_order?: number; created_at?: string };
-        Update: Partial<Database["public"]["Tables"]["pos_categories"]["Insert"]>;
-        Relationships: [];
-      };
-      locations: {
-        Row: Location;
+        Row: {
+          id: string;
+          name: string;
+          sort_order: number;
+          created_at: string;
+        };
         Insert: {
           name: string;
           id?: string;
-          kind?: "farm" | "market" | "popup";
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          name?: string;
+          id?: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
+      // -----------------------------------------------------------------
+      // POS register locations
+      // -----------------------------------------------------------------
+      locations: {
+        Row: {
+          id: string;
+          name: string;
+          kind: Database["public"]["Enums"]["location_kind"];
+          active: boolean;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          name: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["location_kind"];
           active?: boolean;
           sort_order?: number;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["locations"]["Insert"]>;
+        Update: {
+          name?: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["location_kind"];
+          active?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Consignment vendors
+      // -----------------------------------------------------------------
       vendors: {
-        Row: Vendor;
+        Row: {
+          id: string;
+          name: string;
+          contact_name: string | null;
+          contact_email: string | null;
+          contact_phone: string | null;
+          split_pct: number;
+          notes: string | null;
+          active: boolean;
+          created_at: string;
+        };
         Insert: {
           name: string;
           id?: string;
@@ -87,15 +180,50 @@ export interface Database {
           active?: boolean;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["vendors"]["Insert"]>;
+        Update: {
+          name?: string;
+          id?: string;
+          contact_name?: string | null;
+          contact_email?: string | null;
+          contact_phone?: string | null;
+          split_pct?: number;
+          notes?: string | null;
+          active?: boolean;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Orders (schema.sql + migration_003)
+      // -----------------------------------------------------------------
       orders: {
-        Row: Order;
+        Row: {
+          id: string;
+          order_number: number;
+          channel: Database["public"]["Enums"]["order_channel"];
+          status: Database["public"]["Enums"]["order_status"];
+          subtotal_cents: number;
+          tax_cents: number;
+          total_cents: number;
+          customer_name: string | null;
+          customer_email: string | null;
+          customer_phone: string | null;
+          notes: string | null;
+          created_by: string | null;
+          location_id: string | null;
+          stripe_payment_intent_id: string | null;
+          payment_provider: string | null;
+          payment_ref: string | null;
+          age_confirmed_at: string | null;
+          age_confirm_ip: string | null;
+          created_at: string;
+          paid_at: string | null;
+        };
         Insert: {
-          channel: "online" | "pos";
+          channel: Database["public"]["Enums"]["order_channel"];
           id?: string;
-          status?: "pending" | "paid" | "fulfilled" | "cancelled" | "refunded";
+          status?: Database["public"]["Enums"]["order_status"];
           subtotal_cents?: number;
           tax_cents?: number;
           total_cents?: number;
@@ -113,11 +241,43 @@ export interface Database {
           created_at?: string;
           paid_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["orders"]["Insert"]>;
+        Update: {
+          channel?: Database["public"]["Enums"]["order_channel"];
+          id?: string;
+          status?: Database["public"]["Enums"]["order_status"];
+          subtotal_cents?: number;
+          tax_cents?: number;
+          total_cents?: number;
+          customer_name?: string | null;
+          customer_email?: string | null;
+          customer_phone?: string | null;
+          notes?: string | null;
+          created_by?: string | null;
+          location_id?: string | null;
+          stripe_payment_intent_id?: string | null;
+          payment_provider?: string | null;
+          payment_ref?: string | null;
+          age_confirmed_at?: string | null;
+          age_confirm_ip?: string | null;
+          created_at?: string;
+          paid_at?: string | null;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Order line items
+      // -----------------------------------------------------------------
       order_items: {
-        Row: OrderItem;
+        Row: {
+          id: string;
+          order_id: string;
+          product_id: string | null;
+          name_snapshot: string;
+          unit_price_cents: number;
+          quantity: number;
+          line_total_cents: number;
+        };
         Insert: {
           order_id: string;
           name_snapshot: string;
@@ -127,21 +287,62 @@ export interface Database {
           id?: string;
           product_id?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["order_items"]["Insert"]>;
+        Update: {
+          order_id?: string;
+          name_snapshot?: string;
+          unit_price_cents?: number;
+          quantity?: number;
+          line_total_cents?: number;
+          id?: string;
+          product_id?: string | null;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Staff profiles
+      // -----------------------------------------------------------------
       profiles: {
-        Row: Profile;
-        Insert: { id: string; full_name?: string | null; role?: "admin" | "cashier"; created_at?: string };
-        Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
+        Row: {
+          id: string;
+          full_name: string | null;
+          role: Database["public"]["Enums"]["user_role"];
+          created_at: string;
+        };
+        Insert: {
+          id: string;
+          full_name?: string | null;
+          role?: Database["public"]["Enums"]["user_role"];
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          full_name?: string | null;
+          role?: Database["public"]["Enums"]["user_role"];
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Stock movements (audit trail)
+      // -----------------------------------------------------------------
       stock_movements: {
-        Row: StockMovement;
+        Row: {
+          id: string;
+          product_id: string;
+          delta: number;
+          reason: Database["public"]["Enums"]["stock_reason"];
+          note: string | null;
+          order_id: string | null;
+          created_by: string | null;
+          vendor_id: string | null;
+          created_at: string;
+        };
         Insert: {
           product_id: string;
           delta: number;
-          reason: "initial" | "restock" | "sale" | "spoilage" | "correction" | "return";
+          reason: Database["public"]["Enums"]["stock_reason"];
           id?: string;
           note?: string | null;
           order_id?: string | null;
@@ -149,26 +350,68 @@ export interface Database {
           vendor_id?: string | null;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["stock_movements"]["Insert"]>;
+        Update: {
+          product_id?: string;
+          delta?: number;
+          reason?: Database["public"]["Enums"]["stock_reason"];
+          id?: string;
+          note?: string | null;
+          order_id?: string | null;
+          created_by?: string | null;
+          vendor_id?: string | null;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // CMS content blocks
+      // -----------------------------------------------------------------
       site_content: {
-        Row: SiteContent;
+        Row: {
+          key: string;
+          value: Json;
+          updated_at: string;
+          updated_by: string | null;
+        };
         Insert: {
           key: string;
-          value?: Record<string, unknown>;
+          value?: Json;
           updated_at?: string;
           updated_by?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["site_content"]["Insert"]>;
+        Update: {
+          key?: string;
+          value?: Json;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Bookable resources (shelters, barn, fields)
+      // -----------------------------------------------------------------
       bookable_resources: {
-        Row: BookableResource;
+        Row: {
+          id: string;
+          name: string;
+          kind: Database["public"]["Enums"]["resource_kind"];
+          capacity: number | null;
+          description: string | null;
+          price_cents: number;
+          deposit_pct: number;
+          hero_image_url: string | null;
+          floor_plan_url: string | null;
+          amenities: Json;
+          active: boolean;
+          sort_order: number;
+          created_at: string;
+        };
         Insert: {
           name: string;
           id?: string;
-          kind?: "shelter" | "barn" | "field" | "other";
+          kind?: Database["public"]["Enums"]["resource_kind"];
           capacity?: number | null;
           description?: string | null;
           price_cents?: number;
@@ -180,11 +423,42 @@ export interface Database {
           sort_order?: number;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["bookable_resources"]["Insert"]>;
+        Update: {
+          name?: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["resource_kind"];
+          capacity?: number | null;
+          description?: string | null;
+          price_cents?: number;
+          deposit_pct?: number;
+          hero_image_url?: string | null;
+          floor_plan_url?: string | null;
+          amenities?: Json;
+          active?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Field trip programs
+      // -----------------------------------------------------------------
       field_trip_programs: {
-        Row: FieldTripProgram;
+        Row: {
+          id: string;
+          name: string;
+          description: string | null;
+          price_per_student_cents: number;
+          min_students: number;
+          max_students: number;
+          season_start_month: number | null;
+          season_end_month: number | null;
+          schedule: Json;
+          teacher_notes: string | null;
+          active: boolean;
+          created_at: string;
+        };
         Insert: {
           name: string;
           id?: string;
@@ -199,21 +473,58 @@ export interface Database {
           active?: boolean;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["field_trip_programs"]["Insert"]>;
+        Update: {
+          name?: string;
+          id?: string;
+          description?: string | null;
+          price_per_student_cents?: number;
+          min_students?: number;
+          max_students?: number;
+          season_start_month?: number | null;
+          season_end_month?: number | null;
+          schedule?: Json;
+          teacher_notes?: string | null;
+          active?: boolean;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Bookings — customer reservations (shelter + field trip share)
+      // -----------------------------------------------------------------
       bookings: {
-        Row: Booking;
+        Row: {
+          id: string;
+          booking_number: number;
+          resource_id: string | null;
+          program_id: string | null;
+          status: Database["public"]["Enums"]["booking_status"];
+          starts_at: string;
+          ends_at: string;
+          guest_count: number;
+          customer_name: string;
+          customer_email: string;
+          customer_phone: string | null;
+          organization: string | null;
+          notes: string | null;
+          total_cents: number;
+          deposit_cents: number;
+          payment_provider: string | null;
+          payment_ref: string | null;
+          paid_at: string | null;
+          created_at: string;
+        };
         Insert: {
           customer_name: string;
           customer_email: string;
           starts_at: string;
           ends_at: string;
-          guest_count?: number;
           id?: string;
           resource_id?: string | null;
           program_id?: string | null;
-          status?: "pending" | "confirmed" | "cancelled" | "completed" | "no_show";
+          status?: Database["public"]["Enums"]["booking_status"];
+          guest_count?: number;
           customer_phone?: string | null;
           organization?: string | null;
           notes?: string | null;
@@ -224,11 +535,41 @@ export interface Database {
           paid_at?: string | null;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["bookings"]["Insert"]>;
+        Update: {
+          customer_name?: string;
+          customer_email?: string;
+          starts_at?: string;
+          ends_at?: string;
+          id?: string;
+          resource_id?: string | null;
+          program_id?: string | null;
+          status?: Database["public"]["Enums"]["booking_status"];
+          guest_count?: number;
+          customer_phone?: string | null;
+          organization?: string | null;
+          notes?: string | null;
+          total_cents?: number;
+          deposit_cents?: number;
+          payment_provider?: string | null;
+          payment_ref?: string | null;
+          paid_at?: string | null;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Blocked dates (resource unavailability)
+      // -----------------------------------------------------------------
       blocked_dates: {
-        Row: BlockedDate;
+        Row: {
+          id: string;
+          resource_id: string;
+          starts_at: string;
+          ends_at: string;
+          reason: string | null;
+          created_at: string;
+        };
         Insert: {
           resource_id: string;
           starts_at: string;
@@ -237,11 +578,34 @@ export interface Database {
           reason?: string | null;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["blocked_dates"]["Insert"]>;
+        Update: {
+          resource_id?: string;
+          starts_at?: string;
+          ends_at?: string;
+          id?: string;
+          reason?: string | null;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Cider Club plans
+      // -----------------------------------------------------------------
       subscription_plans: {
-        Row: SubscriptionPlan;
+        Row: {
+          id: string;
+          name: string;
+          tier: string;
+          cadence: string;
+          bottles_per_shipment: number;
+          price_cents: number;
+          description: string | null;
+          benefits: string | null;
+          active: boolean;
+          sort_order: number;
+          created_at: string;
+        };
         Insert: {
           name: string;
           tier: string;
@@ -255,63 +619,171 @@ export interface Database {
           sort_order?: number;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["subscription_plans"]["Insert"]>;
+        Update: {
+          name?: string;
+          tier?: string;
+          price_cents?: number;
+          id?: string;
+          cadence?: string;
+          bottles_per_shipment?: number;
+          description?: string | null;
+          benefits?: string | null;
+          active?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Cider Club members
+      // -----------------------------------------------------------------
       subscriptions: {
-        Row: Subscription;
+        Row: {
+          id: string;
+          member_number: number;
+          plan_id: string | null;
+          status: Database["public"]["Enums"]["subscription_status"];
+          customer_name: string;
+          customer_email: string;
+          customer_phone: string | null;
+          shipping_address: string | null;
+          fulfillment_mode: string;
+          member_token: string;
+          started_at: string;
+          paused_until: string | null;
+          cancelled_at: string | null;
+          notes: string | null;
+        };
         Insert: {
           customer_name: string;
           customer_email: string;
           id?: string;
           plan_id?: string | null;
-          status?: "active" | "paused" | "cancelled";
+          status?: Database["public"]["Enums"]["subscription_status"];
           customer_phone?: string | null;
           shipping_address?: string | null;
           fulfillment_mode?: string;
+          member_token?: string;
           started_at?: string;
           paused_until?: string | null;
           cancelled_at?: string | null;
           notes?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["subscriptions"]["Insert"]>;
+        Update: {
+          customer_name?: string;
+          customer_email?: string;
+          id?: string;
+          plan_id?: string | null;
+          status?: Database["public"]["Enums"]["subscription_status"];
+          customer_phone?: string | null;
+          shipping_address?: string | null;
+          fulfillment_mode?: string;
+          member_token?: string;
+          started_at?: string;
+          paused_until?: string | null;
+          cancelled_at?: string | null;
+          notes?: string | null;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Cider Club shipment queue
+      // -----------------------------------------------------------------
       subscription_shipments: {
-        Row: SubscriptionShipment;
+        Row: {
+          id: string;
+          subscription_id: string;
+          ship_date: string;
+          status: Database["public"]["Enums"]["shipment_status"];
+          product_ids: Json;
+          tracking_number: string | null;
+          notes: string | null;
+          created_at: string;
+          shipped_at: string | null;
+        };
         Insert: {
           subscription_id: string;
           ship_date: string;
           id?: string;
-          status?: "queued" | "packed" | "shipped" | "delivered" | "skipped";
+          status?: Database["public"]["Enums"]["shipment_status"];
           product_ids?: Json;
           tracking_number?: string | null;
           notes?: string | null;
           created_at?: string;
           shipped_at?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["subscription_shipments"]["Insert"]>;
+        Update: {
+          subscription_id?: string;
+          ship_date?: string;
+          id?: string;
+          status?: Database["public"]["Enums"]["shipment_status"];
+          product_ids?: Json;
+          tracking_number?: string | null;
+          notes?: string | null;
+          created_at?: string;
+          shipped_at?: string | null;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Season reminder subscribers
+      // -----------------------------------------------------------------
       season_subscribers: {
-        Row: SeasonSubscriber;
+        Row: {
+          id: string;
+          email: string;
+          phone: string | null;
+          topics: Json;
+          confirmed_at: string;
+          unsubscribe_token: string;
+          created_at: string;
+        };
         Insert: {
           email: string;
           id?: string;
           phone?: string | null;
           topics?: Json;
           confirmed_at?: string;
+          unsubscribe_token?: string;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["season_subscribers"]["Insert"]>;
+        Update: {
+          email?: string;
+          id?: string;
+          phone?: string | null;
+          topics?: Json;
+          confirmed_at?: string;
+          unsubscribe_token?: string;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Discount campaigns
+      // -----------------------------------------------------------------
       discount_campaigns: {
-        Row: DiscountCampaign;
+        Row: {
+          id: string;
+          name: string;
+          status: Database["public"]["Enums"]["campaign_status"];
+          product_ids: Json;
+          starts_at: string | null;
+          ends_at: string | null;
+          hero_image_url: string | null;
+          headline: string | null;
+          body: string | null;
+          social_posted_at: string | null;
+          social_post_ref: string | null;
+          created_at: string;
+        };
         Insert: {
           name: string;
           id?: string;
-          status?: "draft" | "scheduled" | "live" | "ended";
+          status?: Database["public"]["Enums"]["campaign_status"];
           product_ids?: Json;
           starts_at?: string | null;
           ends_at?: string | null;
@@ -322,11 +794,37 @@ export interface Database {
           social_post_ref?: string | null;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["discount_campaigns"]["Insert"]>;
+        Update: {
+          name?: string;
+          id?: string;
+          status?: Database["public"]["Enums"]["campaign_status"];
+          product_ids?: Json;
+          starts_at?: string | null;
+          ends_at?: string | null;
+          hero_image_url?: string | null;
+          headline?: string | null;
+          body?: string | null;
+          social_posted_at?: string | null;
+          social_post_ref?: string | null;
+          created_at?: string;
+        };
         Relationships: [];
       };
+
+      // -----------------------------------------------------------------
+      // Shipping providers
+      // -----------------------------------------------------------------
       shipping_providers: {
-        Row: ShippingProvider;
+        Row: {
+          id: string;
+          name: string;
+          code: string;
+          states_covered: Json;
+          api_base_url: string | null;
+          active: boolean;
+          notes: string | null;
+          created_at: string;
+        };
         Insert: {
           name: string;
           code: string;
@@ -337,10 +835,20 @@ export interface Database {
           notes?: string | null;
           created_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["shipping_providers"]["Insert"]>;
+        Update: {
+          name?: string;
+          code?: string;
+          id?: string;
+          states_covered?: Json;
+          api_base_url?: string | null;
+          active?: boolean;
+          notes?: string | null;
+          created_at?: string;
+        };
         Relationships: [];
       };
     };
+
     Views: {
       vendor_sales_summary: {
         Row: {
@@ -351,8 +859,10 @@ export interface Database {
           gross_cents: number;
           vendor_owed_cents: number;
         };
+        Relationships: [];
       };
     };
+
     Functions: {
       mark_order_paid: {
         Args: { p_payment_intent: string };
@@ -362,7 +872,7 @@ export interface Database {
         Args: {
           p_product: string;
           p_delta: number;
-          p_reason: "initial" | "restock" | "sale" | "spoilage" | "correction" | "return";
+          p_reason: Database["public"]["Enums"]["stock_reason"];
           p_note?: string | null;
           p_user?: string | null;
         };
@@ -375,6 +885,7 @@ export interface Database {
       is_staff: { Args: Record<string, never>; Returns: boolean };
       is_admin: { Args: Record<string, never>; Returns: boolean };
     };
+
     Enums: {
       user_role: "admin" | "cashier";
       order_channel: "online" | "pos";
@@ -387,6 +898,7 @@ export interface Database {
       shipment_status: "queued" | "packed" | "shipped" | "delivered" | "skipped";
       campaign_status: "draft" | "scheduled" | "live" | "ended";
     };
+
     CompositeTypes: Record<string, never>;
   };
 }
