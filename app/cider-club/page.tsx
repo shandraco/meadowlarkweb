@@ -83,7 +83,7 @@ export default async function CiderClubPage() {
               { q: "Can I pick up instead of ship?", a: "Yes — pick 'Farm pickup' at sign-up. Members often combine pickup with a farm visit." },
               { q: "What states do you ship to?", a: "Currently KS, MO, CO, NE, OK. Members in other states use farm pickup." },
               { q: "Can I cancel?", a: "Pause or cancel any time from your member link. No fees, no runaround." },
-              { q: "Is this a gift option?", a: "Yes — email us and we'll set up a gift membership card." },
+              { q: "Is this a gift option?", a: "Yes — pick a plan on our /gift page. They'll get a claim link by email; you're only charged when they redeem." },
             ].map((item) => (
               <details key={item.q} className="group bg-paper">
                 <summary className="flex items-center justify-between px-8 py-6 cursor-pointer list-none">

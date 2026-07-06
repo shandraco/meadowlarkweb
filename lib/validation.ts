@@ -131,6 +131,7 @@ const productBase = z
     sortOrder: z.number().int().min(0).max(9999),
     vendorId: uuid.nullable().optional(),
     requiresAgeCheck: z.boolean().optional(),
+    barcode: z.string().max(120).optional(),
     salePriceCents: priceCentsSchema.nullable().optional(),
     saleStartsAt: z.string().datetime({ offset: true }).nullable().optional(),
     saleEndsAt: z.string().datetime({ offset: true }).nullable().optional(),
@@ -463,6 +464,78 @@ export const PurchaseSeasonPassInput = z
       })
       .strict(),
     notes: z.string().max(500).optional(),
+    ageConfirmed: z.boolean(),
+  })
+  .strict();
+
+// ---- Product images (gallery) --------------------------------------------
+
+export const AddProductImageInput = z
+  .object({
+    productId: uuid,
+    url: z.string().url().max(500),
+    altText: z.string().max(200).optional(),
+    isPrimary: z.boolean().optional(),
+  })
+  .strict();
+
+export const SetPrimaryImageInput = z.object({ id: uuid, productId: uuid }).strict();
+export const RemoveImageInput = z.object({ id: uuid }).strict();
+export const ReorderImagesInput = z
+  .object({ productId: uuid, orderedIds: z.array(uuid).max(30) })
+  .strict();
+
+// ---- Product search -------------------------------------------------------
+
+export const SearchProductsInput = z
+  .object({
+    q: z.string().max(120),
+    limit: z.number().int().positive().max(50).optional(),
+  })
+  .strict();
+
+// ---- POS refunds ----------------------------------------------------------
+
+export const RefundReason = z.enum(["customer_request", "damaged", "wrong_item", "other"]);
+
+export const CreateRefundInput = z
+  .object({
+    orderId: uuid,
+    amountCents: z.number().int().positive().max(10_000_000),
+    reason: RefundReason,
+    notes: z.string().max(2000).optional(),
+    restock: z.boolean(),
+  })
+  .strict();
+
+// ---- Gift memberships -----------------------------------------------------
+
+export const PurchaseGiftInput = z
+  .object({
+    planId: uuid,
+    buyer: z
+      .object({
+        name: nonEmptyTrimmed("Your name", 120),
+        email: email,
+      })
+      .strict(),
+    recipient: z
+      .object({
+        name: nonEmptyTrimmed("Recipient's name", 120),
+        email: email,
+      })
+      .strict(),
+    message: z.string().max(1000).optional(),
+    ageConfirmed: z.boolean(),
+  })
+  .strict();
+
+export const ClaimGiftInput = z
+  .object({
+    token: z.string().length(32).regex(/^[a-f0-9]+$/, "Invalid claim link."),
+    shippingAddress: z.string().max(1000).optional(),
+    fulfillmentMode: z.enum(["ship", "pickup"]),
+    phone: z.string().max(30).optional(),
     ageConfirmed: z.boolean(),
   })
   .strict();

@@ -7,6 +7,8 @@ import { getSessionProfile, requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getPosLocationId, setPosLocation, clearPosLocation, touchPosSession } from "@/lib/pos-session";
 import { writeAudit } from "@/lib/audit";
+import { findProductByBarcode } from "@/lib/products";
+import type { Product } from "@/lib/types";
 import { ChooseLocationInput, PosOrderInput, firstIssue, uuid } from "@/lib/validation";
 
 export interface PosSaleResult {
@@ -48,6 +50,21 @@ export async function createPosOrder(input: unknown): Promise<PosSaleResult> {
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Sale failed." };
   }
+}
+
+// ── Barcode lookup (POS scanner) ───────────────────────────────────────────
+const BarcodeInput = z.object({ barcode: z.string().min(1).max(120) }).strict();
+
+export async function findProductByBarcodeAction(
+  input: unknown,
+): Promise<{ ok: boolean; product?: Product; error?: string }> {
+  const session = await getSessionProfile();
+  if (!session) return { ok: false, error: "Not signed in." };
+  const parsed = BarcodeInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const product = await findProductByBarcode(parsed.data.barcode);
+  if (!product) return { ok: false, error: "Barcode not on file." };
+  return { ok: true, product };
 }
 
 export async function chooseLocation(input: unknown): Promise<{ ok: boolean; error?: string }> {

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import CartIndicator from "@/components/store/CartIndicator";
+import SearchBar from "@/components/store/SearchBar";
 
 const links = [
   { href: "/store", label: "Shop" },
@@ -76,6 +77,7 @@ export default function Nav() {
             >
               Order Now
             </Link>
+            <SearchBar />
             <CartIndicator className="text-meadow hover:text-meadow-deep transition-colors" />
           </nav>
 

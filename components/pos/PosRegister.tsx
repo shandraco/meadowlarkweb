@@ -8,6 +8,7 @@ import { formatUSD } from "@/lib/money";
 import { createPosOrder } from "@/app/pos/actions";
 import PosCatalog from "./PosCatalog";
 import CashTenderModal from "./CashTenderModal";
+import BarcodeListener from "./BarcodeListener";
 import Receipt, { type ReceiptItem } from "./Receipt";
 
 interface TicketLine {
@@ -173,6 +174,7 @@ export default function PosRegister({
 
   return (
     <div className="flex-1 flex flex-col lg:flex-row min-h-0 bg-wheat">
+      <BarcodeListener onScan={addToTicket} />
       <PosCatalog products={products} categories={categories} canEdit={canEdit} onAdd={addToTicket} />
 
       <aside className="lg:w-96 bg-wheat-dark/60 border-t lg:border-t-0 lg:border-l border-meadow/15 flex flex-col">

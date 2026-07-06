@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getOrders } from "@/lib/admin-data";
 import { formatUSD } from "@/lib/money";
 import { ChannelBadge, StatusBadge } from "@/components/admin/OrderBadges";
@@ -24,7 +25,9 @@ export default async function AdminOrders() {
             <div key={o.id} className="border border-meadow/10 bg-paper-dark/20 p-5">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="font-serif text-xl text-meadow">#{o.order_number}</span>
+                  <Link href={`/admin/orders/${o.id}`} className="font-serif text-xl text-meadow hover:text-cider transition-colors">
+                    #{o.order_number}
+                  </Link>
                   <ChannelBadge channel={o.channel} />
                   <StatusBadge status={o.status} />
                   {o.location_id && (

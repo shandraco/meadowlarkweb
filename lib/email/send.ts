@@ -141,6 +141,32 @@ export async function sendSeasonPassConfirmation(
   );
 }
 
+export async function sendGiftBuyerConfirmation(
+  to: string,
+  data: import("./templates").GiftBuyerConfirmationData,
+): Promise<boolean> {
+  const { renderGiftBuyerConfirmation } = await import("./templates");
+  const { subject, html, text } = renderGiftBuyerConfirmation(data);
+  return dispatch(
+    "other",
+    { to, subject, html, text, tags: { kind: "gift_buyer" } },
+    { type: "gift_membership", id: String(data.giftNumber) },
+  );
+}
+
+export async function sendGiftRecipient(
+  to: string,
+  data: import("./templates").GiftRecipientData,
+): Promise<boolean> {
+  const { renderGiftRecipient } = await import("./templates");
+  const { subject, html, text } = renderGiftRecipient(data);
+  return dispatch(
+    "other",
+    { to, subject, html, text, tags: { kind: "gift_recipient" } },
+    { type: "gift_membership", id: String(data.giftNumber) },
+  );
+}
+
 export async function sendAdminNewBooking(
   to: string,
   data: AdminNewBookingData,

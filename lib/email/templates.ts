@@ -288,6 +288,63 @@ export function renderSeasonPassConfirmation(d: SeasonPassConfirmationData): { s
   return { subject, html: baseWrapper(inner, `Season Pass #${d.passNumber} active`), text };
 }
 
+// ── Gift membership (buyer) ─────────────────────────────────────────────
+export interface GiftBuyerConfirmationData {
+  giftNumber: number;
+  buyerName: string;
+  recipientName: string;
+  planName: string;
+  priceCents: number;
+  claimUrl: string;
+}
+
+export function renderGiftBuyerConfirmation(d: GiftBuyerConfirmationData): { subject: string; html: string; text: string } {
+  const subject = `Gift #${d.giftNumber} — thanks, ${d.buyerName.split(" ")[0]}`;
+  const inner = `
+    <h1 style="margin:0 0 4px;color:${BRAND.meadow};font-size:26px">Gift #${d.giftNumber}</h1>
+    <p style="margin:0 0 24px;color:${BRAND.cider};font-size:12px;letter-spacing:0.2em;text-transform:uppercase">Reserved</p>
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:${BRAND.ink}">
+      Thanks, ${escapeHtml(d.buyerName)}. We&apos;ve sent ${escapeHtml(d.recipientName)} a link to claim their ${escapeHtml(d.planName)} membership.
+    </p>
+    <p style="margin:0 0 20px;font-size:14px;color:${BRAND.stone}">
+      We&apos;ll invoice you for ${formatUSD(d.priceCents)} once the recipient claims. If they haven&apos;t claimed within a year, we&apos;ll refund you automatically.
+    </p>
+    <p style="margin:0 0 8px;font-size:13px;color:${BRAND.stone}">In case they lose it, their claim link is:</p>
+    <p style="margin:0 0 20px"><a href="${d.claimUrl}" style="color:${BRAND.cider};font-size:14px">${d.claimUrl}</a></p>
+  `;
+  const text = `Gift #${d.giftNumber} reserved for ${d.recipientName}. Claim URL: ${d.claimUrl}. We'll invoice ${formatUSD(d.priceCents)} on claim.`;
+  return { subject, html: baseWrapper(inner), text };
+}
+
+// ── Gift membership (recipient) ─────────────────────────────────────────
+export interface GiftRecipientData {
+  giftNumber: number;
+  recipientName: string;
+  buyerName: string;
+  planName: string;
+  message: string | null;
+  claimUrl: string;
+}
+
+export function renderGiftRecipient(d: GiftRecipientData): { subject: string; html: string; text: string } {
+  const subject = `${d.buyerName.split(" ")[0]} sent you a Cider Club membership`;
+  const messageBlock = d.message
+    ? `<div style="background:${BRAND.wheat};padding:18px;border-left:3px solid ${BRAND.sunflower};margin:0 0 24px;font-style:italic;color:${BRAND.ink}">"${escapeHtml(d.message)}"<div style="margin-top:8px;font-style:normal;font-size:12px;color:${BRAND.stone}">— ${escapeHtml(d.buyerName)}</div></div>`
+    : "";
+  const inner = `
+    <h1 style="margin:0 0 4px;color:${BRAND.meadow};font-size:26px">You&apos;ve got cider incoming.</h1>
+    <p style="margin:0 0 24px;color:${BRAND.cider};font-size:12px;letter-spacing:0.2em;text-transform:uppercase">Gift #${d.giftNumber}</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${BRAND.ink}">
+      Hey ${escapeHtml(d.recipientName)} — ${escapeHtml(d.buyerName)} bought you the <strong>${escapeHtml(d.planName)}</strong> plan from Meadowlark Cider Club. Claim it and pick how you want it delivered.
+    </p>
+    ${messageBlock}
+    <p style="margin:0 0 20px"><a href="${d.claimUrl}" style="display:inline-block;background:${BRAND.cider};color:${BRAND.wheat};padding:14px 28px;text-decoration:none;font-size:14px;letter-spacing:0.15em;text-transform:uppercase">Claim your membership</a></p>
+    <p style="margin:0;font-size:13px;color:${BRAND.stone};line-height:1.6">Link expires in a year. Questions? Reply here.</p>
+  `;
+  const text = `${d.buyerName} sent you a Meadowlark Cider Club ${d.planName} membership. Claim: ${d.claimUrl}${d.message ? `\n\nMessage: ${d.message}` : ""}`;
+  return { subject, html: baseWrapper(inner, `${d.buyerName} sent you cider`), text };
+}
+
 // ── Admin notification (new booking) ────────────────────────────────────
 export interface AdminNewBookingData {
   bookingNumber: number;

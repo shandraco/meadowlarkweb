@@ -14,6 +14,36 @@ export async function getPosCategories(): Promise<PosCategory[]> {
 // Catalog reads use the request-scoped server client (anon key + RLS:
 // "public read active products"). No secret key needed for browsing.
 
+// Full-text-ish search on the public catalog. Uses ilike for portability;
+// upgrade to Postgres `tsvector` + a GIN index once the catalog outgrows a
+// few hundred SKUs.
+export async function searchActiveProducts(q: string, limit = 20): Promise<Product[]> {
+  const query = q.trim();
+  if (query.length < 2) return [];
+  const supabase = await createClient();
+  const like = `%${query.replace(/[%_]/g, "")}%`;
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .or(`name.ilike.${like},description.ilike.${like},tier.ilike.${like}`)
+    .order("sort_order")
+    .limit(limit);
+  if (error) throw new Error(error.message);
+  return (data ?? []) as Product[];
+}
+
+export async function findProductByBarcode(barcode: string): Promise<Product | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("products")
+    .select("*")
+    .eq("barcode", barcode.trim())
+    .eq("active", true)
+    .maybeSingle();
+  return (data as Product | null) ?? null;
+}
+
 export async function getActiveProducts(): Promise<Product[]> {
   const supabase = await createClient();
   const { data, error } = await supabase

@@ -1255,6 +1255,204 @@ export interface Database {
         ];
       };
 
+      // -----------------------------------------------------------------
+      // Product images (gallery, Migration 008)
+      // -----------------------------------------------------------------
+      product_images: {
+        Row: {
+          id: string;
+          product_id: string;
+          url: string;
+          alt_text: string | null;
+          is_primary: boolean;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          product_id: string;
+          url: string;
+          id?: string;
+          alt_text?: string | null;
+          is_primary?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          product_id?: string;
+          url?: string;
+          id?: string;
+          alt_text?: string | null;
+          is_primary?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+
+      // -----------------------------------------------------------------
+      // Refunds (Migration 008)
+      // -----------------------------------------------------------------
+      refunds: {
+        Row: {
+          id: string;
+          order_id: string;
+          amount_cents: number;
+          reason: Database["public"]["Enums"]["refund_reason"];
+          notes: string | null;
+          restock: boolean;
+          processed_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          order_id: string;
+          amount_cents: number;
+          id?: string;
+          reason?: Database["public"]["Enums"]["refund_reason"];
+          notes?: string | null;
+          restock?: boolean;
+          processed_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          order_id?: string;
+          amount_cents?: number;
+          id?: string;
+          reason?: Database["public"]["Enums"]["refund_reason"];
+          notes?: string | null;
+          restock?: boolean;
+          processed_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "refunds_order_id_fkey";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "orders";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+
+      // -----------------------------------------------------------------
+      // Gift memberships (Migration 008)
+      // -----------------------------------------------------------------
+      gift_memberships: {
+        Row: {
+          id: string;
+          gift_number: number;
+          plan_id: string | null;
+          buyer_name: string;
+          buyer_email: string;
+          recipient_name: string;
+          recipient_email: string;
+          message: string | null;
+          price_cents: number;
+          status: Database["public"]["Enums"]["gift_membership_status"];
+          claim_token: string;
+          claimed_subscription_id: string | null;
+          created_at: string;
+          claimed_at: string | null;
+          expires_at: string;
+        };
+        Insert: {
+          buyer_name: string;
+          buyer_email: string;
+          recipient_name: string;
+          recipient_email: string;
+          id?: string;
+          plan_id?: string | null;
+          message?: string | null;
+          price_cents?: number;
+          status?: Database["public"]["Enums"]["gift_membership_status"];
+          claim_token?: string;
+          claimed_subscription_id?: string | null;
+          created_at?: string;
+          claimed_at?: string | null;
+          expires_at?: string;
+        };
+        Update: {
+          buyer_name?: string;
+          buyer_email?: string;
+          recipient_name?: string;
+          recipient_email?: string;
+          id?: string;
+          plan_id?: string | null;
+          message?: string | null;
+          price_cents?: number;
+          status?: Database["public"]["Enums"]["gift_membership_status"];
+          claim_token?: string;
+          claimed_subscription_id?: string | null;
+          created_at?: string;
+          claimed_at?: string | null;
+          expires_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "gift_memberships_plan_id_fkey";
+            columns: ["plan_id"];
+            isOneToOne: false;
+            referencedRelation: "subscription_plans";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "gift_memberships_claimed_subscription_id_fkey";
+            columns: ["claimed_subscription_id"];
+            isOneToOne: false;
+            referencedRelation: "subscriptions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+
+      // -----------------------------------------------------------------
+      // Loyalty events (Migration 008)
+      // -----------------------------------------------------------------
+      loyalty_events: {
+        Row: {
+          id: string;
+          customer_email: string;
+          customer_name: string | null;
+          kind: Database["public"]["Enums"]["loyalty_event_kind"];
+          points: number;
+          order_id: string | null;
+          notes: string | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          customer_email: string;
+          kind: Database["public"]["Enums"]["loyalty_event_kind"];
+          id?: string;
+          customer_name?: string | null;
+          points?: number;
+          order_id?: string | null;
+          notes?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          customer_email?: string;
+          kind?: Database["public"]["Enums"]["loyalty_event_kind"];
+          id?: string;
+          customer_name?: string | null;
+          points?: number;
+          order_id?: string | null;
+          notes?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
       shipping_providers: {
         Row: {
           id: string;
@@ -1374,6 +1572,9 @@ export interface Database {
         | "other";
       email_status: "sent" | "failed" | "skipped";
       season_pass_status: "active" | "expired" | "revoked";
+      refund_reason: "customer_request" | "damaged" | "wrong_item" | "other";
+      gift_membership_status: "pending" | "claimed" | "cancelled" | "expired";
+      loyalty_event_kind: "visit" | "purchase" | "bonus" | "redeem";
     };
 
     CompositeTypes: Record<string, never>;

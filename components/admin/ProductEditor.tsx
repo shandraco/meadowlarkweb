@@ -42,6 +42,7 @@ export default function ProductEditor({ product, vendors }: { product?: Product;
     initialStock: "0",
     vendorId: product?.vendor_id ?? "",
     requiresAgeCheck: product?.requires_age_check ?? true,
+    barcode: product?.barcode ?? "",
   });
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
 
@@ -61,6 +62,7 @@ export default function ProductEditor({ product, vendors }: { product?: Product;
       sortOrder: parseInt(f.sortOrder, 10) || 50,
       vendorId: f.vendorId || null,
       requiresAgeCheck: f.requiresAgeCheck,
+      barcode: f.barcode || undefined,
       salePriceCents: salePrice,
       saleStartsAt: fromDateInput(f.saleStartsAt),
       saleEndsAt: fromDateInput(f.saleEndsAt),
@@ -204,9 +206,20 @@ export default function ProductEditor({ product, vendors }: { product?: Product;
         </div>
       </div>
 
-      <div>
-        <label className={label}>Slug {editing ? "" : "(optional — auto from name)"}</label>
-        <input className={input} value={f.slug} onChange={(e) => set("slug", e.target.value)} placeholder="meadowlark-red" />
+      <div className="grid sm:grid-cols-2 gap-5">
+        <div>
+          <label className={label}>Slug {editing ? "" : "(optional — auto from name)"}</label>
+          <input className={input} value={f.slug} onChange={(e) => set("slug", e.target.value)} placeholder="meadowlark-red" />
+        </div>
+        <div>
+          <label className={label}>Barcode (UPC/EAN)</label>
+          <input
+            className={input}
+            value={f.barcode}
+            onChange={(e) => set("barcode", e.target.value)}
+            placeholder="For POS scanner"
+          />
+        </div>
       </div>
 
       {!editing && (
