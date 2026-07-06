@@ -5,16 +5,19 @@ import { createPaidOrder } from "@/lib/orders";
 import { writeAudit } from "@/lib/audit";
 import { consumeRateLimit, callerIp } from "@/lib/rate-limit";
 import { PlaceOrderInput, firstIssue } from "@/lib/validation";
+import { sendOrderConfirmation } from "@/lib/email/send";
 
 export interface PlaceOrderResult {
   ok: boolean;
   orderNumber?: number;
+  lookupUrl?: string;
   error?: string;
 }
 
-// One-shot: validate the wire payload, throttle abusive callers, then record
-// the order + mark it paid (placeholder). Every attempt is audited so we can
-// spot forgery attempts even when validation blocks them.
+function siteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "";
+}
+
 export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult> {
   const parsed = PlaceOrderInput.safeParse(input);
   if (!parsed.success) {
@@ -31,7 +34,6 @@ export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult
     return { ok: false, error: "Shipping address is required." };
   }
 
-  // 5 attempts / 15 min per email — real customers rarely retry many times.
   const ok = await consumeRateLimit("checkout", p.customer.email, 5, 900);
   if (!ok) {
     await writeAudit({
@@ -60,6 +62,25 @@ export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult
       ageConfirmed: p.ageConfirmed,
       ageConfirmIp: ip,
     });
+
+    const lookupUrl = `${siteUrl()}/orders/lookup?order=${order.orderNumber}&token=${order.lookupToken}`;
+
+    // Fire-and-forget — email failure must not roll back the order. The
+    // send helper already logs to email_log for ops visibility.
+    void sendOrderConfirmation(p.customer.email, {
+      orderNumber: order.orderNumber,
+      customerName: p.customer.name,
+      totalCents: order.totalCents,
+      items: order.items.map((i) => ({
+        name: i.name_snapshot,
+        quantity: i.quantity,
+        lineCents: i.line_total_cents,
+      })),
+      fulfillment: p.fulfillment,
+      address: p.fulfillment === "ship" ? p.address : null,
+      lookupUrl,
+    });
+
     await writeAudit({
       action: "create",
       entityType: "order",
@@ -67,7 +88,7 @@ export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult
       summary: `Online order #${order.orderNumber} — ${p.customer.name} — $${(order.totalCents / 100).toFixed(2)}`,
       after: { orderNumber: order.orderNumber, channel: "online", customer: p.customer, itemCount: p.lines.length },
     });
-    return { ok: true, orderNumber: order.orderNumber };
+    return { ok: true, orderNumber: order.orderNumber, lookupUrl };
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Could not place order.";
     await writeAudit({

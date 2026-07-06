@@ -232,6 +232,7 @@ export interface Database {
           payment_ref: string | null;
           age_confirmed_at: string | null;
           age_confirm_ip: string | null;
+          customer_lookup_token: string;
           created_at: string;
           paid_at: string | null;
         };
@@ -253,6 +254,7 @@ export interface Database {
           payment_ref?: string | null;
           age_confirmed_at?: string | null;
           age_confirm_ip?: string | null;
+          customer_lookup_token?: string;
           created_at?: string;
           paid_at?: string | null;
         };
@@ -274,6 +276,7 @@ export interface Database {
           payment_ref?: string | null;
           age_confirmed_at?: string | null;
           age_confirm_ip?: string | null;
+          customer_lookup_token?: string;
           created_at?: string;
           paid_at?: string | null;
         };
@@ -1028,6 +1031,104 @@ export interface Database {
         Relationships: [];
       };
 
+      // -----------------------------------------------------------------
+      // Events (live music, cider dinners, harvest days)
+      // -----------------------------------------------------------------
+      events: {
+        Row: {
+          id: string;
+          name: string;
+          kind: Database["public"]["Enums"]["event_kind"];
+          starts_at: string;
+          ends_at: string;
+          description: string | null;
+          hero_image_url: string | null;
+          ticket_url: string | null;
+          price_cents: number;
+          capacity: number | null;
+          cancelled: boolean;
+          featured: boolean;
+          created_at: string;
+        };
+        Insert: {
+          name: string;
+          starts_at: string;
+          ends_at: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["event_kind"];
+          description?: string | null;
+          hero_image_url?: string | null;
+          ticket_url?: string | null;
+          price_cents?: number;
+          capacity?: number | null;
+          cancelled?: boolean;
+          featured?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          name?: string;
+          starts_at?: string;
+          ends_at?: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["event_kind"];
+          description?: string | null;
+          hero_image_url?: string | null;
+          ticket_url?: string | null;
+          price_cents?: number;
+          capacity?: number | null;
+          cancelled?: boolean;
+          featured?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
+      // -----------------------------------------------------------------
+      // Email log (append-only, service-role writes)
+      // -----------------------------------------------------------------
+      email_log: {
+        Row: {
+          id: string;
+          recipient: string;
+          kind: Database["public"]["Enums"]["email_kind"];
+          status: Database["public"]["Enums"]["email_status"];
+          subject: string | null;
+          provider: string | null;
+          provider_ref: string | null;
+          entity_type: string | null;
+          entity_id: string | null;
+          error: string | null;
+          created_at: string;
+        };
+        Insert: {
+          recipient: string;
+          kind: Database["public"]["Enums"]["email_kind"];
+          id?: string;
+          status?: Database["public"]["Enums"]["email_status"];
+          subject?: string | null;
+          provider?: string | null;
+          provider_ref?: string | null;
+          entity_type?: string | null;
+          entity_id?: string | null;
+          error?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          recipient?: string;
+          kind?: Database["public"]["Enums"]["email_kind"];
+          id?: string;
+          status?: Database["public"]["Enums"]["email_status"];
+          subject?: string | null;
+          provider?: string | null;
+          provider_ref?: string | null;
+          entity_type?: string | null;
+          entity_id?: string | null;
+          error?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
       shipping_providers: {
         Row: {
           id: string;
@@ -1105,6 +1206,10 @@ export interface Database {
         };
         Returns: boolean;
       };
+      lookup_order_by_token: {
+        Args: { p_token: string; p_email: string };
+        Returns: { order_data: Json; items_data: Json }[];
+      };
       is_staff: { Args: Record<string, never>; Returns: boolean };
       is_admin: { Args: Record<string, never>; Returns: boolean };
     };
@@ -1130,6 +1235,18 @@ export interface Database {
         | "sign_in"
         | "sign_out"
         | "other";
+      event_kind: "live_music" | "cider_dinner" | "harvest_day" | "other";
+      email_kind:
+        | "order_confirmation"
+        | "booking_confirmation"
+        | "booking_status_change"
+        | "club_welcome"
+        | "shipment_shipped"
+        | "season_blast"
+        | "admin_new_booking"
+        | "admin_new_order"
+        | "other";
+      email_status: "sent" | "failed" | "skipped";
     };
 
     CompositeTypes: Record<string, never>;

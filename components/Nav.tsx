@@ -11,6 +11,7 @@ const links = [
   { href: "/store", label: "Shop" },
   { href: "/the-farm", label: "The Farm" },
   { href: "/cider-club", label: "Cider Club" },
+  { href: "/events", label: "Events" },
   { href: "/visit", label: "Visit" },
 ];
 

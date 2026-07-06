@@ -1,16 +1,21 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { joinCiderClub } from "@/lib/subscriptions";
+import { getPlanById, joinCiderClub } from "@/lib/subscriptions";
 import { writeAudit } from "@/lib/audit";
 import { consumeRateLimit } from "@/lib/rate-limit";
 import { JoinClubInput, firstIssue } from "@/lib/validation";
+import { sendClubWelcome } from "@/lib/email/send";
 
 export interface JoinResult {
   ok: boolean;
   memberNumber?: number;
   token?: string;
   error?: string;
+}
+
+function siteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "";
 }
 
 export async function joinClub(input: unknown): Promise<JoinResult> {
@@ -29,12 +34,23 @@ export async function joinClub(input: unknown): Promise<JoinResult> {
     return { ok: false, error: "Shipping address required for shipped members." };
   }
 
-  // 3 attempts / 30 min per email. Legit sign-ups happen once.
   const ok = await consumeRateLimit("club_signup", c.customer.email, 3, 1800);
   if (!ok) return { ok: false, error: "Too many attempts. Please try again shortly." };
 
   try {
     const r = await joinCiderClub(c);
+    const plan = await getPlanById(c.planId);
+
+    void sendClubWelcome(c.customer.email, {
+      memberNumber: r.memberNumber,
+      customerName: c.customer.name,
+      planName: plan?.name ?? "your plan",
+      cadence: plan?.cadence ?? "each season",
+      bottlesPerShipment: plan?.bottles_per_shipment ?? 0,
+      fulfillmentMode: c.fulfillmentMode,
+      memberPortalUrl: `${siteUrl()}/club/account/${r.token}`,
+    });
+
     await writeAudit({
       action: "create",
       entityType: "subscription",

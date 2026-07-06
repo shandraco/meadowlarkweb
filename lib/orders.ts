@@ -22,6 +22,8 @@ export interface CreatedOrder {
   id: string;
   orderNumber: number;
   totalCents: number;
+  lookupToken: string;
+  items: { name_snapshot: string; quantity: number; line_total_cents: number }[];
 }
 
 async function validateAndPrice(items: NewOrderItem[]) {
@@ -98,11 +100,11 @@ export async function createPaidOrder(input: CreateOrderInput): Promise<CreatedO
       age_confirmed_at: input.ageConfirmed ? new Date().toISOString() : null,
       age_confirm_ip: input.ageConfirmIp ?? null,
     })
-    .select("id, order_number")
+    .select("id, order_number, customer_lookup_token")
     .single();
   if (oErr) throw new Error(oErr.message);
 
-  const orderId = order!.id as string;
+  const orderId = order.id;
   const { error: iErr } = await admin
     .from("order_items")
     .insert(lines.map((l) => ({ ...l, order_id: orderId })));
@@ -115,7 +117,17 @@ export async function createPaidOrder(input: CreateOrderInput): Promise<CreatedO
   const { error: mErr } = await admin.rpc("mark_order_paid", { p_payment_intent: ref });
   if (mErr) throw new Error(mErr.message);
 
-  return { id: orderId, orderNumber: order!.order_number as number, totalCents: subtotal };
+  return {
+    id: orderId,
+    orderNumber: order.order_number,
+    totalCents: subtotal,
+    lookupToken: order.customer_lookup_token,
+    items: lines.map((l) => ({
+      name_snapshot: l.name_snapshot,
+      quantity: l.quantity,
+      line_total_cents: l.line_total_cents,
+    })),
+  };
 }
 
 // Kept for callers that were already using the more specific POS-only name.

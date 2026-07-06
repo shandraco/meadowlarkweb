@@ -13,17 +13,20 @@ export default async function CheckoutSuccessPage({
   return (
     <section className="pt-44 pb-40 min-h-[70vh]">
       <div className="max-w-xl mx-auto px-6 text-center">
-        <LeafMark className="w-7 h-10 text-wheat mx-auto mb-8" />
+        <LeafMark className="w-7 h-10 text-sunflower mx-auto mb-8" />
         <p className="section-label mb-4">Thank you</p>
-        <h1 className="embossed font-serif text-5xl md:text-6xl text-ink leading-tight mb-6">Order placed.</h1>
+        <h1 className="embossed font-serif text-5xl md:text-6xl text-meadow leading-tight mb-6">Order placed.</h1>
         {order && (
           <p className="text-ink-soft font-light text-lg mb-2">
-            Your order number is <span className="text-meadow font-normal">#{order}</span>.
+            Your order number is <span className="text-cider font-normal">#{order}</span>.
           </p>
         )}
-        <p className="text-ink-soft font-light leading-relaxed mb-10">
-          We&apos;ve got your order. You&apos;ll receive an email confirmation shortly, and another note when it&apos;s
-          ready for pickup or on its way.
+        <p className="text-ink-soft font-light leading-relaxed mb-6">
+          A confirmation email is on its way. It includes a link you can bookmark to check on your order any time — no
+          account needed.
+        </p>
+        <p className="text-xs text-stone font-light mb-10">
+          Don&apos;t see it in a minute or two? Check your spam folder, or text (316) 518-8907.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link href="/store" className="btn-primary">
