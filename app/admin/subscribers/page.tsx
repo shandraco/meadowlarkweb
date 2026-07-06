@@ -5,7 +5,7 @@ export const metadata = { title: "Season Reminders | Meadowlark Admin" };
 
 export default async function SubscribersPage() {
   const subscribers = await getSeasonSubscribers();
-  const topicLabels = new Map(SEASON_TOPICS.map((t) => [t.id, t.label]));
+  const topicLabels = new Map<string, string>(SEASON_TOPICS.map((t) => [t.id, t.label]));
 
   const countsByTopic: Record<string, number> = {};
   for (const s of subscribers) for (const t of s.topics) countsByTopic[t] = (countsByTopic[t] ?? 0) + 1;
