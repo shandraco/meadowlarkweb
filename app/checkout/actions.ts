@@ -18,9 +18,10 @@ export interface PlaceOrderResult {
 }
 
 // One-shot: record the order, mark it paid (placeholder), decrement stock.
-// A live payment provider will slot into this flow via the abstraction in
-// lib/payments/ — until then, orders are recorded as "paid" for tracking
-// purposes and the customer settles at pickup or via a mailed invoice.
+// Card processing is disabled for now — orders are recorded as "paid" for
+// tracking purposes and the customer settles at pickup or via a mailed
+// invoice. When a payment provider is added, plug it in here and gate the
+// mark-paid step on a webhook confirmation instead.
 export async function placeOnlineOrder(input: PlaceOrderInput): Promise<PlaceOrderResult> {
   if (!input.customer.name?.trim() || !input.customer.email?.trim()) {
     return { ok: false, error: "Name and email are required." };
