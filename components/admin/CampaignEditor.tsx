@@ -54,7 +54,8 @@ export default function CampaignEditor({
     e.preventDefault();
     setError(null);
     start(async () => {
-      const res = await upsertCampaign(campaign?.id ?? null, {
+      const res = await upsertCampaign({
+        id: campaign?.id ?? null,
         name: f.name,
         status: f.status,
         productIds: f.productIds,
@@ -166,7 +167,7 @@ export default function CampaignEditor({
                 type="button"
                 onClick={() =>
                   start(async () => {
-                    await markSocialPosted(campaign!.id, f.socialRef);
+                    await markSocialPosted({ id: campaign!.id, ref: f.socialRef });
                     router.refresh();
                   })
                 }

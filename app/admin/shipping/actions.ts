@@ -1,17 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-
-export interface ProviderInput {
-  name: string;
-  code: string;
-  statesCovered: string[];
-  apiBaseUrl: string;
-  notes: string;
-  active: boolean;
-}
+import { writeAudit } from "@/lib/audit";
+import { ProviderInput, firstIssue, uuid } from "@/lib/validation";
 
 export interface ProviderResult {
   ok: boolean;
@@ -19,30 +13,54 @@ export interface ProviderResult {
   error?: string;
 }
 
+const UpsertProviderInput = z.object({ id: uuid.nullable() }).and(ProviderInput);
+
 function refresh() {
   revalidatePath("/admin/shipping");
 }
 
-export async function upsertProvider(id: string | null, input: ProviderInput): Promise<ProviderResult> {
+export async function upsertProvider(input: unknown): Promise<ProviderResult> {
   await requireAdmin();
-  if (!input.name.trim() || !input.code.trim()) return { ok: false, error: "Name and code required." };
+  const parsed = UpsertProviderInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const p = parsed.data;
+
   const supabase = await createClient();
   const payload = {
-    name: input.name.trim(),
-    code: input.code.trim().toLowerCase(),
-    states_covered: input.statesCovered,
-    api_base_url: input.apiBaseUrl.trim() || null,
-    notes: input.notes.trim() || null,
-    active: input.active,
+    name: p.name,
+    code: p.code,
+    states_covered: p.statesCovered,
+    api_base_url: p.apiBaseUrl || null,
+    notes: p.notes || null,
+    active: p.active,
   };
-  if (id) {
-    const { error } = await supabase.from("shipping_providers").update(payload).eq("id", id);
+
+  if (p.id) {
+    const { data: before } = await supabase.from("shipping_providers").select("*").eq("id", p.id).maybeSingle();
+    if (!before) return { ok: false, error: "Provider not found." };
+    const { error } = await supabase.from("shipping_providers").update(payload).eq("id", p.id);
     if (error) return { ok: false, error: error.message };
+    await writeAudit({
+      action: "update",
+      entityType: "shipping_provider",
+      entityId: p.id,
+      summary: `Updated provider "${p.name}" (${p.statesCovered.length} states)`,
+      before,
+      after: p,
+    });
     refresh();
-    return { ok: true, id };
+    return { ok: true, id: p.id };
   }
+
   const { data, error } = await supabase.from("shipping_providers").insert(payload).select("id").single();
   if (error) return { ok: false, error: error.message };
+  await writeAudit({
+    action: "create",
+    entityType: "shipping_provider",
+    entityId: data.id,
+    summary: `Added provider "${p.name}"`,
+    after: { ...p, id: data.id },
+  });
   refresh();
-  return { ok: true, id: data!.id as string };
+  return { ok: true, id: data.id };
 }

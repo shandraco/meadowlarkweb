@@ -62,7 +62,7 @@ export default function ResourceEditor({ resource }: { resource?: BookableResour
       },
     };
     start(async () => {
-      const res = editing ? await updateResource(resource!.id, input) : await createResource(input);
+      const res = editing ? await updateResource({ id: resource!.id, ...input }) : await createResource(input);
       if (!res.ok) return setError(res.error ?? "Save failed.");
       if (editing) {
         setSaved(true);
@@ -175,7 +175,7 @@ export default function ResourceEditor({ resource }: { resource?: BookableResour
             type="button"
             onClick={() =>
               start(async () => {
-                await setResourceActive(resource!.id, !resource!.active);
+                await setResourceActive({ id: resource!.id, active: !resource!.active });
                 router.refresh();
               })
             }

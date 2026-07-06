@@ -82,7 +82,7 @@ export default function PosCatalog({
         return idx === -1 ? p : { ...p, pos_order: idx };
       }),
     );
-    reorderPosProducts(active === UNCAT ? null : active, newIds);
+    reorderPosProducts({ categoryId: active === UNCAT ? null : active, orderedIds: newIds });
   }
 
   function onTabDragEnd(e: DragEndEvent) {
@@ -91,12 +91,12 @@ export default function PosCatalog({
     const ids = cats.map((c) => c.id);
     const reordered = arrayMove(cats, ids.indexOf(a.id as string), ids.indexOf(over.id as string));
     setCats(reordered.map((c, i) => ({ ...c, sort_order: i })));
-    reorderPosCategories(reordered.map((c) => c.id));
+    reorderPosCategories({ orderedIds: reordered.map((c) => c.id) });
   }
 
   // ── category ops ──
   async function addCategory() {
-    const res = await createPosCategory("New Category");
+    const res = await createPosCategory({ name: "New Category" });
     if (res.ok && res.id) {
       setCats((c) => [...c, { id: res.id!, name: "New Category", sort_order: c.length, created_at: "" }]);
       setActiveId(res.id);
@@ -107,18 +107,18 @@ export default function PosCatalog({
   }
   function commitName(id: string) {
     const name = cats.find((c) => c.id === id)?.name ?? "";
-    if (name.trim()) renamePosCategory(id, name);
+    if (name.trim()) renamePosCategory({ id, name });
   }
   function removeCategory(id: string) {
     setItems((p) => p.map((x) => (x.pos_category_id === id ? { ...x, pos_category_id: null } : x)));
     setCats((c) => c.filter((x) => x.id !== id));
     if (active === id) setActiveId(UNCAT);
-    deletePosCategory(id);
+    deletePosCategory({ id });
   }
   function moveItem(productId: string, categoryId: string) {
     const cat = categoryId === UNCAT ? null : categoryId;
     setItems((p) => p.map((x) => (x.id === productId ? { ...x, pos_category_id: cat } : x)));
-    moveProductToCategory(productId, cat);
+    moveProductToCategory({ productId, categoryId: cat });
   }
 
   return (

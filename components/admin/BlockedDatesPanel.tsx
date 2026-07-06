@@ -36,7 +36,7 @@ export default function BlockedDatesPanel({ resourceId, blocked }: { resourceId:
 
   function remove(id: string) {
     start(async () => {
-      await removeBlockedDate(id);
+      await removeBlockedDate({ id });
       router.refresh();
     });
   }

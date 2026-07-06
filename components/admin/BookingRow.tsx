@@ -28,7 +28,7 @@ export default function BookingRow({ booking, resourceName }: { booking: Booking
 
   function move(to: BookingStatus) {
     start(async () => {
-      await setBookingStatus(booking.id, to);
+      await setBookingStatus({ id: booking.id, status: to });
       router.refresh();
     });
   }

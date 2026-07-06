@@ -35,7 +35,7 @@ export default function VendorEditor({ vendor }: { vendor?: Vendor }) {
       notes: f.notes,
     };
     start(async () => {
-      const res = editing ? await updateVendor(vendor!.id, input) : await createVendor(input);
+      const res = editing ? await updateVendor({ id: vendor!.id, ...input }) : await createVendor(input);
       if (!res.ok) return setError(res.error ?? "Save failed.");
       if (editing) {
         setSaved(true);
@@ -101,7 +101,7 @@ export default function VendorEditor({ vendor }: { vendor?: Vendor }) {
             type="button"
             onClick={() =>
               start(async () => {
-                await setVendorActive(vendor!.id, !vendor!.active);
+                await setVendorActive({ id: vendor!.id, active: !vendor!.active });
                 router.refresh();
               })
             }

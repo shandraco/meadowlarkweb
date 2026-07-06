@@ -4,7 +4,14 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/auth";
-import type { StockReason } from "@/lib/types";
+import { writeAudit } from "@/lib/audit";
+import {
+  AdjustStockInput,
+  CreateProductInput,
+  SetActiveInput,
+  UpdateProductInput,
+  firstIssue,
+} from "@/lib/validation";
 
 const BUCKET = "product-images";
 
@@ -57,56 +64,46 @@ export async function uploadProductImage(formData: FormData): Promise<UploadResu
   if (error) return { ok: false, error: error.message };
 
   const { data } = admin.storage.from(BUCKET).getPublicUrl(path);
+  await writeAudit({
+    action: "create",
+    entityType: "product_image",
+    entityId: path,
+    summary: `Uploaded product image ${path}`,
+    after: { path, url: data.publicUrl, size: file.size, type: file.type },
+  });
   return { ok: true, url: data.publicUrl };
 }
 
-// ---- Create / update product -----------------------------------------------
-export interface ProductInput {
-  name: string;
-  slug?: string;
-  tier: string;
-  category: "cider" | "farm-good";
-  description: string;
-  priceCents: number;
-  abv: string;
-  imageUrl: string;
-  sortOrder: number;
-  vendorId?: string | null;
-  requiresAgeCheck?: boolean;
-  salePriceCents?: number | null;
-  saleStartsAt?: string | null;
-  saleEndsAt?: string | null;
-}
-
-export async function createProduct(
-  input: ProductInput & { initialStock: number },
-): Promise<ActionResult> {
+// ---- Create ---------------------------------------------------------------
+export async function createProduct(input: unknown): Promise<ActionResult> {
   const session = await requireAdmin();
-  if (!input.name.trim()) return { ok: false, error: "Name is required." };
-  if (!Number.isFinite(input.priceCents) || input.priceCents < 0) return { ok: false, error: "Invalid price." };
+  const parsed = CreateProductInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const p = parsed.data;
 
   const supabase = await createClient();
-  const slug = (input.slug?.trim() ? slugify(input.slug) : slugify(input.name)) || crypto.randomUUID();
+  const slug = p.slug?.trim() ? slugify(p.slug) : slugify(p.name);
+  if (!slug) return { ok: false, error: "Could not derive a slug from the name." };
 
   const { data, error } = await supabase
     .from("products")
     .insert({
-      name: input.name.trim(),
+      name: p.name,
       slug,
-      tier: input.tier.trim() || null,
-      category: input.category,
-      description: input.description.trim() || null,
-      price_cents: Math.round(input.priceCents),
-      abv: input.abv.trim() || null,
-      image_url: input.imageUrl.trim() || null,
-      sort_order: input.sortOrder,
+      tier: p.tier || null,
+      category: p.category,
+      description: p.description || null,
+      price_cents: p.priceCents,
+      abv: p.abv || null,
+      image_url: p.imageUrl || null,
+      sort_order: p.sortOrder,
       stock_quantity: 0,
       active: true,
-      vendor_id: input.vendorId ?? null,
-      requires_age_check: input.requiresAgeCheck ?? input.category === "cider",
-      sale_price_cents: input.salePriceCents ?? null,
-      sale_starts_at: input.saleStartsAt ?? null,
-      sale_ends_at: input.saleEndsAt ?? null,
+      vendor_id: p.vendorId ?? null,
+      requires_age_check: p.requiresAgeCheck ?? p.category === "cider",
+      sale_price_cents: p.salePriceCents ?? null,
+      sale_starts_at: p.saleStartsAt ?? null,
+      sale_ends_at: p.saleEndsAt ?? null,
     })
     .select("id")
     .single();
@@ -115,105 +112,148 @@ export async function createProduct(
     return { ok: false, error: error.message.includes("duplicate") ? "That slug is already taken." : error.message };
   }
 
-  if (input.initialStock > 0) {
+  if (p.initialStock > 0) {
     await supabase.rpc("adjust_stock", {
-      p_product: data!.id,
-      p_delta: input.initialStock,
+      p_product: data.id,
+      p_delta: p.initialStock,
       p_reason: "initial",
       p_note: "Opening stock",
       p_user: session.userId,
     });
   }
 
+  await writeAudit({
+    action: "create",
+    entityType: "product",
+    entityId: data.id,
+    summary: `Created product "${p.name}" (${slug})`,
+    after: { ...p, id: data.id, slug },
+  });
+
   revalidateAll();
-  return { ok: true, id: data!.id as string };
+  return { ok: true, id: data.id };
 }
 
-export async function updateProductContent(input: ProductInput & { id: string }): Promise<ActionResult> {
+// ---- Update content (never mutates stock) --------------------------------
+export async function updateProductContent(input: unknown): Promise<ActionResult> {
   await requireAdmin();
-  if (!input.name.trim()) return { ok: false, error: "Name is required." };
+  const parsed = UpdateProductInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const p = parsed.data;
 
   const supabase = await createClient();
+  const { data: before } = await supabase.from("products").select("*").eq("id", p.id).maybeSingle();
+  if (!before) return { ok: false, error: "Product not found." };
+
   const { error } = await supabase
     .from("products")
     .update({
-      name: input.name.trim(),
-      slug: slugify(input.slug || input.name),
-      tier: input.tier.trim() || null,
-      category: input.category,
-      description: input.description.trim() || null,
-      price_cents: Math.round(input.priceCents),
-      abv: input.abv.trim() || null,
-      image_url: input.imageUrl.trim() || null,
-      sort_order: input.sortOrder,
-      vendor_id: input.vendorId ?? null,
-      requires_age_check: input.requiresAgeCheck ?? input.category === "cider",
-      sale_price_cents: input.salePriceCents ?? null,
-      sale_starts_at: input.saleStartsAt ?? null,
-      sale_ends_at: input.saleEndsAt ?? null,
+      name: p.name,
+      slug: slugify(p.slug || p.name),
+      tier: p.tier || null,
+      category: p.category,
+      description: p.description || null,
+      price_cents: p.priceCents,
+      abv: p.abv || null,
+      image_url: p.imageUrl || null,
+      sort_order: p.sortOrder,
+      vendor_id: p.vendorId ?? null,
+      requires_age_check: p.requiresAgeCheck ?? p.category === "cider",
+      sale_price_cents: p.salePriceCents ?? null,
+      sale_starts_at: p.saleStartsAt ?? null,
+      sale_ends_at: p.saleEndsAt ?? null,
       updated_at: new Date().toISOString(),
     })
-    .eq("id", input.id);
+    .eq("id", p.id);
 
   if (error) return { ok: false, error: error.message };
+
+  await writeAudit({
+    action: "update",
+    entityType: "product",
+    entityId: p.id,
+    summary: `Updated product "${p.name}"`,
+    before,
+    after: p,
+  });
+
   revalidateAll();
-  revalidatePath(`/admin/products/${input.id}`);
-  return { ok: true, id: input.id };
+  revalidatePath(`/admin/products/${p.id}`);
+  return { ok: true, id: p.id };
 }
 
-export async function setProductActive(id: string, active: boolean): Promise<ActionResult> {
+export async function setProductActive(input: unknown): Promise<ActionResult> {
   await requireAdmin();
+  const parsed = SetActiveInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const { id, active } = parsed.data;
+
   const supabase = await createClient();
+  const { data: before } = await supabase.from("products").select("id, name, active").eq("id", id).maybeSingle();
+  if (!before) return { ok: false, error: "Product not found." };
+
   const { error } = await supabase
     .from("products")
     .update({ active, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
+
+  await writeAudit({
+    action: "status_change",
+    entityType: "product",
+    entityId: id,
+    summary: `${active ? "Published" : "Hid"} product "${before.name}"`,
+    before: { active: before.active },
+    after: { active },
+  });
+
   revalidateAll();
   return { ok: true, id };
 }
 
-// ---- Stock adjustment (audited) --------------------------------------------
-export async function adjustStock(input: {
-  productId: string;
-  delta: number;
-  reason: StockReason;
-  note?: string;
-  vendorId?: string | null;
-}): Promise<ActionResult> {
+// ---- Stock adjustment (audited) ------------------------------------------
+export async function adjustStock(input: unknown): Promise<ActionResult> {
   const session = await requireAdmin();
-  if (!Number.isInteger(input.delta) || input.delta === 0) return { ok: false, error: "Enter a non-zero whole number." };
+  const parsed = AdjustStockInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const { productId, delta, reason, note, vendorId } = parsed.data;
 
   const supabase = await createClient();
-  // adjust_stock() handles the stock update + core movement log. To attach a
-  // vendor, we update the freshly-inserted movement row afterwards. Cheap and
-  // simpler than reshaping the DB function signature.
+  const { data: before } = await supabase.from("products").select("id, name, stock_quantity").eq("id", productId).maybeSingle();
+  if (!before) return { ok: false, error: "Product not found." };
+
   const { data: newQty, error } = await supabase.rpc("adjust_stock", {
-    p_product: input.productId,
-    p_delta: input.delta,
-    p_reason: input.reason,
-    p_note: input.note?.trim() || null,
+    p_product: productId,
+    p_delta: delta,
+    p_reason: reason,
+    p_note: note ?? null,
     p_user: session.userId,
   });
   if (error) return { ok: false, error: error.message };
 
-  if (input.vendorId) {
-    // Find the movement we just wrote and stamp it with the vendor id.
+  if (vendorId) {
+    // adjust_stock() writes a movement row; stamp it with the vendor id.
     const { data: latest } = await supabase
       .from("stock_movements")
       .select("id")
-      .eq("product_id", input.productId)
+      .eq("product_id", productId)
       .order("created_at", { ascending: false })
       .limit(1);
     if (latest?.[0]) {
-      await supabase.from("stock_movements").update({ vendor_id: input.vendorId }).eq("id", latest[0].id);
+      await supabase.from("stock_movements").update({ vendor_id: vendorId }).eq("id", latest[0].id);
     }
   }
 
-  revalidateAll();
-  revalidatePath(`/admin/products/${input.productId}`);
-  return { ok: true, id: input.productId };
-}
+  await writeAudit({
+    action: "stock_adjust",
+    entityType: "product",
+    entityId: productId,
+    summary: `Stock ${delta > 0 ? "+" : ""}${delta} on "${before.name}" (reason: ${reason})`,
+    before: { stock_quantity: before.stock_quantity },
+    after: { stock_quantity: newQty, delta, reason, note, vendor_id: vendorId ?? null },
+  });
 
-// Small convenience: report the new on-hand from the client if it wants it.
-export type _NewQty = typeof adjustStock;
+  revalidateAll();
+  revalidatePath(`/admin/products/${productId}`);
+  return { ok: true, id: productId };
+}

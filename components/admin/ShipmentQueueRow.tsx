@@ -26,7 +26,7 @@ export default function ShipmentQueueRow({ shipment }: { shipment: Row }) {
   function advance() {
     if (!nextStatus) return;
     start(async () => {
-      await setShipmentStatus(shipment.id, nextStatus, tracking);
+      await setShipmentStatus({ id: shipment.id, status: nextStatus, tracking });
       router.refresh();
     });
   }

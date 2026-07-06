@@ -36,7 +36,8 @@ export default function LocationsPanel({ locations }: { locations: Location[] })
 
   function toggle(loc: Location) {
     start(async () => {
-      await updateLocation(loc.id, {
+      await updateLocation({
+        id: loc.id,
         name: loc.name,
         kind: loc.kind,
         active: !loc.active,
@@ -49,7 +50,7 @@ export default function LocationsPanel({ locations }: { locations: Location[] })
   function remove(id: string) {
     if (!confirm("Delete this location? Past orders keep their tag.")) return;
     start(async () => {
-      const res = await deleteLocation(id);
+      const res = await deleteLocation({ id });
       if (!res.ok) return setError(res.error ?? "Failed.");
       router.refresh();
     });

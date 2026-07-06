@@ -943,6 +943,91 @@ export interface Database {
       // -----------------------------------------------------------------
       // Shipping providers
       // -----------------------------------------------------------------
+      // -----------------------------------------------------------------
+      // Admin audit log (append-only)
+      // -----------------------------------------------------------------
+      admin_audit_log: {
+        Row: {
+          id: string;
+          actor_id: string | null;
+          actor_email: string | null;
+          action: Database["public"]["Enums"]["audit_action"];
+          entity_type: string;
+          entity_id: string | null;
+          summary: string | null;
+          before_state: Json | null;
+          after_state: Json | null;
+          ip_address: string | null;
+          user_agent: string | null;
+          request_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          action: Database["public"]["Enums"]["audit_action"];
+          entity_type: string;
+          id?: string;
+          actor_id?: string | null;
+          actor_email?: string | null;
+          entity_id?: string | null;
+          summary?: string | null;
+          before_state?: Json | null;
+          after_state?: Json | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          request_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          actor_id?: string | null;
+          actor_email?: string | null;
+          action?: Database["public"]["Enums"]["audit_action"];
+          entity_type?: string;
+          entity_id?: string | null;
+          summary?: string | null;
+          before_state?: Json | null;
+          after_state?: Json | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          request_id?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "admin_audit_log_actor_id_fkey";
+            columns: ["actor_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+
+      // -----------------------------------------------------------------
+      // Rate limit events (service-role only)
+      // -----------------------------------------------------------------
+      rate_limit_events: {
+        Row: {
+          id: string;
+          bucket: string;
+          identifier: string;
+          attempted_at: string;
+        };
+        Insert: {
+          bucket: string;
+          identifier: string;
+          id?: string;
+          attempted_at?: string;
+        };
+        Update: {
+          bucket?: string;
+          identifier?: string;
+          id?: string;
+          attempted_at?: string;
+        };
+        Relationships: [];
+      };
+
       shipping_providers: {
         Row: {
           id: string;
@@ -1011,6 +1096,15 @@ export interface Database {
         Args: { p_resource: string; p_start: string; p_end: string };
         Returns: boolean;
       };
+      consume_rate_limit: {
+        Args: {
+          p_bucket: string;
+          p_identifier: string;
+          p_max: number;
+          p_window_sec: number;
+        };
+        Returns: boolean;
+      };
       is_staff: { Args: Record<string, never>; Returns: boolean };
       is_admin: { Args: Record<string, never>; Returns: boolean };
     };
@@ -1027,6 +1121,15 @@ export interface Database {
       subscription_status: "active" | "paused" | "cancelled";
       shipment_status: "queued" | "packed" | "shipped" | "delivered" | "skipped";
       campaign_status: "draft" | "scheduled" | "live" | "ended";
+      audit_action:
+        | "create"
+        | "update"
+        | "delete"
+        | "status_change"
+        | "stock_adjust"
+        | "sign_in"
+        | "sign_out"
+        | "other";
     };
 
     CompositeTypes: Record<string, never>;

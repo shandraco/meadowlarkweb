@@ -38,7 +38,7 @@ export default function PlanEditor({ plan, onSaved }: { plan?: SubscriptionPlan;
       sortOrder: parseInt(f.sortOrder, 10) || 0,
     };
     start(async () => {
-      const res = editing ? await updatePlan(plan!.id, input) : await createPlan(input);
+      const res = editing ? await updatePlan({ id: plan!.id, ...input }) : await createPlan(input);
       if (!res.ok) return setError(res.error ?? "Save failed.");
       setSaved(true);
       setTimeout(() => setSaved(false), 1500);
@@ -110,7 +110,7 @@ export default function PlanEditor({ plan, onSaved }: { plan?: SubscriptionPlan;
             type="button"
             onClick={() =>
               start(async () => {
-                await setPlanActive(plan!.id, !plan!.active);
+                await setPlanActive({ id: plan!.id, active: !plan!.active });
                 router.refresh();
               })
             }

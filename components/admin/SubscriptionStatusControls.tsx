@@ -18,7 +18,7 @@ export default function SubscriptionStatusControls({ subscription }: { subscript
   function change(next: SubscriptionStatus) {
     if (next === subscription.status) return;
     start(async () => {
-      await setSubscriptionStatus(subscription.id, next);
+      await setSubscriptionStatus({ id: subscription.id, status: next });
       router.refresh();
     });
   }

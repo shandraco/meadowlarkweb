@@ -27,7 +27,8 @@ export default function ShippingProviderRow({ provider }: { provider: ShippingPr
       .map((s) => s.trim().toUpperCase())
       .filter(Boolean);
     start(async () => {
-      const res = await upsertProvider(provider.id, {
+      const res = await upsertProvider({
+        id: provider.id,
         name: f.name,
         code: f.code,
         statesCovered,

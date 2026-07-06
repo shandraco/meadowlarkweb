@@ -74,7 +74,7 @@ export default function FieldTripEditor({ program }: { program?: FieldTripProgra
       teacherNotes: f.teacherNotes,
     };
     start(async () => {
-      const res = editing ? await updateProgram(program!.id, input) : await createProgram(input);
+      const res = editing ? await updateProgram({ id: program!.id, ...input }) : await createProgram(input);
       if (!res.ok) return setError(res.error ?? "Save failed.");
       if (editing) {
         setSaved(true);
@@ -186,7 +186,7 @@ export default function FieldTripEditor({ program }: { program?: FieldTripProgra
             type="button"
             onClick={() =>
               start(async () => {
-                await setProgramActive(program!.id, !program!.active);
+                await setProgramActive({ id: program!.id, active: !program!.active });
                 router.refresh();
               })
             }

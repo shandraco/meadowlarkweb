@@ -85,7 +85,7 @@ export default function StockPanel({
           type="button"
           onClick={() =>
             start(async () => {
-              await setProductActive(product.id, !product.active);
+              await setProductActive({ id: product.id, active: !product.active });
               router.refresh();
             })
           }
