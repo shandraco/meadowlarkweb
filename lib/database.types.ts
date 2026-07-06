@@ -31,7 +31,7 @@ export interface Database {
           slug: string;
           name: string;
           tier: string | null;
-          category: string;
+          category: Database["public"]["Enums"]["product_category"];
           description: string | null;
           price_cents: number;
           sale_price_cents: number | null;
@@ -55,7 +55,7 @@ export interface Database {
           price_cents: number;
           id?: string;
           tier?: string | null;
-          category?: string;
+          category?: Database["public"]["Enums"]["product_category"];
           description?: string | null;
           sale_price_cents?: number | null;
           sale_starts_at?: string | null;
@@ -78,7 +78,7 @@ export interface Database {
           price_cents?: number;
           id?: string;
           tier?: string | null;
-          category?: string;
+          category?: Database["public"]["Enums"]["product_category"];
           description?: string | null;
           sale_price_cents?: number | null;
           sale_starts_at?: string | null;
@@ -1017,6 +1017,7 @@ export interface Database {
 
     Enums: {
       user_role: "admin" | "cashier";
+      product_category: "cider" | "farm-good";
       order_channel: "online" | "pos";
       order_status: "pending" | "paid" | "fulfilled" | "cancelled" | "refunded";
       location_kind: "farm" | "market" | "popup";
