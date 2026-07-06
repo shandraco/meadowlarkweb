@@ -14,6 +14,12 @@
 -- Idempotent. Safe to re-run.
 -- ============================================================================
 
+-- ---- Enum extensions ------------------------------------------------------
+-- Season pass confirmation email is dispatched from lib/email/send.ts; add its
+-- kind so email_log inserts don't fail. Safe in a transaction because the
+-- enum was created in a prior migration.
+alter type email_kind add value if not exists 'season_pass_confirmation';
+
 -- ---- Product images (gallery) ---------------------------------------------
 create table if not exists public.product_images (
   id          uuid primary key default gen_random_uuid(),

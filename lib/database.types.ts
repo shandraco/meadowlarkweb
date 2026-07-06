@@ -1572,6 +1572,7 @@ export interface Database {
         | "season_blast"
         | "admin_new_booking"
         | "admin_new_order"
+        | "season_pass_confirmation"
         | "other";
       email_status: "sent" | "failed" | "skipped";
       season_pass_status: "active" | "expired" | "revoked";
