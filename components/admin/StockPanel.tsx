@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { Product, StockMovement, StockReason, Vendor } from "@/lib/types";
 import { adjustStock, setProductActive } from "@/app/admin/products/actions";
 
@@ -151,6 +152,14 @@ export default function StockPanel({
         {reason === "correction" && (
           <p className="text-xs text-ink-soft/60 font-light mt-2">Use a negative number to subtract.</p>
         )}
+        <Link
+          href={`/admin/products/labels?productId=${product.id}${
+            parseInt(qty, 10) > 0 ? `&qty=${parseInt(qty, 10)}` : ""
+          }`}
+          className="inline-block mt-4 text-xs tracking-widest uppercase font-light text-meadow hover:text-meadow-deep"
+        >
+          Print QR labels for this batch →
+        </Link>
       </div>
 
       {/* History */}

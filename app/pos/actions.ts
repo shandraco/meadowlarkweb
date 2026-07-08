@@ -7,7 +7,7 @@ import { getSessionProfile, requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getPosLocationId, setPosLocation, clearPosLocation, touchPosSession } from "@/lib/pos-session";
 import { writeAudit } from "@/lib/audit";
-import { findProductByBarcode } from "@/lib/products";
+import { findProductByBarcode, findProductByScanCode } from "@/lib/products";
 import type { Product } from "@/lib/types";
 import { ChooseLocationInput, PosOrderInput, firstIssue, uuid } from "@/lib/validation";
 
@@ -64,6 +64,21 @@ export async function findProductByBarcodeAction(
   if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
   const product = await findProductByBarcode(parsed.data.barcode);
   if (!product) return { ok: false, error: "Barcode not on file." };
+  return { ok: true, product };
+}
+
+// Camera QR / any-scanner lookup. Resolves a barcode OR a product-id QR.
+const ScanInput = z.object({ code: z.string().min(1).max(200) }).strict();
+
+export async function findProductByScanCodeAction(
+  input: unknown,
+): Promise<{ ok: boolean; product?: Product; error?: string }> {
+  const session = await getSessionProfile();
+  if (!session) return { ok: false, error: "Not signed in." };
+  const parsed = ScanInput.safeParse(input);
+  if (!parsed.success) return { ok: false, error: firstIssue(parsed.error) };
+  const product = await findProductByScanCode(parsed.data.code);
+  if (!product) return { ok: false, error: "No product matches that code." };
   return { ok: true, product };
 }
 

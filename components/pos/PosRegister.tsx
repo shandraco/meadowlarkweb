@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import type { Product, PosCategory } from "@/lib/types";
 import { effectivePriceCents, isOnSale } from "@/lib/types";
 import { formatUSD } from "@/lib/money";
-import { createPosOrder } from "@/app/pos/actions";
+import { createPosOrder, findProductByScanCodeAction } from "@/app/pos/actions";
 import PosCatalog from "./PosCatalog";
 import CashTenderModal from "./CashTenderModal";
 import BarcodeListener from "./BarcodeListener";
+import QrScanner from "@/components/QrScanner";
 import Receipt, { type ReceiptItem } from "./Receipt";
 
 interface TicketLine {
@@ -57,6 +58,7 @@ export default function PosRegister({
   const [done, setDone] = useState<CompletedSale | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tenderOpen, setTenderOpen] = useState(false);
+  const [scanning, setScanning] = useState(false);
 
   const lines = [...ticket.values()];
   const subtotal = useMemo(
@@ -76,6 +78,13 @@ export default function PosRegister({
       next.set(p.id, { product: p, qty });
       return next;
     });
+  }
+
+  async function handleScanCode(code: string) {
+    setScanning(false);
+    const res = await findProductByScanCodeAction({ code });
+    if (res.ok && res.product) addToTicket(res.product);
+    else setError(res.error ?? "No product matches that code.");
   }
 
   function setQty(id: string, qty: number) {
@@ -175,11 +184,18 @@ export default function PosRegister({
   return (
     <div className="flex-1 flex flex-col lg:flex-row min-h-0 bg-wheat">
       <BarcodeListener onScan={addToTicket} />
+      {scanning && <QrScanner onScan={handleScanCode} onClose={() => setScanning(false)} />}
       <PosCatalog products={products} categories={categories} canEdit={canEdit} onAdd={addToTicket} />
 
       <aside className="lg:w-96 bg-wheat-dark/60 border-t lg:border-t-0 lg:border-l border-meadow/15 flex flex-col">
-        <div className="px-6 py-4 border-b border-meadow/10">
+        <div className="px-6 py-4 border-b border-meadow/10 flex items-center justify-between gap-3">
           <p className="section-label">Current Ticket</p>
+          <button
+            onClick={() => setScanning(true)}
+            className="text-xs tracking-widest uppercase font-light border border-meadow text-meadow px-3 py-1.5 hover:bg-meadow hover:text-wheat transition-colors"
+          >
+            Scan QR
+          </button>
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-3 min-h-[120px]">

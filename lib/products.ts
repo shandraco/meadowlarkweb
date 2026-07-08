@@ -44,6 +44,39 @@ export async function findProductByBarcode(barcode: string): Promise<Product | n
   return (data as Product | null) ?? null;
 }
 
+// The string a QR/label encodes for a product: its barcode if set, else its
+// id. Keeping this in one place means the label generator and the scanner
+// always agree on what a code means.
+export function productScanCode(product: Pick<Product, "id" | "barcode">): string {
+  return product.barcode?.trim() || product.id;
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Resolve a scanned code to a product. Works for both the keyboard-wedge
+// barcode scanner and camera-scanned QR codes: try the barcode column first,
+// then fall back to a direct id lookup (for products with no barcode, whose
+// QR encodes the product id).
+export async function findProductByScanCode(code: string): Promise<Product | null> {
+  const trimmed = code.trim();
+  if (!trimmed) return null;
+
+  const byBarcode = await findProductByBarcode(trimmed);
+  if (byBarcode) return byBarcode;
+
+  if (UUID_RE.test(trimmed)) {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", trimmed)
+      .eq("active", true)
+      .maybeSingle();
+    return (data as Product | null) ?? null;
+  }
+  return null;
+}
+
 export async function getActiveProducts(): Promise<Product[]> {
   const supabase = await createClient();
   const { data, error } = await supabase

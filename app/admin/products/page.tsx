@@ -19,9 +19,14 @@ export default async function AdminProducts() {
           <p className="section-label mb-2">Catalog</p>
           <h1 className="font-serif text-4xl md:text-5xl text-meadow leading-none">Products &amp; Stock</h1>
         </div>
-        <Link href="/admin/products/new" className="btn-primary">
-          + Add product
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/admin/products/labels" className="btn-outline text-xs">
+            Print QR labels
+          </Link>
+          <Link href="/admin/products/new" className="btn-primary">
+            + Add product
+          </Link>
+        </div>
       </div>
       <p className="text-ink-soft font-light mb-10">
         Manage every item shown in the store and POS.
@@ -92,6 +97,12 @@ export default async function AdminProducts() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
+                    <Link
+                      href={`/admin/products/labels?productId=${p.id}`}
+                      className="text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors mr-4"
+                    >
+                      Labels
+                    </Link>
                     <Link
                       href={`/admin/products/${p.id}`}
                       className="text-xs tracking-widest uppercase font-light text-meadow hover:text-meadow-deep transition-colors"
