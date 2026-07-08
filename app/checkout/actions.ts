@@ -82,6 +82,7 @@ export async function placeOnlineOrder(input: unknown): Promise<PlaceOrderResult
   const quote = await quoteCartTotals({
     items: p.lines,
     fulfillment: p.fulfillment,
+    shipState: p.fulfillment === "ship" ? p.shipState ?? null : null,
     shipAddress: p.fulfillment === "ship" ? p.address : null,
   });
 

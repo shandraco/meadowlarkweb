@@ -66,6 +66,7 @@ export default function CheckoutPage() {
       customer: { name, email, phone },
       fulfillment,
       address: finalAddress,
+      shipState: fulfillment === "ship" ? shipState : undefined,
       ageConfirmed,
     });
     setLoading(false);

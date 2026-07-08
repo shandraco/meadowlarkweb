@@ -587,6 +587,58 @@ export interface Database {
       };
 
       // -----------------------------------------------------------------
+      // Farm incidents — internal ops log (photo + geolocation + details)
+      // -----------------------------------------------------------------
+      farm_incidents: {
+        Row: {
+          id: string;
+          title: string;
+          details: string | null;
+          category: string;
+          severity: string;
+          status: string;
+          photo_url: string | null;
+          latitude: number | null;
+          longitude: number | null;
+          location_note: string | null;
+          occurred_at: string;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          title: string;
+          id?: string;
+          details?: string | null;
+          category?: string;
+          severity?: string;
+          status?: string;
+          photo_url?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          location_note?: string | null;
+          occurred_at?: string;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          title?: string;
+          id?: string;
+          details?: string | null;
+          category?: string;
+          severity?: string;
+          status?: string;
+          photo_url?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          location_note?: string | null;
+          occurred_at?: string;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+
+      // -----------------------------------------------------------------
       // Bookings — customer reservations (shelter + field trip share)
       // -----------------------------------------------------------------
       bookings: {

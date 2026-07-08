@@ -97,7 +97,29 @@ export const PlaceOrderInput = z
       .strict(),
     fulfillment: z.enum(["pickup", "ship"]),
     address: z.string().transform((s) => s.trim()).pipe(z.string().max(500)).optional(),
+    // Explicit selected ship-to state. Authoritative for the shipping quote —
+    // never re-parse it out of the free-form address (that drops valid states
+    // when the typed address has no recognizable ZIP).
+    shipState: z.string().transform((s) => s.trim().toUpperCase()).pipe(z.string().max(2)).optional(),
     ageConfirmed: z.boolean(),
+  })
+  .strict();
+
+// ---- Farm incidents -------------------------------------------------------
+export const IncidentSeverityEnum = z.enum(["low", "medium", "high"]);
+export const IncidentStatusEnum = z.enum(["open", "resolved"]);
+
+export const IncidentInput = z
+  .object({
+    title: nonEmptyTrimmed("Title", 160),
+    details: optionalTrimmed(4000),
+    category: nonEmptyTrimmed("Category", 60),
+    severity: IncidentSeverityEnum.default("medium"),
+    photoUrl: z.string().url().max(2000).optional().or(z.literal("")),
+    latitude: z.number().min(-90).max(90).nullable().optional(),
+    longitude: z.number().min(-180).max(180).nullable().optional(),
+    locationNote: optionalTrimmed(200),
+    occurredAt: isoDateTime.optional(),
   })
   .strict();
 

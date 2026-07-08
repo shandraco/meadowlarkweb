@@ -167,6 +167,25 @@ export type FieldTripProgram = {
   created_at: string;
 };
 
+export type IncidentSeverity = "low" | "medium" | "high";
+export type IncidentStatus = "open" | "resolved";
+
+export type FarmIncident = {
+  id: string;
+  title: string;
+  details: string | null;
+  category: string;
+  severity: IncidentSeverity;
+  status: IncidentStatus;
+  photo_url: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  location_note: string | null;
+  occurred_at: string;
+  created_by: string | null;
+  created_at: string;
+};
+
 export type Booking = {
   id: string;
   booking_number: number;
