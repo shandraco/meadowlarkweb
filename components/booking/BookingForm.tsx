@@ -30,7 +30,7 @@ export default function BookingForm({ resource, program, monthKey, availability 
   const [notes, setNotes] = useState("");
 
   const input =
-    "w-full border border-meadow/20 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2.5 text-sm font-light outline-none focus:border-meadow transition-colors";
+    "w-full border border-meadow/20 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2.5 text-sm font-normal outline-none focus:border-meadow transition-colors";
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -67,11 +67,11 @@ export default function BookingForm({ resource, program, monthKey, availability 
       <div className="border border-meadow/20 bg-paper-dark/30 p-8 text-center">
         <p className="section-label mb-3">Request received</p>
         <h2 className="font-serif text-3xl text-meadow mb-3">Booking #{success.bookingNumber}</h2>
-        <p className="text-ink-soft font-light mb-4">
+        <p className="text-ink-soft font-normal mb-4">
           Total: <span className="text-ink">{formatUSD(success.totalCents)}</span> · Deposit:{" "}
           <span className="text-ink">{formatUSD(success.depositCents)}</span>
         </p>
-        <p className="text-ink-soft font-light leading-relaxed">
+        <p className="text-ink-soft font-normal leading-relaxed">
           We&apos;ll follow up by email to confirm the date and send an invoice for the deposit. Watch your inbox from
           <span className="text-ink"> gina@themeadowlarkfarm.com</span>.
         </p>
@@ -84,45 +84,45 @@ export default function BookingForm({ resource, program, monthKey, availability 
       <div>
         <p className="section-label mb-4">Pick a date</p>
         <AvailabilityCalendar monthKey={monthKey} availability={availability} selected={date} onPick={setDate} />
-        {date && <p className="text-sm text-ink-soft font-light mt-3">Selected: <span className="text-ink">{date}</span></p>}
+        {date && <p className="text-sm text-ink-soft font-normal mt-3">Selected: <span className="text-ink">{date}</span></p>}
       </div>
 
       <div className="grid sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-xs text-stone font-light mb-1">Start time</label>
+          <label className="block text-xs text-stone font-normal mb-1">Start time</label>
           <input className={input} type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
         </div>
         <div>
-          <label className="block text-xs text-stone font-light mb-1">End time</label>
+          <label className="block text-xs text-stone font-normal mb-1">End time</label>
           <input className={input} type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
         </div>
         <div>
-          <label className="block text-xs text-stone font-light mb-1">{program ? "Students" : "Guests"}</label>
+          <label className="block text-xs text-stone font-normal mb-1">{program ? "Students" : "Guests"}</label>
           <input className={input} inputMode="numeric" value={guests} onChange={(e) => setGuests(e.target.value)} required />
         </div>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-stone font-light mb-1">Your name</label>
+          <label className="block text-xs text-stone font-normal mb-1">Your name</label>
           <input className={input} value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div>
-          <label className="block text-xs text-stone font-light mb-1">Email</label>
+          <label className="block text-xs text-stone font-normal mb-1">Email</label>
           <input className={input} type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
-          <label className="block text-xs text-stone font-light mb-1">Phone (optional)</label>
+          <label className="block text-xs text-stone font-normal mb-1">Phone (optional)</label>
           <input className={input} value={phone} onChange={(e) => setPhone(e.target.value)} />
         </div>
         <div>
-          <label className="block text-xs text-stone font-light mb-1">{program ? "School / organization" : "Organization (optional)"}</label>
+          <label className="block text-xs text-stone font-normal mb-1">{program ? "School / organization" : "Organization (optional)"}</label>
           <input className={input} value={organization} onChange={(e) => setOrganization(e.target.value)} />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs text-stone font-light mb-1">Notes for us</label>
+        <label className="block text-xs text-stone font-normal mb-1">Notes for us</label>
         <textarea
           className={input}
           rows={3}
@@ -132,12 +132,12 @@ export default function BookingForm({ resource, program, monthKey, availability 
         />
       </div>
 
-      {error && <p className="text-sm text-sunset font-light">{error}</p>}
+      {error && <p className="text-sm text-sunset font-normal">{error}</p>}
 
       <button type="submit" disabled={pending || !date} className="btn-primary disabled:opacity-50">
         {pending ? "Requesting…" : "Request Booking"}
       </button>
-      <p className="text-xs text-ink-soft font-light">
+      <p className="text-xs text-ink-soft font-normal">
         You&apos;ll be invoiced by email for a 25% deposit. Balance is due on the day.
       </p>
     </form>

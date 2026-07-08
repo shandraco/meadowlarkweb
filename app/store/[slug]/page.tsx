@@ -34,7 +34,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <Link
           href="/store"
-          className="text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors"
+          className="text-xs tracking-widest uppercase font-normal text-stone hover:text-meadow transition-colors"
         >
           ← Back to the Cellar
         </Link>
@@ -64,10 +64,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
 
             {product.description && (
-              <p className="text-ink-soft font-light leading-relaxed text-lg mb-8 max-w-prose">{product.description}</p>
+              <p className="text-ink-soft font-normal leading-relaxed text-lg mb-8 max-w-prose">{product.description}</p>
             )}
 
-            <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-soft font-light mb-10">
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-soft font-normal mb-10">
               {product.abv && (
                 <span>
                   <span className="text-meadow font-normal">ABV:</span> {product.abv}
@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <AddToCartButton product={product} />
             </div>
 
-            <p className="text-xs text-ink-soft/80 font-light mt-6 leading-relaxed max-w-sm">
+            <p className="text-xs text-ink-soft/80 font-normal mt-6 leading-relaxed max-w-sm">
               Ships to KS, MO, CO, NE & OK, or choose farm pickup at checkout. Must be 21+ with valid ID on delivery.
             </p>
           </div>

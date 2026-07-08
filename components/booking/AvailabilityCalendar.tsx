@@ -102,7 +102,7 @@ export default function AvailabilityCalendar({
 
   const cellClass = (day: CalendarDay) => {
     const base =
-      "aspect-square flex flex-col items-center justify-center border transition-colors text-sm font-light select-none";
+      "aspect-square flex flex-col items-center justify-center border transition-colors text-sm font-normal select-none";
     if (!day.inMonth) return `${base} border-transparent text-stone/20 pointer-events-none`;
     if (day.status === "past") return `${base} border-meadow/5 text-stone/25 cursor-not-allowed`;
     if (day.status === "booked") return `${base} border-sunset/20 bg-sunset/10 text-sunset cursor-not-allowed`;
@@ -117,7 +117,7 @@ export default function AvailabilityCalendar({
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => shift(-1)}
-          className="text-xs tracking-widest uppercase font-light text-meadow hover:text-meadow-deep"
+          className="text-xs tracking-widest uppercase font-normal text-meadow hover:text-meadow-deep"
         >
           ← Prev
         </button>
@@ -126,7 +126,7 @@ export default function AvailabilityCalendar({
         </p>
         <button
           onClick={() => shift(1)}
-          className="text-xs tracking-widest uppercase font-light text-meadow hover:text-meadow-deep"
+          className="text-xs tracking-widest uppercase font-normal text-meadow hover:text-meadow-deep"
         >
           Next →
         </button>
@@ -157,7 +157,7 @@ export default function AvailabilityCalendar({
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mt-5 text-xs text-ink-soft font-light">
+      <div className="flex flex-wrap items-center gap-4 mt-5 text-xs text-ink-soft font-normal">
         <span className="flex items-center gap-2">
           <span className="w-3 h-3 border border-meadow/30 bg-paper" /> Open
         </span>

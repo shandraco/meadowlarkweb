@@ -33,20 +33,20 @@ export default function BuyPassForm({ priceCents }: { priceCents: number }) {
   }
 
   const inputCls =
-    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-light outline-none focus:border-meadow transition-colors";
+    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-normal outline-none focus:border-meadow transition-colors";
 
   if (confirmation) {
     return (
       <div className="border border-meadow/15 bg-wheat p-6 md:p-8 text-center">
         <p className="section-label mb-2">Pass issued</p>
         <p className="font-serif text-5xl text-meadow mb-3">#{confirmation.passNumber}</p>
-        <p className="text-ink-soft font-light mb-6">
+        <p className="text-ink-soft font-normal mb-6">
           Save your pass link (also sent to your email):
         </p>
         <p className="font-mono text-sm text-cider break-all bg-wheat-dark p-3 border border-meadow/15">
           {confirmation.redeemUrl}
         </p>
-        <p className="text-xs text-stone font-light mt-4">
+        <p className="text-xs text-stone font-normal mt-4">
           We&apos;ll email an invoice for {formatUSD(5000)} within a business day.
         </p>
       </div>
@@ -74,15 +74,15 @@ export default function BuyPassForm({ priceCents }: { priceCents: number }) {
           onChange={(e) => setConfirmed(e.target.checked)}
           className="mt-1 w-4 h-4 accent-meadow"
         />
-        <span className="text-sm text-ink font-light leading-snug">
+        <span className="text-sm text-ink font-normal leading-snug">
           I understand my pass is good for one year of unlimited farm entry, non-transferable, and covers the pass holder.
         </span>
       </label>
-      {error && <p className="text-sm text-cider font-light">{error}</p>}
+      {error && <p className="text-sm text-cider font-normal">{error}</p>}
       <button type="submit" disabled={pending || !confirmed} className="btn-primary w-full disabled:opacity-50">
         {pending ? "Issuing pass…" : `Get My Pass · ${formatUSD(priceCents)}`}
       </button>
-      <p className="text-xs text-ink-soft font-light text-center">
+      <p className="text-xs text-ink-soft font-normal text-center">
         Invoiced by email. Card processing coming online soon.
       </p>
     </form>

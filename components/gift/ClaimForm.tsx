@@ -30,14 +30,14 @@ export default function ClaimForm({ token }: { token: string }) {
   }
 
   const input =
-    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-light outline-none focus:border-meadow";
+    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-normal outline-none focus:border-meadow";
 
   if (memberToken) {
     return (
       <div className="border border-meadow/15 bg-wheat p-6 md:p-8 text-center">
         <p className="section-label mb-2">Welcome aboard</p>
         <p className="font-serif text-3xl text-meadow mb-4">You&apos;re in the club.</p>
-        <p className="text-ink-soft font-light mb-6">Save your member portal link — you can pause, skip, or update shipping any time.</p>
+        <p className="text-ink-soft font-normal mb-6">Save your member portal link — you can pause, skip, or update shipping any time.</p>
         <p className="font-mono text-sm text-cider break-all bg-wheat-dark p-3 border border-meadow/15">
           /club/account/{memberToken}
         </p>
@@ -65,7 +65,7 @@ export default function ClaimForm({ token }: { token: string }) {
               }`}
             >
               <p className="font-serif text-lg">{o.label}</p>
-              <p className={`text-xs font-light mt-1 ${fulfillment === o.id ? "text-wheat/70" : "text-ink-soft"}`}>{o.sub}</p>
+              <p className={`text-xs font-normal mt-1 ${fulfillment === o.id ? "text-wheat/70" : "text-ink-soft"}`}>{o.sub}</p>
             </button>
           ))}
         </div>
@@ -77,10 +77,10 @@ export default function ClaimForm({ token }: { token: string }) {
 
       <label className="flex items-start gap-3 p-4 border border-meadow/20 bg-sunflower/10 cursor-pointer">
         <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} className="mt-1 w-4 h-4 accent-meadow" />
-        <span className="text-sm text-ink font-light">I confirm I&apos;m 21 or older.</span>
+        <span className="text-sm text-ink font-normal">I confirm I&apos;m 21 or older.</span>
       </label>
 
-      {error && <p className="text-sm text-cider font-light">{error}</p>}
+      {error && <p className="text-sm text-cider font-normal">{error}</p>}
       <button type="submit" disabled={pending || !confirmed} className="btn-primary w-full disabled:opacity-50">
         {pending ? "Claiming…" : "Claim My Membership"}
       </button>

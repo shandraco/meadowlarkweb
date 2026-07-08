@@ -36,7 +36,7 @@ export default function MemberPortal({
   }
 
   const input =
-    "w-full border border-meadow/20 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2.5 text-sm font-light outline-none focus:border-meadow";
+    "w-full border border-meadow/20 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2.5 text-sm font-normal outline-none focus:border-meadow";
 
   return (
     <div className="space-y-10">
@@ -59,12 +59,12 @@ export default function MemberPortal({
           </span>
         </div>
         {plan && (
-          <p className="text-ink-soft font-light">
+          <p className="text-ink-soft font-normal">
             {plan.name} · {formatUSD(plan.price_cents)}/{plan.cadence} · {plan.bottles_per_shipment} bottles per release
           </p>
         )}
-        {savedMsg && <p className="text-sm text-meadow font-light mt-3">{savedMsg}</p>}
-        {error && <p className="text-sm text-sunset font-light mt-3">{error}</p>}
+        {savedMsg && <p className="text-sm text-meadow font-normal mt-3">{savedMsg}</p>}
+        {error && <p className="text-sm text-sunset font-normal mt-3">{error}</p>}
 
         <div className="flex flex-wrap gap-3 mt-6">
           {subscription.status === "active" && (
@@ -92,7 +92,7 @@ export default function MemberPortal({
                 run(() => memberCancel(token), "Your membership is cancelled.");
               }}
               disabled={pending}
-              className="text-xs tracking-widest uppercase font-light text-stone hover:text-sunset"
+              className="text-xs tracking-widest uppercase font-normal text-stone hover:text-sunset"
             >
               Cancel membership
             </button>
@@ -104,11 +104,11 @@ export default function MemberPortal({
         <h3 className="font-serif text-2xl text-meadow mb-4">Shipping</h3>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-stone font-light mb-1">Address</label>
+            <label className="block text-xs text-stone font-normal mb-1">Address</label>
             <textarea className={input} rows={4} value={address} onChange={(e) => setAddress(e.target.value)} />
           </div>
           <div>
-            <label className="block text-xs text-stone font-light mb-1">Phone</label>
+            <label className="block text-xs text-stone font-normal mb-1">Phone</label>
             <input className={input} value={phone} onChange={(e) => setPhone(e.target.value)} />
           </div>
         </div>
@@ -124,7 +124,7 @@ export default function MemberPortal({
       <div>
         <h3 className="font-serif text-2xl text-meadow mb-4">Shipments</h3>
         {shipments.length === 0 ? (
-          <p className="text-ink-soft font-light">Your first shipment will show here once it&apos;s scheduled.</p>
+          <p className="text-ink-soft font-normal">Your first shipment will show here once it&apos;s scheduled.</p>
         ) : (
           <div className="border border-meadow/10 divide-y divide-meadow/10">
             {shipments.map((s) => (

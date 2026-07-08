@@ -132,7 +132,7 @@ export default function PostcardLoader() {
                 exit={{ opacity: 0 }}
                 transition={{ delay: 0.7, duration: 0.4 }}
                 onClick={skip}
-                className="absolute bottom-8 right-8 text-cream/35 text-xs tracking-widest uppercase font-light hover:text-cream/60 transition-colors duration-200"
+                className="absolute bottom-8 right-8 text-cream/35 text-xs tracking-widest uppercase font-normal hover:text-cream/60 transition-colors duration-200"
               >
                 Skip →
               </motion.button>

@@ -39,7 +39,7 @@ export default function ProductGallery({ images, fallback }: Props) {
   if (!active) {
     return (
       <div className="aspect-[4/5] bg-wheat-dark border border-meadow/10 flex items-center justify-center">
-        <p className="text-ink-soft/60 font-light">No photo yet.</p>
+        <p className="text-ink-soft/60 font-normal">No photo yet.</p>
       </div>
     );
   }

@@ -17,7 +17,7 @@ export default function CartPage() {
         {!hydrated ? null : count === 0 ? (
           <div className="border-t border-meadow/10 pt-12 text-center">
             <p className="font-serif text-2xl text-meadow mb-3">Your basket is empty.</p>
-            <p className="text-ink-soft font-light mb-8">Add a few bottles from the cellar to begin.</p>
+            <p className="text-ink-soft font-normal mb-8">Add a few bottles from the cellar to begin.</p>
             <Link href="/store" className="btn-primary">
               Browse the Cellar
             </Link>
@@ -42,7 +42,7 @@ export default function CartPage() {
                         {formatUSD(l.unitPriceCents * l.quantity)}
                       </p>
                     </div>
-                    <p className="text-sm text-ink-soft font-light mt-1">{formatUSD(l.unitPriceCents)} each</p>
+                    <p className="text-sm text-ink-soft font-normal mt-1">{formatUSD(l.unitPriceCents)} each</p>
 
                     <div className="mt-auto flex items-center justify-between pt-4">
                       <div className="flex items-center border border-meadow/20">
@@ -64,7 +64,7 @@ export default function CartPage() {
                       </div>
                       <button
                         onClick={() => remove(l.productId)}
-                        className="text-xs tracking-widest uppercase font-light text-stone hover:text-sunset transition-colors"
+                        className="text-xs tracking-widest uppercase font-normal text-stone hover:text-sunset transition-colors"
                       >
                         Remove
                       </button>
@@ -77,15 +77,15 @@ export default function CartPage() {
             <aside className="lg:col-span-1">
               <div className="bg-paper-dark border border-meadow/10 p-8 sticky top-32">
                 <p className="section-label mb-6">Order Summary</p>
-                <div className="flex justify-between text-ink-soft font-light mb-3">
+                <div className="flex justify-between text-ink-soft font-normal mb-3">
                   <span>Subtotal</span>
                   <span className="text-ink">{formatUSD(subtotalCents)}</span>
                 </div>
-                <div className="flex justify-between text-ink-soft font-light mb-3">
+                <div className="flex justify-between text-ink-soft font-normal mb-3">
                   <span>Shipping</span>
                   <span className="text-ink-soft/70">Calculated at checkout</span>
                 </div>
-                <div className="flex justify-between text-ink-soft font-light mb-6">
+                <div className="flex justify-between text-ink-soft font-normal mb-6">
                   <span>Tax</span>
                   <span className="text-ink-soft/70">Calculated at checkout</span>
                 </div>
@@ -98,7 +98,7 @@ export default function CartPage() {
                 </Link>
                 <Link
                   href="/store"
-                  className="block text-center text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors mt-5"
+                  className="block text-center text-xs tracking-widest uppercase font-normal text-stone hover:text-meadow transition-colors mt-5"
                 >
                   Continue Shopping
                 </Link>

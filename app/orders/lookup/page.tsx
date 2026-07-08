@@ -16,7 +16,7 @@ export default async function OrderLookupPage({
       <div className="max-w-xl mx-auto px-6 md:px-12">
         <Link
           href="/"
-          className="text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors"
+          className="text-xs tracking-widest uppercase font-normal text-stone hover:text-meadow transition-colors"
         >
           ← Home
         </Link>
@@ -24,7 +24,7 @@ export default async function OrderLookupPage({
         <h1 className="font-serif text-5xl md:text-6xl text-meadow leading-tight mb-4">
           {order ? `#${order}` : "Order lookup"}
         </h1>
-        <p className="text-ink-soft font-light mb-10">
+        <p className="text-ink-soft font-normal mb-10">
           {token
             ? "One quick email check and we'll show you the receipt."
             : "Every order confirmation email includes a personal link to view your receipt."}
@@ -32,7 +32,7 @@ export default async function OrderLookupPage({
 
         <OrderLookup initialToken={token} />
 
-        <p className="mt-8 text-xs text-stone font-light text-center">
+        <p className="mt-8 text-xs text-stone font-normal text-center">
           Questions? Text <a href="sms:3165188907" className="text-cider">(316) 518-8907</a> or reply to your
           confirmation email.
         </p>

@@ -30,7 +30,7 @@ export default function OrderLookup({ initialToken }: { initialToken?: string })
     return (
       <div className="border border-meadow/10 bg-wheat-dark p-6 md:p-8 text-center">
         <p className="section-label mb-3">No lookup link</p>
-        <p className="text-ink-soft font-light leading-relaxed">
+        <p className="text-ink-soft font-normal leading-relaxed">
           Every order confirmation email includes a link that opens this page directly. Check your inbox for a message
           from <span className="text-meadow">gina@themeadowlarkfarm.com</span>.
         </p>
@@ -62,21 +62,21 @@ export default function OrderLookup({ initialToken }: { initialToken?: string })
 
         <div className="grid sm:grid-cols-2 gap-4 mb-6 text-sm">
           <div>
-            <p className="text-xs tracking-widest uppercase text-stone font-light mb-1">Customer</p>
+            <p className="text-xs tracking-widest uppercase text-stone font-normal mb-1">Customer</p>
             <p className="text-ink">{o.customerName ?? "—"}</p>
-            <p className="text-ink-soft font-light">{o.customerEmail}</p>
+            <p className="text-ink-soft font-normal">{o.customerEmail}</p>
           </div>
           <div>
-            <p className="text-xs tracking-widest uppercase text-stone font-light mb-1">Placed</p>
+            <p className="text-xs tracking-widest uppercase text-stone font-normal mb-1">Placed</p>
             <p className="text-ink">{new Date(o.createdAt).toLocaleString()}</p>
-            {o.paidAt && <p className="text-ink-soft font-light text-xs">Paid {new Date(o.paidAt).toLocaleString()}</p>}
+            {o.paidAt && <p className="text-ink-soft font-normal text-xs">Paid {new Date(o.paidAt).toLocaleString()}</p>}
           </div>
         </div>
 
         <div className="border-t border-meadow/10 py-4 mb-4">
           {o.items.map((it, i) => (
             <div key={i} className="flex justify-between py-2 text-sm">
-              <span className="text-ink-soft font-light">
+              <span className="text-ink-soft font-normal">
                 {it.name} <span className="text-stone">× {it.quantity}</span>
               </span>
               <span className="text-meadow whitespace-nowrap">{formatUSD(it.lineCents)}</span>
@@ -91,8 +91,8 @@ export default function OrderLookup({ initialToken }: { initialToken?: string })
 
         {o.notes && (
           <div className="mt-6 bg-wheat-dark p-4">
-            <p className="text-xs tracking-widest uppercase text-stone font-light mb-2">Notes</p>
-            <p className="text-sm text-ink-soft font-light whitespace-pre-wrap">{o.notes}</p>
+            <p className="text-xs tracking-widest uppercase text-stone font-normal mb-2">Notes</p>
+            <p className="text-sm text-ink-soft font-normal whitespace-pre-wrap">{o.notes}</p>
           </div>
         )}
       </div>
@@ -103,22 +103,22 @@ export default function OrderLookup({ initialToken }: { initialToken?: string })
     <form onSubmit={submit} className="border border-meadow/10 bg-wheat p-6 md:p-8 space-y-5">
       <div>
         <p className="section-label mb-3">Verify it&apos;s you</p>
-        <p className="text-sm text-ink-soft font-light mb-4">
+        <p className="text-sm text-ink-soft font-normal mb-4">
           Enter the email you used when placing the order. If it matches, we&apos;ll show you the receipt.
         </p>
       </div>
       <div>
-        <label className="block text-xs text-stone font-light mb-1">Email</label>
+        <label className="block text-xs text-stone font-normal mb-1">Email</label>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-light outline-none focus:border-meadow transition-colors"
+          className="w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-normal outline-none focus:border-meadow transition-colors"
           placeholder="you@example.com"
         />
       </div>
-      {result && !result.ok && <p className="text-sm text-cider font-light">{result.error}</p>}
+      {result && !result.ok && <p className="text-sm text-cider font-normal">{result.error}</p>}
       <button type="submit" disabled={pending || !email} className="btn-primary w-full disabled:opacity-50">
         {pending ? "Looking up…" : "Show My Order"}
       </button>

@@ -6,7 +6,7 @@ export default function OpenNowBadge({ variant = "dark" }: { variant?: "dark" | 
   const status = getFarmStatus();
 
   const base =
-    "inline-flex items-center gap-2 px-3 py-1.5 text-xs tracking-widest uppercase font-light";
+    "inline-flex items-center gap-2 px-3 py-1.5 text-xs tracking-widest uppercase font-normal";
   const style = status.open
     ? variant === "light"
       ? "bg-orchard text-wheat"

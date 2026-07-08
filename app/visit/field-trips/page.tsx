@@ -33,11 +33,11 @@ export default async function FieldTripsPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep via-meadow-deep/85 to-meadow-deep/70" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
-          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-5">For Teachers</p>
+          <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-5">For Teachers</p>
           <h1 className="font-serif text-6xl md:text-8xl text-paper leading-tight">
             Field trips <em className="text-wheat-light">worth talking about.</em>
           </h1>
-          <p className="text-paper/85 font-light text-lg mt-5 max-w-lg">
+          <p className="text-paper/85 font-normal text-lg mt-5 max-w-lg">
             Kids meet the apples on the tree, then watch juice made from them. Bring rubber boots.
           </p>
         </div>
@@ -61,7 +61,7 @@ export default async function FieldTripsPage() {
                   style={{ backgroundImage: `url('${g.src}')` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/85 via-transparent to-transparent" />
-                <p className="absolute bottom-3 left-3 right-3 text-wheat text-xs font-light leading-snug">
+                <p className="absolute bottom-3 left-3 right-3 text-wheat text-xs font-normal leading-snug">
                   {g.label}
                 </p>
               </div>
@@ -73,7 +73,7 @@ export default async function FieldTripsPage() {
       <section className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           {programs.length === 0 ? (
-            <p className="text-ink-soft font-light">
+            <p className="text-ink-soft font-normal">
               Programs are being scheduled. Email{" "}
               <a href="mailto:gina@themeadowlarkfarm.com" className="text-meadow underline">
                 gina@themeadowlarkfarm.com
@@ -86,8 +86,8 @@ export default async function FieldTripsPage() {
                 <div key={p.id} className="grid md:grid-cols-3 gap-8 border-b border-meadow/10 pb-14 last:border-b-0">
                   <div>
                     <h2 className="font-serif text-3xl text-ink mb-2">{p.name}</h2>
-                    {p.description && <p className="text-ink-soft font-light">{p.description}</p>}
-                    <div className="mt-5 text-sm text-ink-soft font-light space-y-1">
+                    {p.description && <p className="text-ink-soft font-normal">{p.description}</p>}
+                    <div className="mt-5 text-sm text-ink-soft font-normal space-y-1">
                       <p>
                         <span className="text-meadow">Fee:</span> {formatUSD(p.price_per_student_cents)} per student
                       </p>
@@ -111,19 +111,19 @@ export default async function FieldTripsPage() {
                     {p.schedule && p.schedule.length > 0 ? (
                       <ol className="border-l-2 border-wheat pl-5 space-y-3">
                         {p.schedule.map((s, i) => (
-                          <li key={i} className="text-ink-soft font-light">
+                          <li key={i} className="text-ink-soft font-normal">
                             <span className="text-meadow font-serif text-lg mr-3">{s.time}</span>
                             {s.activity}
                           </li>
                         ))}
                       </ol>
                     ) : (
-                      <p className="text-ink-soft/70 font-light">Schedule sent by email once we confirm your date.</p>
+                      <p className="text-ink-soft/70 font-normal">Schedule sent by email once we confirm your date.</p>
                     )}
                     {p.teacher_notes && (
                       <div className="mt-6 border border-meadow/10 bg-paper-dark/40 p-5">
                         <p className="text-xs tracking-widest uppercase text-stone mb-2">For teachers</p>
-                        <p className="text-sm text-ink-soft font-light leading-relaxed">{p.teacher_notes}</p>
+                        <p className="text-sm text-ink-soft font-normal leading-relaxed">{p.teacher_notes}</p>
                       </div>
                     )}
                   </div>

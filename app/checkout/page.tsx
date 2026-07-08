@@ -82,7 +82,7 @@ export default function CheckoutPage() {
       <section className="pt-36 pb-40 min-h-[60vh]">
         <div className="max-w-md mx-auto px-6 text-center">
           <h1 className="font-serif text-4xl text-ink mb-4">Nothing to check out.</h1>
-          <p className="text-ink-soft font-light mb-8">Your basket is empty.</p>
+          <p className="text-ink-soft font-normal mb-8">Your basket is empty.</p>
           <Link href="/store" className="btn-primary">
             Browse the Cellar
           </Link>
@@ -92,7 +92,7 @@ export default function CheckoutPage() {
   }
 
   const inputCls =
-    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-light outline-none focus:border-meadow transition-colors";
+    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-normal outline-none focus:border-meadow transition-colors";
 
   const shippingUnsupported = quote?.shipQuote && !quote.shipQuote.supported;
 
@@ -138,7 +138,7 @@ export default function CheckoutPage() {
                     }`}
                   >
                     <p className="font-serif text-xl leading-tight">{opt.label}</p>
-                    <p className={`text-xs font-light mt-1 ${fulfillment === opt.id ? "text-wheat/70" : "text-ink-soft"}`}>
+                    <p className={`text-xs font-normal mt-1 ${fulfillment === opt.id ? "text-wheat/70" : "text-ink-soft"}`}>
                       {opt.sub}
                     </p>
                   </button>
@@ -148,7 +148,7 @@ export default function CheckoutPage() {
                 <div className="mt-4 space-y-3">
                   <div className="grid sm:grid-cols-3 gap-3">
                     <div className="sm:col-span-2">
-                      <label className="block text-xs text-stone font-light mb-1">Street address (incl. city)</label>
+                      <label className="block text-xs text-stone font-normal mb-1">Street address (incl. city)</label>
                       <input
                         className={inputCls}
                         placeholder="123 Main St, Overland Park"
@@ -158,7 +158,7 @@ export default function CheckoutPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-stone font-light mb-1">State</label>
+                      <label className="block text-xs text-stone font-normal mb-1">State</label>
                       <select className={inputCls} value={shipState} onChange={(e) => setShipState(e.target.value)}>
                         {SHIPPABLE_STATES.map((s) => (
                           <option key={s.code} value={s.code}>
@@ -169,12 +169,12 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   {quote?.shipQuote && quote.shipQuote.supported && (
-                    <p className="text-xs text-ink-soft font-light">
+                    <p className="text-xs text-ink-soft font-normal">
                       {quote.shipQuote.notes} · Est. {quote.shipQuote.daysMin}–{quote.shipQuote.daysMax} days
                     </p>
                   )}
                   {shippingUnsupported && (
-                    <p className="text-xs text-cider font-light">
+                    <p className="text-xs text-cider font-normal">
                       {quote?.shipQuote?.warning}
                     </p>
                   )}
@@ -192,7 +192,7 @@ export default function CheckoutPage() {
                     onChange={(e) => setAgeConfirmed(e.target.checked)}
                     className="mt-1 w-4 h-4 accent-meadow"
                   />
-                  <span className="text-sm text-ink font-light leading-snug">
+                  <span className="text-sm text-ink font-normal leading-snug">
                     I confirm I am 21 years of age or older. Carrier will verify ID on delivery — packages with no valid
                     21+ ID will be returned to the farm.
                   </span>
@@ -204,13 +204,13 @@ export default function CheckoutPage() {
               <legend className="section-label mb-5">Payment</legend>
               <div className="border border-meadow/20 bg-wheat-dark/40 p-6">
                 <p className="font-serif text-lg text-meadow mb-1">Settled at pickup or by invoice.</p>
-                <p className="text-sm text-ink-soft font-light">
+                <p className="text-sm text-ink-soft font-normal">
                   We&apos;ll reach out to arrange payment once your order is placed. Card processing coming online soon.
                 </p>
               </div>
             </fieldset>
 
-            {error && <p className="text-sm text-cider font-light">{error}</p>}
+            {error && <p className="text-sm text-cider font-normal">{error}</p>}
           </div>
 
           <aside className="lg:col-span-1">
@@ -219,7 +219,7 @@ export default function CheckoutPage() {
               <div className="space-y-3 mb-6 max-h-64 overflow-auto">
                 {lines.map((l) => (
                   <div key={l.productId} className="flex justify-between gap-3 text-sm">
-                    <span className="text-ink-soft font-light">
+                    <span className="text-ink-soft font-normal">
                       {l.name} <span className="text-ink-soft/60">× {l.quantity}</span>
                     </span>
                     <span className="text-ink whitespace-nowrap">{formatUSD(l.unitPriceCents * l.quantity)}</span>
@@ -230,17 +230,17 @@ export default function CheckoutPage() {
               {quote && (
                 <div className="space-y-2 text-sm border-t border-meadow/15 pt-4 mb-4">
                   <div className="flex justify-between">
-                    <span className="text-ink-soft font-light">Subtotal</span>
+                    <span className="text-ink-soft font-normal">Subtotal</span>
                     <span className="text-ink">{formatUSD(quote.subtotalCents)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-ink-soft font-light">
+                    <span className="text-ink-soft font-normal">
                       {quote.taxLabel ? `Tax (${quote.taxLabel.replace(/ state sales tax/i, "")})` : "Tax"}
                     </span>
                     <span className="text-ink">{formatUSD(quote.taxCents)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-ink-soft font-light">
+                    <span className="text-ink-soft font-normal">
                       {fulfillment === "ship" ? "Shipping" : "Pickup"}
                     </span>
                     <span className="text-ink">
@@ -270,7 +270,7 @@ export default function CheckoutPage() {
               </button>
               <Link
                 href="/cart"
-                className="block text-center text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors mt-5"
+                className="block text-center text-xs tracking-widest uppercase font-normal text-stone hover:text-meadow transition-colors mt-5"
               >
                 Back to Cart
               </Link>

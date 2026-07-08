@@ -54,22 +54,22 @@ h1 em, h2 em, h3 em {
 @layer components {
   /* Primary CTA — cider burgundy on wheat. High contrast, warm. */
   .btn-primary {
-    @apply inline-block px-8 py-3 bg-cider text-wheat text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-cider-deep;
+    @apply inline-block px-8 py-3 bg-cider text-wheat text-sm tracking-widest uppercase font-sans font-normal transition-all duration-300 hover:bg-cider-deep;
   }
 
   /* Outline — prairie navy on wheat. Secondary action. */
   .btn-outline {
-    @apply inline-block px-8 py-3 border border-meadow text-meadow text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-meadow hover:text-wheat;
+    @apply inline-block px-8 py-3 border border-meadow text-meadow text-sm tracking-widest uppercase font-sans font-normal transition-all duration-300 hover:bg-meadow hover:text-wheat;
   }
 
   /* Accent — sunflower gold on ink. Used sparingly for hero CTAs / Kansas
      flag flourish. */
   .btn-accent {
-    @apply inline-block px-8 py-3 bg-sunflower text-ink text-sm tracking-widest uppercase font-sans font-light transition-all duration-300 hover:bg-sunflower-light;
+    @apply inline-block px-8 py-3 bg-sunflower text-ink text-sm tracking-widest uppercase font-sans font-normal transition-all duration-300 hover:bg-sunflower-light;
   }
 
   .section-label {
-    @apply text-xs tracking-widest uppercase font-sans font-light text-cider;
+    @apply text-xs tracking-widest uppercase font-sans font-normal text-cider;
   }
 
   .section-heading {
@@ -86,13 +86,13 @@ h1 em, h2 em, h3 em {
     @apply flex flex-col text-center;
   }
   .info-pill-label {
-    @apply text-[10px] tracking-widest uppercase font-light text-cider mb-1;
+    @apply text-[10px] tracking-widest uppercase font-normal text-cider mb-1;
   }
   .info-pill-value {
     @apply font-serif text-xl text-meadow leading-none;
   }
   .info-pill-sub {
-    @apply text-xs text-ink-soft font-light mt-1;
+    @apply text-xs text-ink-soft font-normal mt-1;
   }
 }
 

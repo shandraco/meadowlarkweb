@@ -21,14 +21,14 @@ export default async function FieldTripBookingPage({ params }: { params: Promise
       <div className="max-w-3xl mx-auto px-6 md:px-12">
         <Link
           href="/visit/field-trips"
-          className="text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors"
+          className="text-xs tracking-widest uppercase font-normal text-stone hover:text-meadow transition-colors"
         >
           ← Back to programs
         </Link>
 
         <p className="section-label mt-6 mb-2">Request a date</p>
         <h1 className="font-serif text-5xl md:text-6xl text-ink mb-4">{program.name}</h1>
-        <p className="text-ink-soft font-light mb-8">
+        <p className="text-ink-soft font-normal mb-8">
           {formatUSD(program.price_per_student_cents)} per student · {program.min_students}–{program.max_students} students per
           class.
         </p>

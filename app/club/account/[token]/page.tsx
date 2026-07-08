@@ -23,7 +23,7 @@ export default async function MemberAccountPage({ params }: { params: Promise<{ 
   return (
     <section className="pt-36 pb-28 md:pb-40">
       <div className="max-w-3xl mx-auto px-6 md:px-12">
-        <Link href="/cider-club" className="text-xs tracking-widest uppercase font-light text-stone hover:text-meadow">
+        <Link href="/cider-club" className="text-xs tracking-widest uppercase font-normal text-stone hover:text-meadow">
           ← Cider Club
         </Link>
         <p className="section-label mt-6 mb-2">Your account</p>

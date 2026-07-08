@@ -26,7 +26,7 @@ export default async function BookResourcePage({ params }: { params: Promise<{ r
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <Link
           href="/visit/book"
-          className="text-xs tracking-widest uppercase font-light text-stone hover:text-meadow transition-colors"
+          className="text-xs tracking-widest uppercase font-normal text-stone hover:text-meadow transition-colors"
         >
           ← Back to spaces
         </Link>
@@ -52,18 +52,18 @@ export default async function BookResourcePage({ params }: { params: Promise<{ r
             )}
 
             {resource.description && (
-              <p className="text-ink-soft font-light leading-relaxed max-w-prose mb-6">{resource.description}</p>
+              <p className="text-ink-soft font-normal leading-relaxed max-w-prose mb-6">{resource.description}</p>
             )}
 
             <div className="grid sm:grid-cols-2 gap-4 mb-8">
               {resource.capacity && (
                 <div className="border border-meadow/10 p-4">
-                  <p className="text-xs tracking-widest uppercase text-stone font-light mb-1">Capacity</p>
+                  <p className="text-xs tracking-widest uppercase text-stone font-normal mb-1">Capacity</p>
                   <p className="font-serif text-xl text-ink">{resource.capacity} guests</p>
                 </div>
               )}
               <div className="border border-meadow/10 p-4">
-                <p className="text-xs tracking-widest uppercase text-stone font-light mb-1">Deposit</p>
+                <p className="text-xs tracking-widest uppercase text-stone font-normal mb-1">Deposit</p>
                 <p className="font-serif text-xl text-ink">{resource.deposit_pct}% at confirmation</p>
               </div>
             </div>
@@ -76,7 +76,7 @@ export default async function BookResourcePage({ params }: { params: Promise<{ r
               resource.amenities.seats) && (
               <div className="mb-8">
                 <p className="section-label mb-3">Amenities</p>
-                <ul className="text-sm text-ink-soft font-light space-y-1">
+                <ul className="text-sm text-ink-soft font-normal space-y-1">
                   {resource.amenities.covered && <li>Cover: {resource.amenities.covered}</li>}
                   {resource.amenities.ac && <li>Air conditioning</li>}
                   {resource.amenities.near_parking && <li>Adjacent to parking</li>}

@@ -27,18 +27,18 @@ export default async function StorePage() {
           <p className="font-serif text-[24vw] text-wheat whitespace-nowrap leading-none">The Cellar</p>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-20">
-          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-5">The Cellar</p>
+          <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-5">The Cellar</p>
           <h1 className="font-serif text-7xl md:text-9xl text-wheat leading-tight">
             Order
             <br />
             <em className="text-sunflower">online.</em>
           </h1>
-          <p className="text-wheat/70 font-light text-lg mt-6 max-w-lg">
+          <p className="text-wheat/70 font-normal text-lg mt-6 max-w-lg">
             Estate cider and farm-store goods, shipped or held for farm pickup. Every cider made from fruit grown right
             here in Rose Hill, Kansas.
           </p>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-8 text-wheat/80 font-light text-sm">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-8 text-wheat/80 font-normal text-sm">
             <OpenNowBadge variant="light" />
             <span>Pick up at 11249 SW 160th St, Rose Hill KS</span>
             <span className="hidden md:inline w-1 h-1 rounded-full bg-wheat/40" />
@@ -49,7 +49,7 @@ export default async function StorePage() {
 
       {/* Age notice */}
       <div className="bg-sunflower text-ink text-center py-3 px-6">
-        <p className="text-xs tracking-wide font-light">
+        <p className="text-xs tracking-wide font-normal">
           You must be 21 or older to purchase alcoholic cider. Age confirmation is required at checkout.
         </p>
       </div>
@@ -114,7 +114,7 @@ export default async function StorePage() {
                     </div>
                     {p.abv && <p className="section-label mb-3">{p.abv} · Estate Cider</p>}
                     {p.description && (
-                      <p className="text-sm text-ink-soft font-light leading-relaxed mb-5 flex-1">{p.description}</p>
+                      <p className="text-sm text-ink-soft font-normal leading-relaxed mb-5 flex-1">{p.description}</p>
                     )}
                     <AddToCartButton product={p} />
                   </article>

@@ -77,7 +77,7 @@ export default function SearchBar() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Cider, peach, apple butter…"
-              className="flex-1 bg-transparent text-ink placeholder:text-ink-soft/50 text-sm font-light outline-none"
+              className="flex-1 bg-transparent text-ink placeholder:text-ink-soft/50 text-sm font-normal outline-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && results[0]) {
                   closeAndClear();
@@ -93,15 +93,15 @@ export default function SearchBar() {
 
           <div className="max-h-96 overflow-auto">
             {pending && q.length >= 2 && (
-              <p className="p-4 text-xs text-ink-soft font-light">Searching…</p>
+              <p className="p-4 text-xs text-ink-soft font-normal">Searching…</p>
             )}
             {!pending && q.length >= 2 && results.length === 0 && (
-              <p className="p-4 text-sm text-ink-soft font-light">
+              <p className="p-4 text-sm text-ink-soft font-normal">
                 Nothing matched &ldquo;{q}&rdquo;. Try &ldquo;cider&rdquo; or &ldquo;peach.&rdquo;
               </p>
             )}
             {q.length < 2 && (
-              <div className="p-4 text-xs text-ink-soft/70 font-light">
+              <div className="p-4 text-xs text-ink-soft/70 font-normal">
                 Type at least two letters to search the catalog.
               </div>
             )}

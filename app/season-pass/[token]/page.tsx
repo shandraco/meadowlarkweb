@@ -28,7 +28,7 @@ export default async function PassRedeemPage({ params }: { params: Promise<{ tok
           }`}
         >
           <p
-            className={`text-xs tracking-widest uppercase font-light mb-3 ${
+            className={`text-xs tracking-widest uppercase font-normal mb-3 ${
               active ? "text-orchard" : "text-stone"
             }`}
           >
@@ -37,13 +37,13 @@ export default async function PassRedeemPage({ params }: { params: Promise<{ tok
           <p className="font-serif text-7xl text-meadow mb-2">#{pass.pass_number}</p>
           <p className="font-serif text-lg text-ink mb-4">{pass.customer_name}</p>
           <div className="border-t border-meadow/15 pt-4 mt-4">
-            <p className="text-xs tracking-widest uppercase text-stone font-light">Good through</p>
+            <p className="text-xs tracking-widest uppercase text-stone font-normal">Good through</p>
             <p className="font-serif text-2xl text-meadow">
               {expiresAt.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
             </p>
           </div>
         </div>
-        <p className="text-xs text-ink-soft font-light text-center mt-6">
+        <p className="text-xs text-ink-soft font-normal text-center mt-6">
           Show this screen at the shop counter. Bookmark it on your phone.
         </p>
         <div className="text-center mt-4">

@@ -69,7 +69,7 @@ export default function FarmVideos({ block }: { block: FarmVideoBlock }) {
             <figure key={i} className="relative aspect-[3/4] overflow-hidden bg-meadow-deep">
               <LazyVideo src={v.url} poster={v.posterUrl} title={v.title} />
               <figcaption className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-meadow-deep/80 to-transparent">
-                <p className="text-xs tracking-widest uppercase font-light text-wheat">{v.title}</p>
+                <p className="text-xs tracking-widest uppercase font-normal text-wheat">{v.title}</p>
               </figcaption>
             </figure>
           ))}

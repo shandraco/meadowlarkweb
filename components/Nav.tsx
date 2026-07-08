@@ -113,7 +113,7 @@ export default function Nav() {
                 key={l.href}
                 href={l.href}
                 onClick={() => setMenuOpen(false)}
-                className="text-xs tracking-widest uppercase font-light text-meadow-deep/80 hover:text-meadow transition-colors"
+                className="text-xs tracking-widest uppercase font-normal text-meadow-deep/80 hover:text-meadow transition-colors"
               >
                 {l.label}
               </Link>
@@ -121,7 +121,7 @@ export default function Nav() {
             <Link
               href="/store"
               onClick={() => setMenuOpen(false)}
-              className="mt-1 text-xs tracking-widest uppercase font-light px-6 py-3 border border-meadow text-meadow hover:bg-meadow hover:text-paper transition-all"
+              className="mt-1 text-xs tracking-widest uppercase font-normal px-6 py-3 border border-meadow text-meadow hover:bg-meadow hover:text-paper transition-all"
             >
               Order Now
             </Link>

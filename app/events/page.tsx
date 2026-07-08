@@ -32,13 +32,13 @@ export default async function EventsPage() {
     <>
       <section className="pt-36 pb-14 bg-meadow-deep">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-4">What&apos;s on</p>
+          <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-4">What&apos;s on</p>
           <h1 className="font-serif text-6xl md:text-8xl text-wheat leading-tight">
             Live music, dinners,
             <br />
             <em className="text-sunflower">harvest days.</em>
           </h1>
-          <p className="text-wheat/70 font-light text-lg mt-5 max-w-xl">
+          <p className="text-wheat/70 font-normal text-lg mt-5 max-w-xl">
             Bring a friend and a lawn chair. Everything here happens on the farm — the orchard is the venue.
           </p>
         </div>
@@ -47,7 +47,7 @@ export default async function EventsPage() {
       <section className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           {events.length === 0 ? (
-            <p className="text-ink-soft font-light text-center">
+            <p className="text-ink-soft font-normal text-center">
               Nothing scheduled at the moment. Sign up for season reminders on the homepage and we&apos;ll tell you when
               the next event drops.
             </p>
@@ -66,17 +66,17 @@ export default async function EventsPage() {
                       </span>
                     </div>
                     <div className="md:col-span-3 flex flex-col">
-                      <p className="text-xs tracking-widest uppercase text-cider font-light mb-2">{when}</p>
+                      <p className="text-xs tracking-widest uppercase text-cider font-normal mb-2">{when}</p>
                       <h2 className="font-serif text-3xl md:text-4xl text-meadow leading-tight mb-3">{e.name}</h2>
                       {e.description && (
-                        <p className="text-ink-soft font-light leading-relaxed mb-4 max-w-prose">{e.description}</p>
+                        <p className="text-ink-soft font-normal leading-relaxed mb-4 max-w-prose">{e.description}</p>
                       )}
                       <div className="mt-auto flex flex-wrap items-baseline gap-6 pt-4">
                         <span className="font-serif text-2xl text-cider">
                           {e.price_cents === 0 ? "Free" : formatUSD(e.price_cents)}
                         </span>
                         {e.capacity && (
-                          <span className="text-xs text-ink-soft font-light">Capacity {e.capacity}</span>
+                          <span className="text-xs text-ink-soft font-normal">Capacity {e.capacity}</span>
                         )}
                         {e.ticket_url && (
                           <a

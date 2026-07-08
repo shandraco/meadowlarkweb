@@ -36,14 +36,14 @@ export default function BuyGiftForm({ plans }: { plans: SubscriptionPlan[] }) {
 
   const plan = plans.find((p) => p.id === planId);
   const input =
-    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-light outline-none focus:border-meadow";
+    "w-full border border-meadow/20 bg-wheat text-ink placeholder:text-ink-soft/40 px-4 py-3 text-sm font-normal outline-none focus:border-meadow";
 
   if (confirmation) {
     return (
       <div className="border border-meadow/15 bg-wheat p-6 md:p-8 text-center">
         <p className="section-label mb-2">Gift sent</p>
         <p className="font-serif text-5xl text-meadow mb-3">#{confirmation.giftNumber}</p>
-        <p className="text-ink-soft font-light">
+        <p className="text-ink-soft font-normal">
           We just emailed you a receipt and sent {recipientName} their claim link. You&apos;ll be invoiced when they redeem it.
         </p>
       </div>
@@ -53,7 +53,7 @@ export default function BuyGiftForm({ plans }: { plans: SubscriptionPlan[] }) {
   if (plans.length === 0) {
     return (
       <div className="border border-meadow/15 bg-wheat p-8 text-center">
-        <p className="text-ink-soft font-light">
+        <p className="text-ink-soft font-normal">
           Cider Club plans aren&apos;t published yet. Email{" "}
           <a href="mailto:gina@themeadowlarkfarm.com" className="text-cider">
             gina@themeadowlarkfarm.com
@@ -83,7 +83,7 @@ export default function BuyGiftForm({ plans }: { plans: SubscriptionPlan[] }) {
                   {formatUSD(p.price_cents)} <span className="text-xs text-ink-soft">/{p.cadence}</span>
                 </p>
               </div>
-              {p.description && <p className="text-sm text-ink-soft font-light mt-1">{p.description}</p>}
+              {p.description && <p className="text-sm text-ink-soft font-normal mt-1">{p.description}</p>}
             </label>
           ))}
         </div>
@@ -112,17 +112,17 @@ export default function BuyGiftForm({ plans }: { plans: SubscriptionPlan[] }) {
 
       <label className="flex items-start gap-3 p-4 border border-meadow/20 bg-sunflower/10 cursor-pointer">
         <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} className="mt-1 w-4 h-4 accent-meadow" />
-        <span className="text-sm text-ink font-light">
+        <span className="text-sm text-ink font-normal">
           I confirm both the buyer and recipient are 21 or older. The recipient will verify their age when they claim.
         </span>
       </label>
 
-      {error && <p className="text-sm text-cider font-light">{error}</p>}
+      {error && <p className="text-sm text-cider font-normal">{error}</p>}
 
       <button type="submit" disabled={pending || !confirmed} className="btn-primary w-full disabled:opacity-50">
         {pending ? "Sending gift…" : `Gift ${plan ? plan.name : ""} · ${plan ? formatUSD(plan.price_cents) : ""}`}
       </button>
-      <p className="text-xs text-ink-soft font-light text-center">
+      <p className="text-xs text-ink-soft font-normal text-center">
         Invoiced when the recipient claims. Refunded automatically if they don&apos;t claim within a year.
       </p>
     </form>

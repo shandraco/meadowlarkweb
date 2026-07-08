@@ -41,14 +41,14 @@ export default function JoinClubForm({ plans }: { plans: SubscriptionPlan[] }) {
   const selectedPlan = plans.find((p) => p.id === planId);
 
   const input =
-    "w-full border border-meadow/20 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2.5 text-sm font-light outline-none focus:border-meadow transition-colors";
+    "w-full border border-meadow/20 bg-paper text-ink placeholder:text-ink-soft/40 px-3 py-2.5 text-sm font-normal outline-none focus:border-meadow transition-colors";
 
   if (confirmation) {
     return (
       <div className="border border-meadow/15 bg-paper-dark/40 p-8 text-center">
         <p className="section-label mb-2">Welcome to the club</p>
         <h2 className="font-serif text-3xl text-meadow mb-3">Member #{confirmation.memberNumber}</h2>
-        <p className="text-ink-soft font-light mb-6">
+        <p className="text-ink-soft font-normal mb-6">
           We&apos;ll email you a receipt and your member portal link. Save this URL to manage your subscription:
         </p>
         <p className="font-mono text-sm text-meadow break-all border border-meadow/20 bg-paper px-4 py-3">
@@ -61,7 +61,7 @@ export default function JoinClubForm({ plans }: { plans: SubscriptionPlan[] }) {
   if (plans.length === 0) {
     return (
       <div className="border border-meadow/15 bg-paper-dark/40 p-8 text-center">
-        <p className="text-ink-soft font-light">
+        <p className="text-ink-soft font-normal">
           The club opens soon. Email{" "}
           <a href="mailto:gina@themeadowlarkfarm.com" className="text-meadow underline">
             gina@themeadowlarkfarm.com
@@ -99,8 +99,8 @@ export default function JoinClubForm({ plans }: { plans: SubscriptionPlan[] }) {
                   <span className="text-xs text-ink-soft ml-1">/{p.cadence}</span>
                 </p>
               </div>
-              {p.description && <p className="text-sm text-ink-soft font-light mt-1">{p.description}</p>}
-              {p.benefits && <p className="text-xs text-meadow font-light mt-2">{p.benefits}</p>}
+              {p.description && <p className="text-sm text-ink-soft font-normal mt-1">{p.description}</p>}
+              {p.benefits && <p className="text-xs text-meadow font-normal mt-2">{p.benefits}</p>}
             </label>
           ))}
         </div>
@@ -108,15 +108,15 @@ export default function JoinClubForm({ plans }: { plans: SubscriptionPlan[] }) {
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-stone font-light mb-1">Name</label>
+          <label className="block text-xs text-stone font-normal mb-1">Name</label>
           <input className={input} value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div>
-          <label className="block text-xs text-stone font-light mb-1">Email</label>
+          <label className="block text-xs text-stone font-normal mb-1">Email</label>
           <input className={input} type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div className="sm:col-span-2">
-          <label className="block text-xs text-stone font-light mb-1">Phone (optional)</label>
+          <label className="block text-xs text-stone font-normal mb-1">Phone (optional)</label>
           <input className={input} value={phone} onChange={(e) => setPhone(e.target.value)} />
         </div>
       </div>
@@ -139,7 +139,7 @@ export default function JoinClubForm({ plans }: { plans: SubscriptionPlan[] }) {
               }`}
             >
               <p className="font-serif text-lg leading-tight">{o.label}</p>
-              <p className={`text-xs font-light mt-1 ${fulfillment === o.id ? "text-paper/70" : "text-ink-soft"}`}>{o.sub}</p>
+              <p className={`text-xs font-normal mt-1 ${fulfillment === o.id ? "text-paper/70" : "text-ink-soft"}`}>{o.sub}</p>
             </button>
           ))}
         </div>
@@ -162,18 +162,18 @@ export default function JoinClubForm({ plans }: { plans: SubscriptionPlan[] }) {
           onChange={(e) => setAgeConfirmed(e.target.checked)}
           className="mt-1 w-4 h-4 accent-meadow"
         />
-        <span className="text-sm text-ink font-light leading-snug">
+        <span className="text-sm text-ink font-normal leading-snug">
           I confirm I am 21 years of age or older.
         </span>
       </label>
 
-      {error && <p className="text-sm text-sunset font-light">{error}</p>}
+      {error && <p className="text-sm text-sunset font-normal">{error}</p>}
 
       <div>
         <button type="submit" disabled={pending} className="btn-primary w-full disabled:opacity-50">
           {pending ? "Signing you up…" : selectedPlan ? `Join ${selectedPlan.name} — ${formatUSD(selectedPlan.price_cents)}` : "Join"}
         </button>
-        <p className="text-xs text-ink-soft font-light mt-3 text-center">
+        <p className="text-xs text-ink-soft font-normal mt-3 text-center">
           We&apos;ll email an invoice for your first shipment. Cancel anytime.
         </p>
       </div>
