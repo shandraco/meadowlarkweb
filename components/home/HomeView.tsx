@@ -394,12 +394,12 @@ export default function HomeView({
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
-              { label: "Cider Flights", sub: "Order a flight in the tap room", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" },
-              { label: "U-Pick Orchard", sub: "Strawberries, peaches, 30+ apple varieties", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=700&q=80" },
-              { label: "Disc Golf", sub: "Family-friendly 9-hole course", image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=700&q=80" },
+              { label: "Cider Flights", sub: "Order a flight in the tap room", image: "/images/cider-flight.jpg" },
+              { label: "U-Pick Orchard", sub: "Strawberries, peaches, 30+ apple varieties", image: "/images/strawberry.jpg" },
+              { label: "Disc Golf", sub: "Family-friendly 9-hole course", image: "/images/MAP.png" },
               { label: "Pumpkin Patch", sub: "October weekends", image: "https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?w=700&q=80" },
-              { label: "Farm Store", sub: "Jams, mustard, apple butter, salsa, honey", image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=700&q=80" },
-              { label: "Live Music", sub: "Concerts & cider-pairing events", image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=700&q=80" },
+              { label: "Farm Store", sub: "Jams, mustard, apple butter, salsa, honey", image: "/images/farm-store-donuts.jpg" },
+              { label: "Live Music", sub: "Concerts & cider-pairing events", image: "/images/tasting-dinner.jpg" },
             ].map((item, i) => (
               <motion.div
                 key={item.label}

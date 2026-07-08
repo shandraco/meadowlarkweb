@@ -81,7 +81,7 @@ export const DEFAULT_HERO: HeroContent = {
   primaryHref: "/store",
   secondaryLabel: "Our Story",
   secondaryHref: "/the-farm",
-  imageUrl: "https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1800&q=85",
+  imageUrl: "/images/cider-flight.jpg",
 };
 
 export const DEFAULT_BANNER: BannerContent = {
@@ -104,8 +104,8 @@ export const DEFAULT_STORY: StoryContent = {
     "Their cider is different because it has to be: every apple pressed at Meadowlark was grown here, on this land. No concentrate. No outside fruit. An estate cidery in the truest sense.",
   quote: "We love the good people of Kansas and we really enjoy our customers at the farm.",
   attribution: "— Tom & Gina Brown",
-  primaryImageUrl: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=900&q=85",
-  secondaryImageUrl: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80",
+  primaryImageUrl: "/images/cider-press.jpg",
+  secondaryImageUrl: "/images/peach-blossom.jpg",
 };
 
 export const DEFAULT_TAP_LIST: TapListContent = {
@@ -147,7 +147,7 @@ export const DEFAULT_CLUB_TEASER: ClubTeaserContent = {
   fineprint: "From $120/season · Free first tasting room visit · 10–15% off the shop",
   ctaLabel: "Become a Member",
   ctaHref: "/cider-club",
-  imageUrl: "https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1800&q=80",
+  imageUrl: "/images/cider-bottles.jpg",
 };
 
 export interface ContentField {

@@ -11,13 +11,13 @@ export default function TheFarmPage() {
       {/* Hero */}
       <section className="relative h-[80vh] min-h-[560px] flex items-end overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1800&q=85"
-          alt="Meadowlark Farm orchard rows in bloom, Rose Hill, Kansas"
+          src="/images/dog-blossom.jpg"
+          alt="Meadowlark Farm orchard in bloom, Rose Hill, Kansas"
           fill
           priority
           className="estate-photo object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-orchard/85 via-orchard/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-orchard-deep/90 via-orchard-deep/45 to-orchard-deep/10" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-28 w-full">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
             <p className="section-label text-amber mb-5">The Farm</p>
@@ -48,14 +48,14 @@ export default function TheFarmPage() {
               >
                 <div className="aspect-[3/4] relative overflow-hidden">
                   <Image
-                    src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=900&q=85"
-                    alt="Tom and Gina Brown, founders of Meadowlark Farm"
+                    src="/images/cider-press.jpg"
+                    alt="A Meadowlark founder working the cider press"
                     fill
                     className="estate-photo object-cover"
                   />
                 </div>
                 {/* Floating name card */}
-                <div className="absolute -bottom-6 -right-4 md:-right-10 bg-amber text-orchard p-6 md:p-8 max-w-[220px]">
+                <div className="absolute -bottom-6 -right-4 md:-right-10 bg-amber text-meadow p-6 md:p-8 max-w-[220px]">
                   <p className="font-serif text-2xl leading-tight">Tom & Gina Brown</p>
                   <p className="text-xs tracking-widest uppercase font-light mt-2 opacity-80">Founders, Meadowlark Farm</p>
                   <p className="text-xs font-light mt-1 opacity-70">Est. 2010 · Rose Hill, KS</p>
@@ -71,15 +71,15 @@ export default function TheFarmPage() {
                 className="mt-16 aspect-video relative overflow-hidden"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=900&q=85"
-                  alt="5,000 trees in the Meadowlark orchard"
+                  src="/images/tree-planting.jpg"
+                  alt="Bare-root fruit trees ready to plant at Meadowlark Farm"
                   fill
                   className="estate-photo object-cover"
                 />
-                <div className="absolute inset-0 bg-orchard/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-orchard-deep/95 via-orchard-deep/40 to-transparent" />
                 <div className="absolute inset-0 flex flex-col justify-end p-8">
                   <p className="font-serif text-6xl text-cream">5,000</p>
-                  <p className="text-xs tracking-widest uppercase text-cream/70 font-light mt-1">Peach & apple trees planted</p>
+                  <p className="text-xs tracking-widest uppercase text-cream/90 font-light mt-1">Peach & apple trees planted</p>
                 </div>
               </motion.div>
             </div>
@@ -163,7 +163,7 @@ export default function TheFarmPage() {
       </section>
 
       {/* Mission */}
-      <section className="py-24 md:py-36 bg-orchard relative overflow-hidden">
+      <section className="py-24 md:py-36 bg-orchard-deep relative overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none select-none">
           <p className="font-serif text-[20vw] text-cream whitespace-nowrap leading-none">Mission</p>
         </div>
@@ -179,7 +179,7 @@ export default function TheFarmPage() {
               <div key={item.title} className="border border-cream/10 p-8">
                 <span className="text-amber text-sm block mb-4">{item.icon}</span>
                 <h3 className="font-serif text-2xl text-cream mb-3">{item.title}</h3>
-                <p className="text-cream/60 font-light text-sm leading-relaxed">{item.body}</p>
+                <p className="text-cream/80 font-light text-sm leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -206,28 +206,28 @@ export default function TheFarmPage() {
                 months: "March – May",
                 heading: "The orchard wakes up.",
                 body: "Peach blossoms arrive first — pale pink against bare branches. Apple trees follow weeks later. Strawberries ripen in May, and we open for the first U-pick of the year.",
-                image: "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=900&q=80",
+                image: "/images/peach-blossom.jpg",
               },
               {
                 season: "Summer",
                 months: "June – August",
                 heading: "Peach season.",
                 body: "July and August bring the peach harvest. We pick by hand, every one of them. What doesn't go to the stand or the kitchen goes straight to the press for our Peach Cider. The farm smells sweet and warm all month long.",
-                image: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=900&q=80",
+                image: "/images/cider-peeling.jpg",
               },
               {
                 season: "Harvest",
                 months: "August – October",
                 heading: "The apple harvest.",
                 body: "30+ varieties — Honeycrisp, Gala, heirlooms, and everything in between — come off the trees from August through October. The cidery presses through autumn. Fresh sweet cider (non-alcoholic) becomes available in October. The pumpkin patch opens.",
-                image: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=900&q=80",
+                image: "/images/cider-conveyor.jpg",
               },
               {
                 season: "Winter",
                 months: "November – February",
                 heading: "Quiet patience.",
                 body: "The cider ferments slowly in the cellar. We prune, we plan, we rest. The farm is open year-round — no appointment needed — but the pace slows. The best cider is patient. We've learned to be too.",
-                image: "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=900&q=80",
+                image: "/images/bonfire.jpg",
               },
             ].map((s, i) => (
               <motion.div
@@ -259,13 +259,13 @@ export default function TheFarmPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-orchard text-cream py-24">
+      <section className="bg-orchard-deep text-cream py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <LeafMark className="w-5 h-8 text-amber mx-auto mb-8" />
           <h2 className="font-serif text-5xl md:text-6xl mb-8 leading-tight">
             Come see it for yourself.
           </h2>
-          <p className="text-cream/60 font-light mb-10">
+          <p className="text-cream/85 font-light mb-10">
             Open Wed–Sun, 10am–5pm (Fri until 6:30). No appointment needed.
             <br />
             11249 SW 160th St, Rose Hill, KS 67133

@@ -17,7 +17,7 @@ export default async function GiftPage() {
     <>
       <section className="relative h-[50vh] min-h-[400px] flex items-end overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1800&q=85"
+          src="/images/cider-bottles.jpg"
           alt="Meadowlark cider bottles"
           fill
           priority

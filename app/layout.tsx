@@ -3,6 +3,7 @@ import { Cormorant_SC, Cormorant, Playfair_Display, Inter } from "next/font/goog
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import PostcardLoader from "@/components/PostcardLoader";
 import { CartProvider } from "@/components/store/CartProvider";
 
 const cormorantSC = Cormorant_SC({
@@ -96,6 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${cormorantSC.variable} ${cormorantDisplay.variable} ${playfair.variable} ${inter.variable}`}
     >
       <body>
+        <PostcardLoader />
         <CartProvider>
           <Nav />
           <main>{children}</main>

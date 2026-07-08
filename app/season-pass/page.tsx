@@ -22,8 +22,8 @@ export default function SeasonPassPage() {
     <>
       <section className="relative h-[55vh] min-h-[440px] flex items-end overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1800&q=85"
-          alt="Meadowlark Farm orchard bloom"
+          src="/images/pavilion.jpg"
+          alt="The picnic pavilion and grounds at Meadowlark Farm"
           fill
           priority
           className="estate-photo object-cover"

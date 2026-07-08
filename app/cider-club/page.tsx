@@ -15,8 +15,8 @@ export default async function CiderClubPage() {
     <>
       <section className="relative h-[60vh] min-h-[450px] flex items-end overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80"
-          alt="Kansas countryside at dusk"
+          src="/images/cider-bottling.jpg"
+          alt="Bottling estate cider at Meadowlark Farm"
           fill
           priority
           className="estate-photo object-cover"

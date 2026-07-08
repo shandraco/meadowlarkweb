@@ -7,20 +7,66 @@ export const metadata = { title: "Field Trips | Meadowlark Farm" };
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+// Real field-trip photos. Rendered as CSS background-image so a not-yet-added
+// file degrades to the solid brand color underneath instead of a broken <img>.
+// Each is exposed to assistive tech via role="img" + aria-label. Drop the
+// matching files into /public/images/field-trips/ to make them appear.
+const GALLERY = [
+  { src: "/images/field-trips/strawberry-toddlers.jpg", label: "Toddlers walking the strawberry rows on a farm visit" },
+  { src: "/images/field-trips/strawberry-planting.jpg", label: "Students tending strawberry plants in the field" },
+  { src: "/images/field-trips/turtle.jpg", label: "A student holding an ornate box turtle found on the farm" },
+  { src: "/images/field-trips/snakeskin.jpg", label: "A student holding a shed snake skin discovered in the orchard" },
+];
+
 export default async function FieldTripsPage() {
   const programs = await getFieldTripPrograms();
 
   return (
     <>
-      <section className="pt-36 pb-14 bg-meadow-deep">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <p className="text-xs tracking-widest uppercase font-light text-wheat mb-5">For Teachers</p>
+      <section className="relative pt-36 pb-14 bg-meadow-deep overflow-hidden">
+        {/* Background photo (kids walking the apple orchard rows). Decorative —
+            the heading carries the meaning — so no alt/aria is needed here. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/images/field-trips/orchard-rows.jpg')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep via-meadow-deep/85 to-meadow-deep/70" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-5">For Teachers</p>
           <h1 className="font-serif text-6xl md:text-8xl text-paper leading-tight">
             Field trips <em className="text-wheat-light">worth talking about.</em>
           </h1>
-          <p className="text-paper/70 font-light text-lg mt-5 max-w-lg">
+          <p className="text-paper/85 font-light text-lg mt-5 max-w-lg">
             Kids meet the apples on the tree, then watch juice made from them. Bring rubber boots.
           </p>
+        </div>
+      </section>
+
+      {/* What a visit looks like — real photos from past field trips */}
+      <section className="py-16 md:py-20 bg-wheat-light">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <p className="section-label mb-3">Out in the field</p>
+          <h2 className="font-serif text-3xl md:text-4xl text-meadow mb-8">
+            Picking, planting, and the odd turtle.
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {GALLERY.map((g) => (
+              <div key={g.src} className="relative aspect-[3/4] overflow-hidden bg-orchard-deep">
+                {/* Decorative here: the visible caption below conveys the same
+                    info, so aria-hidden avoids a duplicate screen-reader read. */}
+                <div
+                  aria-hidden
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
+                  style={{ backgroundImage: `url('${g.src}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/85 via-transparent to-transparent" />
+                <p className="absolute bottom-3 left-3 right-3 text-wheat text-xs font-light leading-snug">
+                  {g.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

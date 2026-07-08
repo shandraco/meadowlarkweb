@@ -13,17 +13,17 @@ export const metadata = {
 };
 
 const activities = [
-  { name: "Cider Flights", sub: "Order a flight in the tap room — 10 ciders across three tiers.", season: "Year-round", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" },
-  { name: "Cider Pressing Demo", sub: "Watch estate apples become cider during harvest season.", season: "Aug–Oct", image: "https://images.unsplash.com/photo-1560493676-04071c5f467b?w=700&q=80" },
-  { name: "U-Pick Strawberries", sub: "Buckets provided. Pick straight from the patch.", season: "May", image: "https://images.unsplash.com/photo-1464976062524-40e5b2199126?w=700&q=80" },
+  { name: "Cider Flights", sub: "Order a flight in the tap room — 10 ciders across three tiers.", season: "Year-round", image: "/images/cider-flight.jpg" },
+  { name: "Cider Pressing Demo", sub: "Watch estate apples become cider during harvest season.", season: "Aug–Oct", image: "/images/cider-conveyor.jpg" },
+  { name: "U-Pick Strawberries", sub: "Buckets provided. Pick straight from the patch.", season: "May", image: "/images/strawberry.jpg" },
   { name: "U-Pick Peaches", sub: "Our own peaches, hand-picked by visitors.", season: "July–Aug", image: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=700&q=80" },
-  { name: "U-Pick Apples", sub: "30+ apple varieties across the season.", season: "Aug–Oct", image: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=700&q=80" },
+  { name: "U-Pick Apples", sub: "30+ apple varieties across the season.", season: "Aug–Oct", image: "/images/apple-thinning.jpg" },
   { name: "Pumpkin Patch", sub: "Dozens of varieties, from pie pumpkins to giants.", season: "October", image: "https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?w=700&q=80" },
-  { name: "Disc Golf", sub: "Family-friendly 9-hole course on the farm grounds. Free to play.", season: "Year-round", image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=700&q=80" },
-  { name: "Playground & Games", sub: "Kids playground, corn hole, table games, rubber duck races.", season: "Year-round", image: "https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?w=700&q=80" },
-  { name: "Meet the Animals", sub: "Goats and farm animals roam the grounds.", season: "Year-round", image: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=700&q=80" },
-  { name: "Farm Store", sub: "Jams, mustard, apple butter, salsa, honey, eggs, cheese, local goods.", season: "Year-round", image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=700&q=80" },
-  { name: "Live Music & Events", sub: "Cider-pairing dinners, concerts, and seasonal celebrations.", season: "Seasonal", image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=700&q=80" },
+  { name: "Disc Golf", sub: "Family-friendly 9-hole course on the farm grounds. Free to play.", season: "Year-round", image: "/images/MAP.png" },
+  { name: "Playground & Games", sub: "Kids playground, corn hole, table games, rubber duck races.", season: "Year-round", image: "/images/pavilion.jpg" },
+  { name: "Meet the Animals", sub: "Goats and farm animals roam the grounds.", season: "Year-round", image: "/images/goats.jpg" },
+  { name: "Farm Store", sub: "Jams, mustard, apple butter, salsa, honey, eggs, cheese, local goods.", season: "Year-round", image: "/images/farm-store-donuts.jpg" },
+  { name: "Live Music & Events", sub: "Cider-pairing dinners, concerts, and seasonal celebrations.", season: "Seasonal", image: "/images/tasting-dinner.jpg" },
 ];
 
 const amenities = [
@@ -72,7 +72,7 @@ export default async function VisitPage() {
       {/* ── HERO — everything a first-time visitor needs above the fold. */}
       <section className="relative h-[80vh] min-h-[560px] flex items-end overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1800&q=85"
+          src="/images/wildflowers.jpg"
           alt="Meadowlark Farm grounds in autumn, Rose Hill Kansas"
           fill
           priority

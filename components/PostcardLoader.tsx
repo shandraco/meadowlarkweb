@@ -330,8 +330,7 @@ function CardBack({ opacity }: { opacity: MotionValue<number> }) {
           hero photo so the expand-to-hero hand-off is seamless. */}
       <div style={{
         position: "absolute", inset: 0,
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1800&q=85')",
+        backgroundImage: "url('/images/cider-flight.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         filter: "saturate(0.88) contrast(1.05) brightness(0.98) sepia(0.12)",

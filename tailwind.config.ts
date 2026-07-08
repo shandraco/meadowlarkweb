@@ -51,7 +51,9 @@ const config: Config = {
         // Ink — darkest text, deep prairie shadow.
         ink: "#1B2A3D",
         "ink-soft": "#3E5470",
-        stone: "#7C6E5B",
+        // Muted taupe for labels/secondary copy. Darkened from #7C6E5B so it
+        // clears WCAG AA (4.5:1) on the wheat page background (now 5.64:1).
+        stone: "#655A48",
 
         // Legacy aliases so pages still mid-migration keep rendering
         // (they now resolve to the Prairie palette).
