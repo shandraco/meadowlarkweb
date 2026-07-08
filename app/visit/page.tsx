@@ -81,7 +81,7 @@ export default async function VisitPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/90 via-meadow-deep/35 to-meadow-deep/10" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-16 md:pb-20 w-full">
-          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-4">Visit the Farm</p>
+          <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-4">Visit the Farm</p>
           <h1 className="font-serif text-6xl md:text-8xl lg:text-9xl text-wheat leading-[1.0] mb-6">
             Come to
             <br />
@@ -90,7 +90,7 @@ export default async function VisitPage() {
             <em className="text-sunflower">Stay awhile.</em>
           </h1>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-8 text-wheat/85 font-light">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-8 text-wheat/85 font-normal">
             <OpenNowBadge variant="light" />
             <span>11249 SW 160th St, Rose Hill, KS 67133</span>
             <span className="hidden md:inline w-1 h-1 rounded-full bg-wheat/40" />
@@ -132,9 +132,9 @@ export default async function VisitPage() {
             },
           ].map((item) => (
             <div key={item.label} className="md:px-10 first:pl-0 last:pr-0">
-              <p className="text-xs tracking-widest uppercase font-light text-sunflower-light mb-2">{item.label}</p>
+              <p className="text-xs tracking-widest uppercase font-normal text-sunflower-light mb-2">{item.label}</p>
               <p className="font-serif text-3xl text-wheat">{item.value}</p>
-              <p className="text-sm text-wheat/60 font-light mt-1 leading-snug">{item.sub}</p>
+              <p className="text-sm text-wheat/60 font-normal mt-1 leading-snug">{item.sub}</p>
             </div>
           ))}
         </div>
@@ -158,9 +158,9 @@ export default async function VisitPage() {
                 <Image src={a.image} alt={a.name} fill className="estate-photo object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/85 via-meadow-deep/10 to-transparent" />
                 <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-5">
-                  <p className="text-[10px] tracking-widest uppercase text-sunflower font-light mb-1">{a.season}</p>
+                  <p className="text-[10px] tracking-widest uppercase text-sunflower font-normal mb-1">{a.season}</p>
                   <h3 className="font-serif text-lg md:text-xl text-wheat leading-tight">{a.name}</h3>
-                  <p className="text-xs text-wheat/60 font-light mt-1 hidden md:block">{a.sub}</p>
+                  <p className="text-xs text-wheat/60 font-normal mt-1 hidden md:block">{a.sub}</p>
                 </div>
               </article>
             ))}
@@ -180,7 +180,7 @@ export default async function VisitPage() {
               {amenities.map((a) => (
                 <li key={a.label} className="border-l-2 border-sunflower pl-4">
                   <p className="font-serif text-lg text-meadow">{a.label}</p>
-                  <p className="text-sm text-ink-soft font-light leading-snug">{a.detail}</p>
+                  <p className="text-sm text-ink-soft font-normal leading-snug">{a.detail}</p>
                 </li>
               ))}
             </ul>
@@ -193,7 +193,7 @@ export default async function VisitPage() {
                 <li key={d.name} className="flex items-baseline justify-between gap-4 border-b border-meadow/10 pb-4">
                   <div>
                     <p className="font-serif text-xl text-meadow">{d.name}</p>
-                    <p className="text-sm text-ink-soft font-light">{d.sub}</p>
+                    <p className="text-sm text-ink-soft font-normal">{d.sub}</p>
                   </div>
                   <span
                     className={`text-[10px] tracking-widest uppercase px-2 py-1 whitespace-nowrap ${
@@ -205,7 +205,7 @@ export default async function VisitPage() {
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-ink-soft/70 font-light mt-6 italic">
+            <p className="text-xs text-ink-soft/70 font-normal mt-6 italic">
               Must be 21+ to order alcoholic cider. Non-alcoholic drinks on tap for the whole family.
             </p>
           </div>
@@ -226,11 +226,11 @@ export default async function VisitPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6">
             {beforeYouCome.map((b, i) => (
               <div key={b.label} className="border-t border-meadow/10 pt-4">
-                <p className="text-xs tracking-widest uppercase text-cider font-light mb-2">
+                <p className="text-xs tracking-widest uppercase text-cider font-normal mb-2">
                   {String(i + 1).padStart(2, "0")}
                 </p>
                 <p className="font-serif text-xl text-meadow mb-1">{b.label}</p>
-                <p className="text-sm text-ink-soft font-light leading-snug">{b.detail}</p>
+                <p className="text-sm text-ink-soft font-normal leading-snug">{b.detail}</p>
               </div>
             ))}
           </div>
@@ -249,7 +249,7 @@ export default async function VisitPage() {
                   <span className="font-serif text-lg md:text-xl text-meadow">{item.q}</span>
                   <span className="text-cider text-xl group-open:rotate-45 transition-transform duration-200">+</span>
                 </summary>
-                <p className="px-6 md:px-8 pb-6 text-ink-soft font-light text-sm leading-relaxed">{item.a}</p>
+                <p className="px-6 md:px-8 pb-6 text-ink-soft font-normal text-sm leading-relaxed">{item.a}</p>
               </details>
             ))}
           </div>
@@ -284,7 +284,7 @@ export default async function VisitPage() {
                   (316) 518-8907
                 </a>
               </p>
-              <p className="text-sm text-ink-soft font-light mt-2">Text works best — we&apos;re usually outside.</p>
+              <p className="text-sm text-ink-soft font-normal mt-2">Text works best — we&apos;re usually outside.</p>
             </div>
             <div>
               <p className="section-label mb-3">Email</p>
@@ -293,7 +293,7 @@ export default async function VisitPage() {
                   gina@themeadowlarkfarm.com
                 </a>
               </p>
-              <p className="text-sm text-ink-soft font-light mt-2">Bookings + field trip inquiries.</p>
+              <p className="text-sm text-ink-soft font-normal mt-2">Bookings + field trip inquiries.</p>
             </div>
           </div>
         </div>

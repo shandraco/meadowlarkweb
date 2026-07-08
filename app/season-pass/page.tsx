@@ -30,13 +30,13 @@ export default function SeasonPassPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/90 via-meadow-deep/40 to-meadow-deep/10" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-16 md:pb-20 w-full">
-          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-4">Annual Pass</p>
+          <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-4">Annual Pass</p>
           <h1 className="font-serif text-6xl md:text-8xl text-wheat leading-[1.0]">
             One year.
             <br />
             <em className="text-sunflower">Unlimited farm.</em>
           </h1>
-          <p className="text-wheat/80 font-light text-lg mt-4 max-w-lg">
+          <p className="text-wheat/80 font-normal text-lg mt-4 max-w-lg">
             The best value for anyone who wants to bring the family more than a few times a year — regular visitors save
             fast.
           </p>
@@ -60,18 +60,18 @@ export default function SeasonPassPage() {
                     <Sunflower className="w-6 h-6 text-sunflower shrink-0 mt-1" />
                     <div>
                       <p className="font-serif text-xl text-meadow">{p.title}</p>
-                      <p className="text-sm text-ink-soft font-light leading-relaxed">{p.body}</p>
+                      <p className="text-sm text-ink-soft font-normal leading-relaxed">{p.body}</p>
                     </div>
                   </li>
                 ))}
               </ul>
 
               <div className="mt-10 pt-6 border-t border-meadow/10">
-                <p className="text-xs text-stone font-light mb-2 flex items-center gap-2">
+                <p className="text-xs text-stone font-normal mb-2 flex items-center gap-2">
                   <KansasOutline className="w-4 h-3 text-cider" />
                   Rose Hill, Kansas
                 </p>
-                <p className="text-sm text-ink-soft font-light leading-relaxed">
+                <p className="text-sm text-ink-soft font-normal leading-relaxed">
                   Pass covers admission only. Cider, farm store goods, u-pick fruit, and event tickets are separate.
                   Field trips and space bookings are their own thing —{" "}
                   <Link href="/visit/book" className="text-cider underline">
@@ -94,7 +94,7 @@ export default function SeasonPassPage() {
       <section className="py-16 bg-wheat-dark">
         <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
           <p className="section-label mb-2">Also worth knowing</p>
-          <p className="text-ink-soft font-light leading-relaxed">
+          <p className="text-ink-soft font-normal leading-relaxed">
             Season passes are for one named holder. They&apos;re not transferable and don&apos;t stack with Cider Club
             member discounts. Kids under 10 always get in free — no pass needed.
           </p>

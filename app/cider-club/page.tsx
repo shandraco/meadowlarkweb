@@ -23,7 +23,7 @@ export default async function CiderClubPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/85 via-meadow-deep/25 to-transparent" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-16 md:pb-24 w-full">
-          <p className="text-xs tracking-widest uppercase font-light text-wheat mb-4">Cider Club</p>
+          <p className="text-xs tracking-widest uppercase font-normal text-wheat mb-4">Cider Club</p>
           <h1 className="font-serif text-6xl md:text-8xl text-paper leading-tight">
             First from the press.
             <br />
@@ -38,7 +38,7 @@ export default async function CiderClubPage() {
           <h2 className="section-heading mb-8">
             Cider the way it should be — <em>anticipated.</em>
           </h2>
-          <p className="text-ink-soft font-light text-lg leading-relaxed">
+          <p className="text-ink-soft font-normal text-lg leading-relaxed">
             Members get their allocation before each release goes public. Every shipment includes a hand-stamped postcard
             with tasting notes, and — sometimes — a scent card from the orchard.
           </p>
@@ -57,7 +57,7 @@ export default async function CiderClubPage() {
               <div key={s.n}>
                 <p className="font-serif text-7xl text-wheat/50 mb-4">{s.n}</p>
                 <h3 className="font-serif text-xl text-ink mb-3">{s.title}</h3>
-                <p className="text-sm text-ink-soft font-light leading-relaxed">{s.body}</p>
+                <p className="text-sm text-ink-soft font-normal leading-relaxed">{s.body}</p>
               </div>
             ))}
           </div>
@@ -90,7 +90,7 @@ export default async function CiderClubPage() {
                   <span className="font-serif text-xl text-ink">{item.q}</span>
                   <span className="text-meadow text-xl group-open:rotate-45 transition-transform duration-200">+</span>
                 </summary>
-                <p className="px-8 pb-6 text-ink-soft font-light text-sm leading-relaxed">{item.a}</p>
+                <p className="px-8 pb-6 text-ink-soft font-normal text-sm leading-relaxed">{item.a}</p>
               </details>
             ))}
           </div>

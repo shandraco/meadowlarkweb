@@ -96,7 +96,7 @@ export default function HomeView({
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-16 md:pb-20 w-full">
           <motion.div variants={stagger} initial="hidden" animate="show" className="max-w-3xl">
-            <motion.p variants={fadeUp} className="text-xs tracking-widest uppercase font-light text-sunflower mb-4">
+            <motion.p variants={fadeUp} className="text-xs tracking-widest uppercase font-normal text-sunflower mb-4">
               {hero.label}
             </motion.p>
             <motion.h1
@@ -111,7 +111,7 @@ export default function HomeView({
             </motion.h1>
             <motion.p
               variants={fadeUp}
-              className="text-wheat/85 font-light text-lg md:text-xl leading-relaxed mb-8 max-w-xl"
+              className="text-wheat/85 font-normal text-lg md:text-xl leading-relaxed mb-8 max-w-xl"
             >
               {hero.body}
             </motion.p>
@@ -120,7 +120,7 @@ export default function HomeView({
                 the client wants visible without scrolling. */}
             <motion.div
               variants={fadeUp}
-              className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-8 text-wheat/80 text-sm font-light"
+              className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-8 text-wheat/80 text-sm font-normal"
             >
               <span className="inline-flex items-center gap-2">
                 <span
@@ -158,7 +158,7 @@ export default function HomeView({
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-wheat/40">
-          <span className="text-xs tracking-widest uppercase font-light">Scroll</span>
+          <span className="text-xs tracking-widest uppercase font-normal">Scroll</span>
           <div className="h-8 w-px bg-wheat/30 animate-pulse" />
         </div>
       </section>
@@ -167,7 +167,7 @@ export default function HomeView({
       <div className="bg-cider text-wheat">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-4">
-            <span className="text-xs tracking-widest uppercase font-light text-sunflower-light">{banner.eyebrow}</span>
+            <span className="text-xs tracking-widest uppercase font-normal text-sunflower-light">{banner.eyebrow}</span>
             <span className="h-px w-6 bg-wheat/40" />
             <span className="font-serif text-lg md:text-xl">{banner.line1}</span>
             <span className="hidden md:inline h-4 w-px bg-wheat/30" />
@@ -175,7 +175,7 @@ export default function HomeView({
           </div>
           <Link
             href={banner.ctaHref}
-            className="text-xs tracking-widest uppercase font-light border border-wheat/50 px-5 py-2 hover:bg-wheat/10 transition-colors whitespace-nowrap shrink-0"
+            className="text-xs tracking-widest uppercase font-normal border border-wheat/50 px-5 py-2 hover:bg-wheat/10 transition-colors whitespace-nowrap shrink-0"
           >
             {banner.ctaLabel}
           </Link>
@@ -248,7 +248,7 @@ export default function HomeView({
               >
                 <LeafMark className="w-3.5 h-5 text-cider mb-3" />
                 <p className="font-serif text-xl md:text-2xl text-meadow leading-none mb-2">{p.mark}</p>
-                <p className="text-xs tracking-wide font-light text-stone leading-snug">{p.sub}</p>
+                <p className="text-xs tracking-wide font-normal text-stone leading-snug">{p.sub}</p>
               </motion.div>
             ))}
           </div>
@@ -272,7 +272,7 @@ export default function HomeView({
               Shop the Cellar →
             </Link>
           </div>
-          {tapList.intro && <p className="text-ink-soft font-light max-w-2xl mb-10">{tapList.intro}</p>}
+          {tapList.intro && <p className="text-ink-soft font-normal max-w-2xl mb-10">{tapList.intro}</p>}
           <BranchDivider className="text-meadow mb-12" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-meadow/10 border border-meadow/10">
             {tiers.map((t, i) => (
@@ -288,7 +288,7 @@ export default function HomeView({
                 <p className="font-serif text-6xl text-cider mb-4">{t.price}</p>
                 <p className="font-serif text-sm text-ink-soft italic mb-6 leading-relaxed">{t.names}</p>
                 <div className="h-px w-10 bg-sunflower mb-6" />
-                <p className="text-sm text-ink-soft font-light leading-relaxed">{t.desc}</p>
+                <p className="text-sm text-ink-soft font-normal leading-relaxed">{t.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -309,7 +309,7 @@ export default function HomeView({
                 className="px-6 md:px-10 py-4 text-center first:pl-0 last:pr-0"
               >
                 <p className="font-serif text-5xl md:text-6xl text-meadow mb-2">{s.number}</p>
-                <p className="text-xs tracking-widest uppercase font-light text-stone">{s.label}</p>
+                <p className="text-xs tracking-widest uppercase font-normal text-stone">{s.label}</p>
               </motion.div>
             ))}
           </div>
@@ -355,7 +355,7 @@ export default function HomeView({
                 <em>{story.emphasis}</em>
               </h2>
 
-              <div className="space-y-5 text-ink-soft font-light leading-relaxed text-base">
+              <div className="space-y-5 text-ink-soft font-normal leading-relaxed text-base">
                 <p className="drop-cap">{story.paragraph1}</p>
                 <p>{story.paragraph2}</p>
                 <p>{story.paragraph3}</p>
@@ -386,7 +386,7 @@ export default function HomeView({
                 <em>{activities.emphasis}</em>
               </h2>
             </div>
-            <div className="text-ink-soft font-light leading-relaxed md:pt-8 space-y-4">
+            <div className="text-ink-soft font-normal leading-relaxed md:pt-8 space-y-4">
               <p>{activities.paragraph1}</p>
               <p>{activities.paragraph2}</p>
             </div>
@@ -413,7 +413,7 @@ export default function HomeView({
                 <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/85 via-meadow-deep/10 to-transparent group-hover:from-meadow-deep/95 transition-all duration-300" />
                 <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
                   <h3 className="font-serif text-xl md:text-2xl text-wheat leading-tight">{item.label}</h3>
-                  <p className="text-xs text-sunflower-light font-light mt-1 hidden md:block">{item.sub}</p>
+                  <p className="text-xs text-sunflower-light font-normal mt-1 hidden md:block">{item.sub}</p>
                 </div>
               </motion.div>
             ))}
@@ -443,17 +443,17 @@ export default function HomeView({
               <div className="absolute -bottom-8 -right-8 text-sunflower/10 pointer-events-none select-none">
                 <LeafMark className="w-40 h-56" />
               </div>
-              <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-4">For Teachers</p>
+              <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-4">For Teachers</p>
               <h3 className="font-serif text-4xl md:text-5xl leading-tight mb-4">
                 Field trips <em className="text-sunflower">worth talking about.</em>
               </h3>
-              <p className="text-wheat/80 font-light leading-relaxed mb-8 max-w-md">
+              <p className="text-wheat/80 font-normal leading-relaxed mb-8 max-w-md">
                 Kids meet the apples on the tree, then watch juice pressed from them. Hands-on programs, seasonal
                 windows, and a schedule you can actually plan around.
               </p>
               <Link
                 href="/visit/field-trips"
-                className="inline-block px-8 py-3 bg-sunflower text-ink text-sm tracking-widest uppercase font-light hover:bg-sunflower-light transition-colors"
+                className="inline-block px-8 py-3 bg-sunflower text-ink text-sm tracking-widest uppercase font-normal hover:bg-sunflower-light transition-colors"
               >
                 Request a Date
               </Link>
@@ -469,17 +469,17 @@ export default function HomeView({
               <div className="absolute -bottom-8 -right-8 text-sunflower/10 pointer-events-none select-none">
                 <LeafMark className="w-40 h-56" />
               </div>
-              <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-4">For Groups</p>
+              <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-4">For Groups</p>
               <h3 className="font-serif text-4xl md:text-5xl leading-tight mb-4">
                 Book the barn, <em className="text-sunflower">the shelters, the fields.</em>
               </h3>
-              <p className="text-wheat/80 font-light leading-relaxed mb-8 max-w-md">
+              <p className="text-wheat/80 font-normal leading-relaxed mb-8 max-w-md">
                 Family reunions, birthdays, small weddings, corporate off-sites. Pick a space, check the calendar,
                 request a date online.
               </p>
               <Link
                 href="/visit/book"
-                className="inline-block px-8 py-3 bg-sunflower text-ink text-sm tracking-widest uppercase font-light hover:bg-sunflower-light transition-colors"
+                className="inline-block px-8 py-3 bg-sunflower text-ink text-sm tracking-widest uppercase font-normal hover:bg-sunflower-light transition-colors"
               >
                 See the Spaces
               </Link>
@@ -505,14 +505,14 @@ export default function HomeView({
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-12 text-center">
           <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} viewport={{ once: true }}>
-            <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-6">{clubTeaser.eyebrow}</p>
+            <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-6">{clubTeaser.eyebrow}</p>
             <h2 className="font-serif text-5xl md:text-7xl text-wheat mb-6 leading-tight">
               {clubTeaser.headline}
               <br />
               <em className="text-sunflower">{clubTeaser.emphasis}</em>
             </h2>
-            <p className="text-wheat/80 font-light text-lg leading-relaxed mb-4 max-w-xl mx-auto">{clubTeaser.body}</p>
-            <p className="text-sunflower/70 font-light text-sm mb-12">{clubTeaser.fineprint}</p>
+            <p className="text-wheat/80 font-normal text-lg leading-relaxed mb-4 max-w-xl mx-auto">{clubTeaser.body}</p>
+            <p className="text-sunflower/70 font-normal text-sm mb-12">{clubTeaser.fineprint}</p>
             <Link href={clubTeaser.ctaHref} className="btn-accent">
               {clubTeaser.ctaLabel}
             </Link>
@@ -536,9 +536,9 @@ export default function HomeView({
               { label: "Location", value: admission.locationValue, sub: admission.locationSub },
             ].map((item) => (
               <div key={item.label} className="md:px-10 first:pl-0 last:pr-0 text-center md:text-left">
-                <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-2">{item.label}</p>
+                <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-2">{item.label}</p>
                 <p className="font-serif text-4xl text-wheat mb-1">{item.value}</p>
-                <p className="text-sm text-wheat/60 font-light">{item.sub}</p>
+                <p className="text-sm text-wheat/60 font-normal">{item.sub}</p>
               </div>
             ))}
           </div>

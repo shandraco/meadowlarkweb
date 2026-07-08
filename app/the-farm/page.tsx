@@ -57,8 +57,8 @@ export default function TheFarmPage() {
                 {/* Floating name card */}
                 <div className="absolute -bottom-6 -right-4 md:-right-10 bg-amber text-meadow p-6 md:p-8 max-w-[220px]">
                   <p className="font-serif text-2xl leading-tight">Tom & Gina Brown</p>
-                  <p className="text-xs tracking-widest uppercase font-light mt-2 opacity-80">Founders, Meadowlark Farm</p>
-                  <p className="text-xs font-light mt-1 opacity-70">Est. 2010 · Rose Hill, KS</p>
+                  <p className="text-xs tracking-widest uppercase font-normal mt-2 opacity-80">Founders, Meadowlark Farm</p>
+                  <p className="text-xs font-normal mt-1 opacity-70">Est. 2010 · Rose Hill, KS</p>
                 </div>
               </motion.div>
 
@@ -79,7 +79,7 @@ export default function TheFarmPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-orchard-deep/95 via-orchard-deep/40 to-transparent" />
                 <div className="absolute inset-0 flex flex-col justify-end p-8">
                   <p className="font-serif text-6xl text-cream">5,000</p>
-                  <p className="text-xs tracking-widest uppercase text-cream/90 font-light mt-1">Peach & apple trees planted</p>
+                  <p className="text-xs tracking-widest uppercase text-cream/90 font-normal mt-1">Peach & apple trees planted</p>
                 </div>
               </motion.div>
             </div>
@@ -99,7 +99,7 @@ export default function TheFarmPage() {
                 <em>to the Kansas prairie.</em>
               </h2>
 
-              <div className="space-y-6 text-stone font-light leading-relaxed text-base md:text-lg">
+              <div className="space-y-6 text-stone font-normal leading-relaxed text-base md:text-lg">
                 <p className="drop-cap">
                   Tom and Gina Brown are Kansas born and raised. But for many years,
                   Kansas wasn't home. Tom spent time working in agriculture development
@@ -127,7 +127,7 @@ export default function TheFarmPage() {
                 <p className="section-label mt-4">— Tom & Gina Brown</p>
               </div>
 
-              <div className="space-y-6 text-stone font-light leading-relaxed text-base md:text-lg">
+              <div className="space-y-6 text-stone font-normal leading-relaxed text-base md:text-lg">
                 <p>
                   The cidery grew from a simple conviction: that good cider comes
                   entirely from good fruit, grown on good land. At Meadowlark, every
@@ -153,7 +153,7 @@ export default function TheFarmPage() {
                 ].map((s) => (
                   <div key={s.n}>
                     <p className="font-serif text-6xl text-orchard">{s.n}</p>
-                    <p className="text-xs tracking-widest uppercase font-light text-stone mt-1">{s.label}</p>
+                    <p className="text-xs tracking-widest uppercase font-normal text-stone mt-1">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -179,7 +179,7 @@ export default function TheFarmPage() {
               <div key={item.title} className="border border-cream/10 p-8">
                 <span className="text-amber text-sm block mb-4">{item.icon}</span>
                 <h3 className="font-serif text-2xl text-cream mb-3">{item.title}</h3>
-                <p className="text-cream/80 font-light text-sm leading-relaxed">{item.body}</p>
+                <p className="text-cream/80 font-normal text-sm leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -245,12 +245,12 @@ export default function TheFarmPage() {
                   <div className="flex items-center gap-4 mb-6">
                     <p className="section-label">{s.season}</p>
                     <span className="h-px w-6 bg-amber/40" />
-                    <p className="text-xs text-stone font-light">{s.months}</p>
+                    <p className="text-xs text-stone font-normal">{s.months}</p>
                   </div>
                   <h3 className="font-serif text-4xl md:text-5xl text-orchard mb-5 leading-tight">
                     <em>{s.heading}</em>
                   </h3>
-                  <p className="font-light text-stone leading-relaxed">{s.body}</p>
+                  <p className="font-normal text-stone leading-relaxed">{s.body}</p>
                 </div>
               </motion.div>
             ))}
@@ -265,7 +265,7 @@ export default function TheFarmPage() {
           <h2 className="font-serif text-5xl md:text-6xl mb-8 leading-tight">
             Come see it for yourself.
           </h2>
-          <p className="text-cream/85 font-light mb-10">
+          <p className="text-cream/85 font-normal mb-10">
             Open Wed–Sun, 10am–5pm (Fri until 6:30). No appointment needed.
             <br />
             11249 SW 160th St, Rose Hill, KS 67133

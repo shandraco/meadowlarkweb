@@ -25,7 +25,7 @@ export default async function GiftPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-meadow-deep/90 via-meadow-deep/35 to-meadow-deep/10" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-14 w-full">
-          <p className="text-xs tracking-widest uppercase font-light text-sunflower mb-4">Gift a Membership</p>
+          <p className="text-xs tracking-widest uppercase font-normal text-sunflower mb-4">Gift a Membership</p>
           <h1 className="font-serif text-5xl md:text-7xl text-wheat leading-tight">
             The best cider they&apos;ll
             <br />
@@ -39,7 +39,7 @@ export default async function GiftPage() {
           <div className="text-center text-sunflower mb-8">
             <SunflowerFlourish />
           </div>
-          <p className="text-ink-soft font-light text-lg leading-relaxed text-center mb-12">
+          <p className="text-ink-soft font-normal text-lg leading-relaxed text-center mb-12">
             Pick a plan, tell us who it&apos;s for, and we&apos;ll email them a claim link. They pick ship or pickup on redemption. You get invoiced when they claim — nothing sooner, nothing later.
           </p>
 
