@@ -9,7 +9,7 @@ export default function TheFarmPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative h-[80vh] min-h-[560px] flex items-end overflow-hidden">
+      <section className="relative min-h-[80vh] pt-24 md:pt-32 flex items-end overflow-hidden">
         <Image
           src="/images/dog-blossom.jpg"
           alt="Meadowlark Farm orchard in bloom, Rose Hill, Kansas"

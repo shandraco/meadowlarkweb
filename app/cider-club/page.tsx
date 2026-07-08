@@ -13,7 +13,7 @@ export default async function CiderClubPage() {
 
   return (
     <>
-      <section className="relative h-[60vh] min-h-[450px] flex items-end overflow-hidden">
+      <section className="relative min-h-[60vh] pt-24 md:pt-32 flex items-end overflow-hidden">
         <Image
           src="/images/cider-bottling.jpg"
           alt="Bottling estate cider at Meadowlark Farm"

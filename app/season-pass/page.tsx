@@ -20,7 +20,7 @@ const perks = [
 export default function SeasonPassPage() {
   return (
     <>
-      <section className="relative h-[55vh] min-h-[440px] flex items-end overflow-hidden">
+      <section className="relative min-h-[55vh] pt-24 md:pt-32 flex items-end overflow-hidden">
         <Image
           src="/images/pavilion.jpg"
           alt="The picnic pavilion and grounds at Meadowlark Farm"

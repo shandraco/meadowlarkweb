@@ -70,7 +70,7 @@ export default async function VisitPage() {
   return (
     <>
       {/* ── HERO — everything a first-time visitor needs above the fold. */}
-      <section className="relative h-[80vh] min-h-[560px] flex items-end overflow-hidden">
+      <section className="relative min-h-[80vh] pt-24 md:pt-32 flex items-end overflow-hidden">
         <Image
           src="/images/wildflowers.jpg"
           alt="Meadowlark Farm grounds in autumn, Rose Hill Kansas"

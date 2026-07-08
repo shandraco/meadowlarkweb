@@ -15,7 +15,7 @@ export default async function GiftPage() {
 
   return (
     <>
-      <section className="relative h-[50vh] min-h-[400px] flex items-end overflow-hidden">
+      <section className="relative min-h-[50vh] pt-24 md:pt-32 flex items-end overflow-hidden">
         <Image
           src="/images/cider-bottles.jpg"
           alt="Meadowlark cider bottles"

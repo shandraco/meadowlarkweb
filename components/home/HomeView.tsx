@@ -70,7 +70,7 @@ export default function HomeView({
           Above the fold shows: name, tagline, address, hours, admission,
           and the two most-used CTAs. Everything a first-time visitor needs
           to know whether to come today OR shop now, without scrolling. */}
-      <section ref={heroRef} className="relative h-screen min-h-[720px] flex items-end overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen pt-24 md:pt-32 flex items-end overflow-hidden">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
           <Image
             src={hero.imageUrl}
